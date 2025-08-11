@@ -115,7 +115,7 @@ Cross axis = vertical
 
 ## All in one group of setting format
 
-```
+```css
 :root {
 /* Color */
 --colora: #ffe537;
@@ -138,7 +138,7 @@ Cross axis = vertical
 --white: #fff;
 ```
 
-```
+```css
 /* Font-size family and Line Height */
 --font-family: Arial, Helvetica, sans-serif;
 --h1-X: bold 4rem/1em var(--font-family);
@@ -157,7 +157,7 @@ Cross axis = vertical
 --font-size-small: 0.75rem/1.8em var(--font-family);
 ```
 
-```
+```css
 /* Margin and Padding */
 --margin-xxs: 0.25rem;
 --margin-xs: 0.5rem;
@@ -175,7 +175,7 @@ Cross axis = vertical
 --padding-xxl: 2.5rem;
 ```
 
-```
+```css
 /* Effect */
 --shadow: 0 2px 8px rgba(0,0,0,0.05);
 --shadow-img: 0 2px 8px rgba(0,0,0,0.08);
@@ -184,7 +184,7 @@ Cross axis = vertical
 --border-radius: 10px;
 ```
 
-```
+```css
 /* Resetting to Default */
 * {
 margin: 0;

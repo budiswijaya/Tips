@@ -1,14 +1,30 @@
 ## **4 fundamental categories** of  selectors
 
 - Basic selectors   
- :(universal, type, class, id, attribute)
-- Combinators    
- :(descendant, child, sibling)
-- Pseudo-classes is element based on its specific state or position   
-:(:hover, :focus, :nth-child, :first-child, etc)
-- Pseudo-elements                                                    
- :(::before, ::after)
+```css
+:(universal, type, class, id, attribute)
+```
 
+- Combinators    
+```css
+:(descendant, child, sibling)
+```
+
+- Pseudo-classes is element based on its specific state or position   
+```css
+:(:hover, :focus, :nth-child, :first-child, etc)
+```
+
+- Pseudo-elements                     
+```css
+:(::before, ::after)
+```
+
+```css
+Element Selector: p {} → styles all <p> tags
+Class Selector: .class-name {} → styles elements with class="class-name"
+ID Selector: #id-name {} → styles a specific element with id="id-name"
+```
 ## The align-items Property
 
 Definition: This property is used to distribute items along the cross axis. 

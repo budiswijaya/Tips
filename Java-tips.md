@@ -1,5 +1,29 @@
 ## Golden rule and tips
 
+### JavaScript Basics:
+Variables: Store information.
+```js
+let message = "Hello!";
+```
+
+Functions: Block of code that runs when called.
+```js
+function greet() { alert("Hi!"); }
+```
+
+Event Listeners: Run code when an event happens.
+```js
+button.addEventListener("click", greet);
+```
+
+Accessing HTML Elements:
+```js
+document.querySelector("button") gets the first <button> 
+document.getElementById("important") 
+document.getElementsByClassName("") 
+document.querySelctorAll("")
+```
+
 ### Character Encoding
 
 Two main types:

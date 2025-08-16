@@ -1,6 +1,49 @@
-## Golden rule and tips
+# Golden rule and tips
 
-### JavaScript Basics:
+- [Golden rule and tips](#golden-rule-and-tips)
+  - [JavaScript Basics:](#javascript-basics)
+  - [Character Encoding](#character-encoding)
+  - [Number Systems](#number-systems)
+  - [Variable Naming Conventions](#variable-naming-conventions)
+  - [Variable Declarations](#variable-declarations)
+  - [String Manipulation](#string-manipulation)
+    - [Console.logging for debugging](#consolelogging-for-debugging)
+  - [Object Manipulation](#object-manipulation)
+    - [Braces in JavaScript](#braces-in-javascript)
+    - [Object Manipulation Structure Levels](#object-manipulation-structure-levels)
+    - [Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}](#natural-hierarchical-structure-levels-in-different-variable-declarations-classification)
+    - [Object Constructors](#object-constructors)
+    - [Array Constructors](#array-constructors)
+    - [JSON](#json)
+    - [Array Methods](#array-methods)
+  - [Operator](#operator)
+    - [Arithmetic Operators](#arithmetic-operators)
+    - [Assignment Operators](#assignment-operators)
+    - [Comparison Operators](#comparison-operators)
+    - [Logical Operators](#logical-operators)
+    - [Other Important Operators](#other-important-operators)
+  - [Data Types](#data-types)
+    - [Data type identifier](#data-type-identifier)
+    - [Type Conversion](#type-conversion)
+    - [Math Operations](#math-operations)
+  - [Scope Accessibility](#scope-accessibility)
+  - [Closure](#closure)
+  - [Logical / Reasoning Method](#logical--reasoning-method)
+    - [Functions](#functions)
+    - [Control Flow](#control-flow)
+    - [Loops](#loops)
+    - [There are a lot of purpose to use loop:](#there-are-a-lot-of-purpose-to-use-loop)
+    - [DOM Manipulation](#dom-manipulation)
+  - [CanvasRenderingContext2D API](#canvasrenderingcontext2d-api)
+    - [1. Path Methods (building geometric paths)](#1-path-methods-building-geometric-paths)
+    - [2. Fill and Stroke (rendering paths)](#2-fill-and-stroke-rendering-paths)
+    - [3. Image methods](#3-image-methods)
+    - [4. State \& Styles](#4-state--styles)
+    - [Other big families](#other-big-families)
+    - [How to Think of It:](#how-to-think-of-it)
+
+
+## JavaScript Basics:
 Variables: Store information.
 ```js
 let message = "Hello!";
@@ -24,7 +67,7 @@ document.getElementsByClassName("")
 document.querySelctorAll("")
 ```
 
-### Character Encoding
+## Character Encoding
 
 Two main types:
 
@@ -53,7 +96,7 @@ let char = String.fromCharCode(65);
 console.log(char);  // Output: A
 ```
 
-### Number Systems
+## Number Systems
 
 - **Binary**: Base-2 (0,1) with 8 digits
 - **Hexadecimal**: Base-16 (0-9, A-F) with 2 digits
@@ -71,7 +114,7 @@ Example below:
     *Note: other types can also be convert vice versa
 ```
 
-### Variable Naming Conventions
+## Variable Naming Conventions
 
 - Variable names should be descriptive and meaningful.
 - Variable names should be camelCase like cityName, isLoggedIn, and veryBigNumber.
@@ -136,7 +179,7 @@ for (let studentIndex = 0; studentIndex < students.length; studentIndex++) {
 
 Remember the goal is to make your code as self explanatory as possible. A good rule of thumb is that if you need to add a comment to explain what a variable or function does, you might want to consider renaming it to something more descriptive.
 
-### Variable Declarations
+## Variable Declarations
 
 There are three main ways to declare variables:
 
@@ -152,7 +195,7 @@ There are also other keyway manipulation methods:
 - **class** - For class declarations
 - **interface** - For interface declarations
 
-### String Manipulation
+## String Manipulation
 
 The newline character (\n) functions similarly to the line break element (< br >) in HTML/CSS
 
@@ -2417,7 +2460,7 @@ switch (dayOfWeek) {
 
 **"i" as the loop variable recognized by every programmer, stands for "index" or "iterator")**
 
-### **Synonym for "Iterable"**
+**Synonym for "Iterable"**
 
 You can think of it as:
 
@@ -2425,7 +2468,7 @@ You can think of it as:
 - **"Sequence-able"** (has an order of elements)
 - **"Traversable"** (you can go through its items one by one)
 
-### **Real-World Analogy**
+ **Real-World Analogy**
 
 Imagine:
 
@@ -3164,3 +3207,170 @@ document.getElementsByTagName('div');
 document.querySelector('.class'); // First match
 document.querySelectorAll('div.highlight'); // All matches
 ```
+
+## CanvasRenderingContext2D API
+
+When you’re inside ```<canvas>```, everything comes from the CanvasRenderingContext2D API.
+```js
+const ctx = canvas.getContext("2d");
+```
+
+### 1. Path Methods (building geometric paths)
+These define shapes by constructing a sequence of connected lines/curves.
+
+- beginPath() - Resets the list of sub-paths, starting a new empty path.
+
+    Use case: Prevents new shapes from being connected to old ones.
+Syntax:
+```js
+ctx.beginPath();
+```
+
+Example:
+```js
+ctx.beginPath();
+ctx.moveTo(50, 50);
+ctx.lineTo(200, 50);
+ctx.stroke(); 
+```
+
+- moveTo(x, y) - Moves the “pen” to (x, y) without drawing.
+
+    Use case: Starting a new line at a specific coordinate.
+
+- lineTo(x, y) - Creates a straight line from current point → (x, y).
+
+    Use case: Building polygons or free-hand drawings.
+
+- arc(x, y, radius, startAngle, endAngle [, anticlockwise]) - Adds an arc or circle to the path. Angles in radians (not degrees).
+
+    Use case: Circles, arcs, pie charts.
+```js
+ctx.beginPath();
+ctx.arc(100, 75, 50, 0, Math.PI * 2); 
+ctx.stroke();
+```
+
+- closePath() - Connects the last point to the start point automatically.
+
+    Use case: Completing polygons.
+
+Example:
+```js
+ctx.beginPath();
+ctx.moveTo(50, 50);
+ctx.lineTo(150, 50);
+ctx.lineTo(100, 150);
+ctx.closePath(); 
+ctx.stroke(); // outline triangle
+```
+
+### 2. Fill and Stroke (rendering paths)
+
+- fill() - Fills the interior of the current path with the current fillStyle.
+
+    Use case: Filled shapes (buttons, circles, areas).
+- stroke() - Outlines the current path with strokeStyle and lineWidth.
+
+    Use case: Drawing outlines.
+
+Example:
+```js
+ctx.fillStyle = "red";
+ctx.strokeStyle = "black";
+
+ctx.beginPath();
+ctx.rect(80, 80, 120, 100);
+ctx.fill();   // red interior
+ctx.stroke(); // black border
+```
+
+- fillRect(x, y, width, height) - Shortcut to fill a rectangle (no beginPath() needed).
+
+    Use case: Quick background blocks, UI panels.
+
+- strokeRect(x, y, width, height) - Shortcut to fill a rectangle (no beginPath() needed).
+
+    Use case: Quick background blocks, UI panels.
+
+```js
+ctx.fillStyle = "red";
+ctx.fillRect(20, 20, 100, 80);
+
+ctx.strokeStyle = "black";
+ctx.strokeRect(20, 20, 100, 80);
+```
+
+- clearRect(x, y, width, height) - Clears part of the canvas, making it fully transparent.
+
+    Use case: Game loops (redraw screen each frame).
+```js
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+```
+
+### 3. Image methods
+
+- drawImage(image, dx, dy [, dWidth, dHeight]) - Draws an image or video onto the canvas.
+```
+- drawImage(img, x, y) 
+- drawImage(img, dx, dy, dw, dh)
+- drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh)
+```
+
+Example:
+```js
+const img = new Image();
+img.src = "sprite.png";
+img.onload = () => ctx.drawImage(img, 50, 50, 100, 100);
+```
+
+### 4. State & Styles
+
+- fillStyle / strokeStyle - Sets the color/gradient/pattern used for filling/stroking.
+```js
+ctx.fillStyle = "#00FF00";
+ctx.strokeStyle = "rgba(0,0,255,0.5)";
+```
+- lineWidth, lineJoin, lineCap
+```
+lineWidth: thickness of strokes.
+lineJoin: corner style (miter, bevel, round).
+lineCap: end of lines (butt, round, square).
+```
+
+```js
+ctx.lineWidth = 8;
+ctx.lineJoin = "round";
+ctx.lineCap = "square";
+```
+
+- save() / restore() - Save/restore the drawing state (colors, transforms, clipping).
+```js
+ctx.save();
+ctx.fillStyle = "red";
+ctx.fillRect(10,10,50,50);
+ctx.restore(); // back to old style
+```
+
+###⚡ Big Picture Classification
+- Path Construction → beginPath, moveTo, lineTo, arc, closePath.
+- Rendering → fill, stroke, fillRect, strokeRect, clearRect.
+- Images → drawImage.
+- State & Styles → fillStyle, strokeStyle, lineWidth, save/restore.
+
+### Other big families
+
+- Text methods: fillText(), strokeText(), measureText().
+- Transformations: translate(), rotate(), scale().
+- Compositing: globalCompositeOperation (blending modes like Photoshop).
+- Pixel manipulation: getImageData(), putImageData() (low-level bitmap access).
+
+### How to Think of It:
+
+- Path methods → “construct geometry.”
+- Stroke/fill → “apply paint to geometry.”
+- Direct shapes → “shortcuts for rectangles.”
+- Images → “place photos/sprites on canvas.”
+- Styling → “set brush/pen look.”
+- Text, transform, pixels → “extra tools for text, effects, advanced drawing.”
+

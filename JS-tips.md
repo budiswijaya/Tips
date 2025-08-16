@@ -912,6 +912,17 @@ console.log(words); // Output: ["The", "quick", "brown", "fox"]
 
 **Adding/Removing Elements**
 
+Keep in mind that it can be used with however format we want to.  
+```js
+let arr = [];
+arr.push([1, 2, 3]);
+console.log(arr); // [[1, 2, 3]]  <-- an array inside an array
+
+let inv = [];
+inv.push({ name: "FLOUR", quantity: 5 });
+console.log(inv); // [{ name: "FLOUR", quantity: 5 }]
+```
+
 - **pop()** - Removes the last element from an array
 
 ```js
@@ -1936,7 +1947,7 @@ console.log(randomNum);
 // any number between 0 and 1 – 0 inclusive and 1 exclusive
 ```
 
-- `Math.min()/Math.max()` - Both take a set of numbers and return the minimum and maximum value, respectively.
+- `Math.min()/Math.max()` - Both take a set of numbers and return the minimum and maximum value, respectively. 
 ```js
 const smallest = Math.min(1, 5, 3, 9);
 console.log(smallest); // 1

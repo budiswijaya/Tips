@@ -24,3 +24,6 @@
 - <span> → Inline text wrapper - Styling a specific word or phrase. - Targeting small chunks of text with JavaScript.
 - <strong> → Bold text for emphasis
 ```
+
+### CanvasRenderingContext2D API:
+- <canvas> → provides a drawing surface within a web page, allowing for dynamic, scriptable rendering of 2D shapes and bitmap images using JavaScript. It was introduced with HTML5.

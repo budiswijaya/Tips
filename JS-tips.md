@@ -1,5 +1,3 @@
-# Golden rule and tips
-
 - [Golden rule and tips](#golden-rule-and-tips)
   - [JavaScript Basics:](#javascript-basics)
   - [Character Encoding](#character-encoding)
@@ -7,43 +5,45 @@
   - [Variable Naming Conventions](#variable-naming-conventions)
   - [Variable Declarations](#variable-declarations)
   - [String Manipulation](#string-manipulation)
-    - [Console.logging for debugging](#consolelogging-for-debugging)
-  - [Object Manipulation](#object-manipulation)
-    - [Braces in JavaScript](#braces-in-javascript)
-    - [Object Manipulation Structure Levels](#object-manipulation-structure-levels)
-    - [Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}](#natural-hierarchical-structure-levels-in-different-variable-declarations-classification)
-    - [Object Constructors](#object-constructors)
-    - [Array Constructors](#array-constructors)
-    - [JSON](#json)
-    - [Array Methods](#array-methods)
-  - [Operator](#operator)
-    - [Arithmetic Operators](#arithmetic-operators)
-    - [Assignment Operators](#assignment-operators)
-    - [Comparison Operators](#comparison-operators)
-    - [Logical Operators](#logical-operators)
-    - [Other Important Operators](#other-important-operators)
-  - [Data Types](#data-types)
-    - [Data type identifier](#data-type-identifier)
-    - [Type Conversion](#type-conversion)
-    - [Math Operations](#math-operations)
-  - [Scope Accessibility](#scope-accessibility)
-  - [Closure](#closure)
-  - [Logical / Reasoning Method](#logical--reasoning-method)
-    - [Functions](#functions)
-    - [Control Flow](#control-flow)
-    - [Loops](#loops)
-    - [There are a lot of purpose to use loop:](#there-are-a-lot-of-purpose-to-use-loop)
-    - [DOM Manipulation](#dom-manipulation)
-  - [CanvasRenderingContext2D API](#canvasrenderingcontext2d-api)
-    - [1. Path Methods (building geometric paths)](#1-path-methods-building-geometric-paths)
-    - [2. Fill and Stroke (rendering paths)](#2-fill-and-stroke-rendering-paths)
-    - [3. Image methods](#3-image-methods)
-    - [4. State \& Styles](#4-state--styles)
-    - [Other big families](#other-big-families)
-    - [How to Think of It:](#how-to-think-of-it)
+  - [Console.logging for debugging](#consolelogging-for-debugging)
+- [Object Manipulation](#object-manipulation)
+  - [Braces in JavaScript](#braces-in-javascript)
+  - [Object Manipulation Structure Levels](#object-manipulation-structure-levels)
+  - [Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}](#natural-hierarchical-structure-levels-in-different-variable-declarations-classification)
+  - [Object Constructors](#object-constructors)
+  - [Array Constructors](#array-constructors)
+  - [JSON](#json)
+  - [Array Methods](#array-methods)
+- [Operator](#operator)
+  - [Arithmetic Operators](#arithmetic-operators)
+  - [Assignment Operators](#assignment-operators)
+  - [Comparison Operators](#comparison-operators)
+  - [Logical Operators](#logical-operators)
+  - [Other Important Operators](#other-important-operators)
+- [Data Types](#data-types)
+  - [Data type identifier](#data-type-identifier)
+  - [Type Conversion](#type-conversion)
+  - [Math Operations](#math-operations)
+- [Scope Accessibility](#scope-accessibility)
+- [Closure](#closure)
+- [Logical / Reasoning Method](#logical--reasoning-method)
+  - [Functions](#functions)
+  - [Control Flow](#control-flow)
+  - [Loops](#loops)
+  - [There are a lot of purpose to use loop:](#there-are-a-lot-of-purpose-to-use-loop)
+  - [DOM Manipulation](#dom-manipulation)
+- [CanvasRenderingContext2D API](#canvasrenderingcontext2d-api)
+  - [1. Path Methods (building geometric paths)](#1-path-methods-building-geometric-paths)
+  - [2. Fill and Stroke (rendering paths)](#2-fill-and-stroke-rendering-paths)
+  - [3. Image methods](#3-image-methods)
+  - [4. State \& Styles](#4-state--styles)
+  - [Other big families](#other-big-families)
+  - [How to Think of It:](#how-to-think-of-it)
 
 
-## JavaScript Basics:
+## Golden rule and tips
+
+### JavaScript Basics:
 Variables: Store information.
 ```js
 let message = "Hello!";
@@ -67,7 +67,7 @@ document.getElementsByClassName("")
 document.querySelctorAll("")
 ```
 
-## Character Encoding
+### Character Encoding
 
 Two main types:
 
@@ -96,7 +96,7 @@ let char = String.fromCharCode(65);
 console.log(char);  // Output: A
 ```
 
-## Number Systems
+### Number Systems
 
 - **Binary**: Base-2 (0,1) with 8 digits
 - **Hexadecimal**: Base-16 (0-9, A-F) with 2 digits
@@ -114,7 +114,7 @@ Example below:
     *Note: other types can also be convert vice versa
 ```
 
-## Variable Naming Conventions
+### Variable Naming Conventions
 
 - Variable names should be descriptive and meaningful.
 - Variable names should be camelCase like cityName, isLoggedIn, and veryBigNumber.
@@ -179,7 +179,7 @@ for (let studentIndex = 0; studentIndex < students.length; studentIndex++) {
 
 Remember the goal is to make your code as self explanatory as possible. A good rule of thumb is that if you need to add a comment to explain what a variable or function does, you might want to consider renaming it to something more descriptive.
 
-## Variable Declarations
+### Variable Declarations
 
 There are three main ways to declare variables:
 
@@ -195,7 +195,7 @@ There are also other keyway manipulation methods:
 - **class** - For class declarations
 - **interface** - For interface declarations
 
-## String Manipulation
+### String Manipulation
 
 The newline character (\n) functions similarly to the line break element (< br >) in HTML/CSS
 

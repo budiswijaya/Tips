@@ -1,12 +1,20 @@
 ### Main Tags Used:
+
 ```html
-- <!DOCTYPE html> → Declares the document as HTML5
-- <html> → The root element
-- <head> → Meta-info like title and mobile support
-- <body> → The actual content users see
+- <!DOCTYPE html> → Declares the document as HTML5 -
+<html>
+  → The root element -
+  <head>
+    → Meta-info like title and mobile support -
+    <body>
+      → The actual content users see
+    </body>
+  </head>
+</html>
 ```
 
 ### Common HTML Tags:
+
 ```html
 - <h1> to <h6> → Headings
 - <p> → Paragraph
@@ -26,4 +34,5 @@
 ```
 
 ### CanvasRenderingContext2D API:
+
 - <canvas> → provides a drawing surface within a web page, allowing for dynamic, scriptable rendering of 2D shapes and bitmap images using JavaScript. It was introduced with HTML5.

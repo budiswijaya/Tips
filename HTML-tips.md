@@ -1,3 +1,19 @@
+### Things to grade website
+
+W3C Markup Validation Service. It's going to check if your HTML is valid and using the correct tags.
+
+- https://validator.w3.org/#validate_by_uri
+
+It's not going to check for SEO stuff! Like if your missing a meta description, overuse of <div> instead of other semantic tags.
+Try using this for SEO.
+
+- https://www.seobility.net/
+
+Wave Web Accessibility Eval Tools. This gives you an evaluation of your website if it's good to go with individuals with disabilities.
+
+- https://wave.webaim.org/
+-
+
 ### Main Tags Used:
 
 ```html

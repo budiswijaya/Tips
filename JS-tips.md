@@ -8,7 +8,7 @@
   - [Modules \& Imports/Exports](#modules--importsexports)
 - [Data Types](#data-types)
   - [Primitive Data \& Non Primitive Data](#primitive-data--non-primitive-data)
-  - [Data type identifier](#data-type-identifier)
+  - [Type Checking](#type-checking)
   - [Type Conversion](#type-conversion)
   - [Math Operations](#math-operations)
   - [JSON](#json)
@@ -32,7 +32,7 @@
   - [Loops](#loops)
     - [Primary Loop Structures (for... / while / do... while)](#primary-loop-structures-for--while--do-while)
     - [Specialized Loops (for... of / for... in / forEach())](#specialized-loops-for-of--for-in--foreach)
-    - [Loop Control (break/continue)](#loop-control-breakcontinue)
+    - [Loop Control (break/continue/labelled loops)](#loop-control-breakcontinuelabelled-loops)
     - [There are a lot of purpose to use loop:](#there-are-a-lot-of-purpose-to-use-loop)
   - [return](#return)
   - [throw](#throw)
@@ -58,7 +58,7 @@
       - [Key concepts for beginners](#key-concepts-for-beginners)
   - [HTTP Request](#http-request)
     - [fetch](#fetch)
-    - [axios](#axios)
+    - [axios (third-party library, not an API)](#axios-third-party-library-not-an-api)
     - [XMLHttpRequest (XHR)](#xmlhttprequest-xhr)
     - [Differences (purpose \& practical choice)](#differences-purpose--practical-choice)
       - [Which to pick?](#which-to-pick)
@@ -223,10 +223,9 @@ There are three main ways to declare variables:
 There are also other keyway manipulation methods:
 
 - **function** - For function declarations
-- **delete** - To delete a variable or property
+- **delete** - Does not delete variables declared with var/let/const; it only deletes object properties.
 - **new** - For creating objects with constructors
 - **class** - For class declarations
-- **interface** - For interface declarations
 
 ## String Manipulation
 
@@ -445,7 +444,7 @@ Shay, 30, true, ["reading", "coding", "gaming"], { firstName: "Shay", lastName: 
   console.log("freeCodeCamp".indexOf("F")); // -1
   ```
 
-## Data type identifier
+## Type Checking
 
 - Function similar to typeof but more precise and easy to use
 
@@ -960,7 +959,7 @@ Used for mathematical calculations:
 
 Used to assign values to variables:
 
-- (=:) Basic assignment
+- (=) Basic assignment
 
   ```js
   `let x = 10;`;
@@ -1369,7 +1368,7 @@ Forth Statement Explain
   console.log(a >> 1); // Output: 2 (Binary: 10)
   ```
 
-- Unary operators (+, -, !, ~, .void, typeof)
+- Unary operators (+, -, !, ~, void, typeof)
   Act on a single operand to perform operations like type conversion, value manipulation, or checking certain conditions.
 
       (+) unary plus operator converts its operand into a number.
@@ -1412,7 +1411,7 @@ Forth Statement Explain
       console.log(~num); // -6
       ```
 
-      (.void) unary operator that evaluates an expression and returns undefined.
+      (void) unary operator that evaluates an expression and returns undefined.
 
       ```js
       const result = void (2 + 2);
@@ -2853,7 +2852,7 @@ Practical Use Cases
    });
    ```
 
-### Loop Control (break/continue)
+### Loop Control (break/continue/labelled loops)
 
 A break statement is used to exit a loop early, while a continue statement is used to skip the current iteration of a loop and move to the next one.
 
@@ -2870,6 +2869,7 @@ A break statement is used to exit a loop early, while a continue statement is us
   ```
 
 - `continue` - Skip current iteration
+
   ```js
   for (let i = 0; i < 10; i++) {
     if (i === 5) {
@@ -2880,58 +2880,58 @@ A break statement is used to exit a loop early, while a continue statement is us
   /*The output of this code will print the numbers 0, 1, 2, 3, 4, 6, 7, 8, and 9. The number 5 is skipped because of the continue statement.*/
   ```
 
-Outer Loop and Inner Loop
+- Labelled Loops: Outer Loop and Inner Loop
 
-```js
-// Example below:
-outerLoop: for (let i = 0; i < 3; i++) {
-  innerLoop: for (let j = 0; j < 3; j++) {
-    if (i === 1 && j === 1) {
-      break outerLoop;
+  ```js
+  // Example below:
+  outerLoop: for (let i = 0; i < 3; i++) {
+    innerLoop: for (let j = 0; j < 3; j++) {
+      if (i === 1 && j === 1) {
+        break outerLoop;
+      }
+      console.log(`i: ${i}, j: ${j}`);
     }
-    console.log(`i: ${i}, j: ${j}`);
   }
-}
 
-/* When i is equal to 1 and j is equal to 1, we use the break statement with the outerLoop label to exit the outer loop early. This will exit both the inner and outer loops */
+  /* When i is equal to 1 and j is equal to 1, we use the break statement with the outerLoop label to exit the outer loop early. This will exit both the inner and outer loops */
 
-// Results below:
-("i: 0, j: 0");
-("i: 0, j: 1");
-("i: 0, j: 2");
-("i: 1, j: 0");
+  // Results below:
+  ("i: 0, j: 0");
+  ("i: 0, j: 1");
+  ("i: 0, j: 2");
+  ("i: 1, j: 0");
 
-/* think of it I as the big box and J is the small box INSIDE the big box. you wont start counting the next big box until you done counting small box inside the first big box*/
-```
+  /* think of it I as the big box and J is the small box INSIDE the big box. you wont start counting the next big box until you done counting small box inside the first big box*/
+  ```
 
-Think of loops like boxes inside boxes:
+  Think of loops like boxes inside boxes:
 
-```js
-📦 BIG BOX (Outer Loop)
-    📦 Small Box (Inner Loop)
-    📦 Small Box (Inner Loop)
-    📦 Small Box (Inner Loop)
+  ```js
+  📦 BIG BOX (Outer Loop)
+      📦 Small Box (Inner Loop)
+      📦 Small Box (Inner Loop)
+      📦 Small Box (Inner Loop)
 
-// Example below:
-for (let house = 1; house <= 2; house++) {
-    console.log("🏠 House " + house);
+  // Example below:
+  for (let house = 1; house <= 2; house++) {
+      console.log("🏠 House " + house);
 
-    *Inner Loop = Which ROOM in this house
-    for (let room = 1; room <= 3; room++) {
-        console.log("  🚪 Room " + room);
-    }
-}
+      *Inner Loop = Which ROOM in this house
+      for (let room = 1; room <= 3; room++) {
+          console.log("  🚪 Room " + room);
+      }
+  }
 
-// Result below:
-🏠 House 1
-🚪 Room 1
-🚪 Room 2
-🚪 Room 3
-🏠 House 2
-🚪 Room 1
-🚪 Room 2
-🚪 Room 3
-```
+  // Result below:
+  🏠 House 1
+  🚪 Room 1
+  🚪 Room 2
+  🚪 Room 3
+  🏠 House 2
+  🚪 Room 1
+  🚪 Room 2
+  🚪 Room 3
+  ```
 
 ### There are a lot of purpose to use loop:
 
@@ -4103,7 +4103,7 @@ Cons / gotchas
   MDN Web Docs
 - No built-in interceptors or automatic JSON error parsing — you roll those yourself.
 
-### axios
+### axios (third-party library, not an API)
 
 `axios` is a widely used, promise-based HTTP client library that works both in the browser (wraps XHR) and in Node.js (wraps the native `http` module). It offers features that make real-world API work easier: auto JSON transforms, request/response interceptors, timeouts, cancellation, and convenient config defaults.
 [Axios](https://axios-http.com/docs/intro?utm_source=chatgpt.com)

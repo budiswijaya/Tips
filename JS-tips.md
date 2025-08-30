@@ -5,8 +5,9 @@
   - [Variable Declarations](#variable-declarations)
   - [String Manipulation](#string-manipulation)
   - [Console.logging for debugging](#consolelogging-for-debugging)
-  - [Modules \& Imports/Exports (ongoing update)](#modules--importsexports-ongoing-update)
+  - [Modules \& Imports/Exports](#modules--importsexports)
 - [Data Types](#data-types)
+  - [Primitive Data \& Non Primitive Data](#primitive-data--non-primitive-data)
   - [Data type identifier](#data-type-identifier)
   - [Type Conversion](#type-conversion)
   - [Math Operations](#math-operations)
@@ -20,33 +21,34 @@
 - [Objects \& Arrays](#objects--arrays)
   - [Braces in JavaScript (object literal syntax)](#braces-in-javascript-object-literal-syntax)
   - [Object Manipulation Structure Levels](#object-manipulation-structure-levels)
-  - [Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}](#natural-hierarchical-structure-levels-in-different-variable-declarations-classification)
-  - [Object Constructors](#object-constructors)
+    - [Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}](#natural-hierarchical-structure-levels-in-different-variable-declarations-classification)
+    - [Object Constructors](#object-constructors)
   - [Array Constructors](#array-constructors)
   - [Array Methods](#array-methods)
   - [Classes \& Prototypes (ongoing update)](#classes--prototypes-ongoing-update)
 - [Control Flow](#control-flow)
-  - [**if/else statements**:](#ifelse-statements)
-  - [**switch statements**:](#switch-statements)
+  - [if/else](#ifelse)
+  - [switch](#switch)
   - [Loops](#loops)
-    - [**1. Primary Loop Structures** (for... / while / do... while)](#1-primary-loop-structures-for--while--do-while)
-    - [**2. Specialized Loops** (for... of / for... in / forEach())](#2-specialized-loops-for-of--for-in--foreach)
-    - [**Loop Control** (break/continue)](#loop-control-breakcontinue)
+    - [Primary Loop Structures (for... / while / do... while)](#primary-loop-structures-for--while--do-while)
+    - [Specialized Loops (for... of / for... in / forEach())](#specialized-loops-for-of--for-in--foreach)
+    - [Loop Control (break/continue)](#loop-control-breakcontinue)
     - [There are a lot of purpose to use loop:](#there-are-a-lot-of-purpose-to-use-loop)
-  - [return (ongoing update)](#return-ongoing-update)
-  - [throw (ongoing update)](#throw-ongoing-update)
-  - [try / catch / finally (ongoing update)](#try--catch--finally-ongoing-update)
+  - [return](#return)
+  - [throw](#throw)
+  - [try / catch / finally](#try--catch--finally)
 - [Functions \& Scope](#functions--scope)
   - [Closure](#closure)
   - [Scope Accessibility](#scope-accessibility)
 - [Asynchronous JavaScript](#asynchronous-javascript)
   - [async Function](#async-function)
     - [Clear Difference: async function vs normal function](#clear-difference-async-function-vs-normal-function)
-  - [Promises (ongoing update)](#promises-ongoing-update)
-    - [new Promise, then, catch, finally (ongoing update)](#new-promise-then-catch-finally-ongoing-update)
-    - [Promise.all / race / any / allSettled (ongoing update)](#promiseall--race--any--allsettled-ongoing-update)
-  - [Iterators \& Generators (sync and async) (ongoing update)](#iterators--generators-sync-and-async-ongoing-update)
-  - [Error handling in async (try/catch with await) (ongoing update)](#error-handling-in-async-trycatch-with-await-ongoing-update)
+  - [Promises](#promises)
+    - [new Promise (executor)](#new-promise-executor)
+    - [Static methods](#static-methods)
+    - [Instance methods](#instance-methods)
+  - [Iterators \& Generators (sync and async)](#iterators--generators-sync-and-async)
+  - [Error handling in async (try/catch with await)](#error-handling-in-async-trycatch-with-await)
 - [Web APIs](#web-apis)
   - [DOM (Document Object Model) Manipulation](#dom-document-object-model-manipulation)
     - [Structure of the DOM](#structure-of-the-dom)
@@ -63,7 +65,7 @@
   - [localStorage](#localstorage)
   - [CanvasRenderingContext2D API](#canvasrenderingcontext2d-api)
     - [Other big families](#other-big-families)
-      - [How to Think of It:](#how-to-think-of-it)
+    - [How to Think of It:](#how-to-think-of-it)
 
 # Foundations (ECMAScript Core Language)
 
@@ -297,9 +299,99 @@ This  a console log message.
 X This is an error message.
 ```
 
-## Modules & Imports/Exports (ongoing update)
+## Modules & Imports/Exports
+
+Modules are files that explicitly declare what they export (make public) and what they import (use from other modules). They give JavaScript a first-class, standardized way to structure programs across files. ES Modules (ESM) are static (the imports/exports are known at parse time), support live bindings (imports “see” updates), and enable features like top-level `await`.
+[MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules?utm_source=chatgpt.com)
+
+Why it exists. Before ESM, developers used script tags, IIFEs, or bundler conventions. Modules bring portability, better tooling, and clear boundaries. Node.js also supports ESM alongside the older CommonJS (require, module.exports).
+[Node.js](https://nodejs.org/api/esm.html?utm_source=chatgpt.com)
+
+- Named exports & imports
+
+  ```js
+  // math.js
+  export const TWO = 2;
+  export function add(a, b) {
+    return a + b;
+  }
+
+  // app.js
+  import { TWO, add } from "./math.js";
+  ```
+
+- Default export (one per module)
+
+  ```js
+  // api.js
+  export default function request(url) {
+    /* ... */
+  }
+
+  // app.js
+  import request from "./api.js";
+  ```
+
+- Renaming & namespace imports
+
+  ```js
+  import { add as plus } from "./math.js";
+  import * as MathLib from "./math.js";
+  ```
+
+- Re-exporting
+
+  ```js
+  export { add } from "./math.js"; // pass-through
+  export * as MathLib from "./math.js"; // namespace re-export
+  ```
+
+- Dynamic import (async)
+
+  ```js
+  const mod = await import("./heavy.js"); // returns a Promise
+  mod.run(); // use when needed
+  ```
+
+  Dynamic import() loads a module on demand and returns a Promise.
+  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import?utm_source=chatgpt.com)
+
+- Module metadata
+
+  ```js
+  console.log(import.meta.url); // URL of this module file
+  ```
+
+  `import.meta` exposes context info about the current module. Some environments also provide `import.meta.resolve()`.
+  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta?utm_source=chatgpt.com)
+
+- Top-level await (in modules only)
+  ```js
+  // config.js (ES module)
+  const resp = await fetch("/config.json");
+  export const config = await resp.json();
+  ```
+  `await` is allowed at the module’s top level; the module pauses loading until the awaited Promise settles.
+  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await?utm_source=chatgpt.com)
+
+Visualization (module graph).
+
+```
+[ app.js ] --imports--> [ math.js ]
+        \--dynamic-->   [ heavy.js ] (only when needed)
+```
+
+- You can’t use `import`/`export` inside blocks or conditionals (they’re static).
+- Imported bindings are live: if the exporter updates a binding, importers “see” it.
+  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export?utm_source=chatgpt.com)
+- Top-level `await` works in modules, not classic scripts.
+  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await?utm_source=chatgpt.com)
+
+Modules & Imports/Exports → Program structure (ESM): import, export, import(), import.meta, top-level await. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules?utm_source=chatgpt.com)
 
 # Data Types
+
+## Primitive Data & Non Primitive Data
 
 Primitive Data Types: These data types include numbers, strings, booleans, null, undefined, and symbols. These types are called "primitive" because they represent single values and are not objects. Primitive values are immutable, which means once they are created, their value cannot be changed.
 
@@ -353,7 +445,7 @@ Shay, 30, true, ["reading", "coding", "gaming"], { firstName: "Shay", lastName: 
   console.log("freeCodeCamp".indexOf("F")); // -1
   ```
 
-### Data type identifier
+## Data type identifier
 
 - Function similar to typeof but more precise and easy to use
 
@@ -410,7 +502,7 @@ console.log(divide(10, 0)); // Infinity
 console.log(divide(0, 0)); // "Error: Division resulted in NaN"
 ```
 
-### Type Conversion
+## Type Conversion
 
 Converting between types:
 
@@ -651,7 +743,7 @@ console.log(person.toString()); // "[object Object]"
   writing clear and error-free JavaScript code.*/
   ```
 
-### Math Operations
+## Math Operations
 
 Common math methods:
 
@@ -722,7 +814,7 @@ console.log(randomNumBtw1And20);
   console.log(Math.pow(8, 2)); // 64
   ```
 
-### JSON
+## JSON
 
 Stands for JavaScript Object Notation. It is a lightweight data-interchange format for storing and transporting data. It is a lightweight data-interchange format that is easy to read and write, and it is easy to parse and generate. Here's an example of a JSON object:
 
@@ -830,7 +922,7 @@ isAdmin: true
 
 # Operator
 
-### Arithmetic Operators
+## Arithmetic Operators
 
 Used for mathematical calculations:
 
@@ -864,7 +956,7 @@ Used for mathematical calculations:
   `let remainder = 10 % 3;`; // 1
   ```
 
-### Assignment Operators
+## Assignment Operators
 
 Used to assign values to variables:
 
@@ -903,7 +995,7 @@ Used to assign values to variables:
   `let c = 7; c %= 2;`; // Same as c = c % 2 (c becomes 1)
   ```
 
-### Comparison Operators
+## Comparison Operators
 
 Used to compare values:
 
@@ -982,7 +1074,7 @@ Used to compare values:
   `5 <= 10`; // true
   ```
 
-### Logical Operators
+## Logical Operators
 
 Used to determine logic between variables or values:
 
@@ -1077,7 +1169,7 @@ Used to determine logic between variables or values:
   }
   ```
 
-### Other Important Operators
+## Other Important Operators
 
 - **Ternary operator (?:)**: Shorthand for if-else statements ? expression if true : expression if false
 
@@ -1338,7 +1430,7 @@ Forth Statement Explain
 
 # Objects & Arrays
 
-### Braces in JavaScript (object literal syntax)
+## Braces in JavaScript (object literal syntax)
 
 ```js
 Curly Braces {}         - Objects & Code Blocks
@@ -1378,7 +1470,7 @@ console.log(greeting[1]); // Output: "e"
 console.log(greeting[greeting.length - 1]); // Output: "o"
 ```
 
-### Object Manipulation Structure Levels
+## Object Manipulation Structure Levels
 
 Accessing nested object data:
 
@@ -1724,7 +1816,7 @@ console.log(name); // Alice
 console.log(age); // 30
 ```
 
-### Array Constructors
+## Array Constructors
 
 Definition
 The Array() constructor creates JavaScript array objects. It can:
@@ -1792,7 +1884,7 @@ Summary
 
 Use the constructor only when you specifically need its unique behavior. Otherwise, stick with []. 🚀
 
-### Array Methods
+## Array Methods
 
 **Finding Elements**
 
@@ -2181,7 +2273,7 @@ console.log(arr); // [[1, 2, 3]] <-- an array inside an array
 
 # Control Flow
 
-## **if/else statements**:
+## if/else
 
 ```js
 const marks = 85;
@@ -2270,7 +2362,7 @@ const wordCount = getWordCount("I love freeCodeCamp");
 console.log(`Word Count: ${wordCount}`); // Word Count: 3
 ```
 
-## **switch statements**:
+## switch
 
 ```js
 switch (expression) {
@@ -2326,7 +2418,7 @@ Imagine:
 
 Different types of loops for iteration:
 
-### **1. Primary Loop Structures** (for... / while / do... while)
+### Primary Loop Structures (for... / while / do... while)
 
 - **for loop** - When you know how many iterations needed , processing arrays, need a counter.
 
@@ -2493,7 +2585,7 @@ Different types of loops for iteration:
   Thank you.
   ```
 
-### **2. Specialized Loops** (for... of / for... in / forEach())
+### Specialized Loops (for... of / for... in / forEach())
 
 - **for...of loop** - When you need to loop over values from an iterable.
 
@@ -2761,7 +2853,7 @@ Practical Use Cases
    });
    ```
 
-### **Loop Control** (break/continue)
+### Loop Control (break/continue)
 
 A break statement is used to exit a loop early, while a continue statement is used to skip the current iteration of a loop and move to the next one.
 
@@ -2994,11 +3086,132 @@ The classification answers:
 ~ When scope doesn’t drive the logic (side effects).
 This framework helps choose the right scope strategy for your loop’s purpose.
 
-## return (ongoing update)
+## return
 
-## throw (ongoing update)
+`return` ends the current function and hands a value back to the caller. If no value is provided, the result is `undefined`. You cannot use `return` outside a function.
+[MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return?utm_source=chatgpt.com)
 
-## try / catch / finally (ongoing update)
+Why it exists. Functions are little black boxes: inputs → work → output. `return` is the output chute.
+
+- Regular function
+
+  ```js
+  function area(r) {
+    if (r < 0) return 0; // early exit
+    return Math.PI * r * r; // final result
+  }
+  ```
+
+- Async function — always returns a Promise. <br>
+  Returning `x` resolves the returned Promise with `x`. Throwing rejects it.
+
+  ```js
+  async function load() {
+    return 42; // resolves to 42
+  }
+  ```
+
+  (Equivalent to `Promise.resolve(42)`). [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function?utm_source=chatgpt.com)
+
+- Generator (`function*`) — `return` finishes the generator and sets the `{ value, done: true }` of the final iterator result. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function%2A?utm_source=chatgpt.com)
+
+Visualization (what return means).
+
+```
+caller --> [ function body ... return VALUE ] --> caller gets VALUE
+```
+
+- A return inside finally overrides earlier return or throw. Prefer not to return from finally unless you know why.
+- In async functions, return → fulfilled Promise; throw → rejected Promise. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function?utm_source=chatgpt.com)
+
+## throw
+
+`throw` aborts the current execution path by raising an exception value (any value, though `Error` objects are recommended). Control jumps to the nearest matching `catch`; if none exists, the error becomes unhandled. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/throw?utm_source=chatgpt.com)
+
+Why it exists. It signals “this path cannot proceed”—for programmer errors, invalid input, failed invariants, or expected exceptional conditions.
+
+```js
+// Throwing built-in errors (recommended)
+function parsePort(s) {
+  const n = Number(s);
+  if (!Number.isInteger(n) || n < 0) {
+    throw new RangeError("Invalid port"); // aborts here
+  }
+  return n;
+}
+
+// Custom error with 'cause' (ES2022)
+try {
+  // ...
+} catch (e) {
+  throw new Error("Failed to start", { cause: e });
+}
+```
+
+Async interplay.
+
+- Inside an async function, `throw` rejects the function’s returned Promise.
+- Rejections are caught with `try…catch` around `await`, or with `.catch()` in Promise chains. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Async_JS/Promises?utm_source=chatgpt.com)
+
+Visualization (propagation).
+
+```
+throw --> bubble up call stack --> nearest try { ... } catch(e) { ... } handles it
+```
+
+- `return` → Function control flow & outputs (regular functions, async functions, generators). [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/return?utm_source=chatgpt.com)
+
+## try / catch / finally
+
+A `try` block lets you run code that might fail. If it throws, control jumps to `catch`. The `finally` block (if present) runs no matter what (success, failure, or early `return`) before exiting the whole construct. Since ES2019, `catch` can omit the error binding: `catch { ... }`. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch?utm_source=chatgpt.com)
+
+Why it exists. It’s the language’s structured error-handling: keep the happy path readable while providing a safe landing zone for failures.
+
+Core shapes.
+
+```js
+try {
+  risky();
+} catch (err) {
+  // handle or rethrow
+} finally {
+  cleanup();
+}
+```
+
+With async & await.
+
+```js
+async function main() {
+  try {
+    const data = await getData(); // if this rejects...
+    use(data);
+  } catch (err) {
+    // ...control comes here
+    console.error("Failed:", err);
+  } finally {
+    stopSpinner();
+  }
+}
+```
+
+- `catch` handles synchronous throws in the `try` block and rejections from awaited Promises. If you forget `await`, the rejection won’t be caught here. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Learn_web_development/Extensions/Async_JS/Promises?utm_source=chatgpt.com)
+
+Visualization (control flow).
+
+```
+try {
+   [ run code ]
+   ├─ success ───────────────┐
+   └─ throw/reject ─> catch  │
+                 (optional)  │
+finally { always runs } <────┘
+```
+
+- `finally` always runs (including after `return`/`throw`)—except on hard termination (e.g., process exit). [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch?utm_source=chatgpt.com)
+- Syntax errors aren’t catchable; `try…catch` only handles runtime errors in the executed block. [javascript.info](https://javascript.info/try-catch?utm_source=chatgpt.com)
+
+try / catch / finally → Structured error handling with guaranteed cleanup via finally. Works with sync code and with awaited Promises. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/try...catch?utm_source=chatgpt.com)
 
 # Functions & Scope
 
@@ -3290,15 +3503,23 @@ block scope will provide a solid foundation for understanding more advanced topi
 
 # Asynchronous JavaScript
 
+Asynchronous JavaScript refers to techniques that allow code execution without blocking the main thread. In simple terms, instead of waiting for a task (like fetching data from a server) to finish before moving on, JavaScript can “set it aside” and continue running other code, then come back when the task is done.
+
+Why it matters: JavaScript runs on a single thread (one task at a time). Without asynchrony, a slow task (like downloading a file) would freeze the entire page. Asynchrony keeps apps smooth and responsive.
+
+Visualization:
+
+```
+[Normal Sync Code]          [Async Code Flow]
+ Task A (waits 3s)           Task A (starts)
+ Task B (waits A done)       Task B (runs immediately)
+ Task C (waits B done)       Task C (runs immediately)
+                            [Meanwhile... A finishes later, result returned]
+```
+
 ## async Function
 
-An `async function` in JavaScript is a special kind of function that always returns a Promise.
-Inside it, you can use the keyword `await` to pause execution until another Promise resolves or rejects.
-
-It was introduced in ECMAScript 2017 (ES8) to simplify working with asynchronous code and Promises.
-Think of it as “syntactic sugar”: it makes asynchronous code look and read like synchronous code.
-
-Basic async function
+An async function is a special type of function in JavaScript that always returns a Promise. Inside it, you can use the await keyword to pause execution until another asynchronous operation finishes.
 
 ```js
 async function greet() {
@@ -3321,6 +3542,14 @@ async function fetchData() {
 }
 
 fetchData();
+```
+
+```js
+async function fetchData() {
+  let response = await fetch("https://api.example.com/data");
+  let json = await response.json();
+  return json; // returns a Promise
+}
 ```
 
 Here:
@@ -3416,15 +3645,135 @@ Bottom line
 - The essential difference: return type (value vs Promise) and the ability to use `await` inside.
 - Use `async` when dealing with tasks that take time (network calls, file reads, timers). Use normal functions for everything else.
 
-## Promises (ongoing update)
+## Promises
 
-### new Promise, then, catch, finally (ongoing update)
+A Promise is a JavaScript object representing the eventual result of an asynchronous operation. Think of it as a placeholder for a value that might not be available yet.
 
-### Promise.all / race / any / allSettled (ongoing update)
+States of a Promise
 
-## Iterators & Generators (sync and async) (ongoing update)
+- Pending: Still working.
+- Fulfilled: Finished successfully.
+- Rejected: Failed with an error.
+- Visualization:
 
-## Error handling in async (try/catch with await) (ongoing update)
+```
+Promise lifecycle:
+[ Pending ] ---> [ Fulfilled : value ]
+          \---> [ Rejected : error ]
+```
+
+### new Promise (executor)
+
+You can manually create a Promise using the `new Promise()` constructor.<br>
+The `executor` is a function with two arguments:
+
+- resolve(value) → marks success.
+- reject(error) → marks failure.
+
+```js
+let promise = new Promise((resolve, reject) => {
+  setTimeout(() => resolve("Done!"), 1000);
+});
+
+promise.then((result) => console.log(result)); // Done! (after 1s)
+```
+
+### Static methods
+
+Static methods are built-in helpers attached to the Promise class itself.
+
+- `Promise.resolve(value)` → creates an immediately resolved promise.
+- `Promise.reject(error)` → creates an immediately rejected promise.
+- `Promise.all([p1, p2])` → runs multiple promises in parallel, waits for all.
+- `Promise.race([p1, p2])` → returns the result of the first finished promise.
+- `Promise.allSettled([p1, p2])` → waits for all, gives success/failure info.
+- `Promise.any([p1, p2])` → resolves with the first success (ignores rejections).
+
+Visualization:
+
+```
+Promise.all    -> [✓ ✓ ✓] Waits for ALL
+Promise.race   -> [✓ ✗ ✓] First finished wins
+Promise.any    -> [✗ ✓ ✗] First SUCCESS wins
+Promise.allSettled -> [✓ ✗ ✓] Gives full report
+```
+
+### Instance methods
+
+These are called on an existing Promise.
+
+- `.then(onFulfilled, onRejected)` → handle success or failure.
+- `.catch(onRejected)` → handle only failure.
+- `.finally(onFinally)` → run cleanup code (success or failure).
+
+```js
+fetch("https://api.example.com/data")
+  .then((res) => res.json())
+  .then((data) => console.log(data))
+  .catch((err) => console.error("Error:", err))
+  .finally(() => console.log("Done fetching"));
+```
+
+## Iterators & Generators (sync and async)
+
+- Iterators
+
+  An iterator is an object that defines a sequence and a way to step through it.
+  It has a `next()` method that returns `{ value, done }`.
+
+  ```js
+  let arr = [10, 20, 30];
+  let iterator = arr[Symbol.iterator]();
+
+  console.log(iterator.next()); // { value: 10, done: false }
+  console.log(iterator.next()); // { value: 20, done: false }
+  console.log(iterator.next()); // { value: 30, done: false }
+  console.log(iterator.next()); // { value: undefined, done: true }
+  ```
+
+- Generators
+
+  Generators are special functions that can pause and resume using `function*` and `yield`.
+
+  ```
+  function* numberGen() {
+    yield 1;
+    yield 2;
+    yield 3;
+  }
+  let gen = numberGen();
+  console.log(gen.next()); // { value: 1, done: false }
+  ```
+
+- Async Generators
+  Work like generators but yield Promises. Declared with `async function*`.
+  ```js
+  async function* asyncNumbers() {
+    yield 1;
+    yield 2;
+  }
+  for await (let n of asyncNumbers()) {
+    console.log(n); // 1, then 2
+  }
+  ```
+
+## Error handling in async (try/catch with await)
+
+When using async/await, errors can be caught using try/catch just like synchronous code.
+
+```js
+async function loadData() {
+  try {
+    let response = await fetch("bad-url"); // will throw
+    let data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error("Caught error:", error.message);
+  }
+}
+```
+
+This is cleaner than handling errors only with .catch() in promises.
 
 # Web APIs
 
@@ -4154,7 +4503,7 @@ const ctx = canvas.getContext("2d");
 - Compositing: globalCompositeOperation (blending modes like Photoshop).
 - Pixel manipulation: getImageData(), putImageData() (low-level bitmap access).
 
-#### How to Think of It:
+### How to Think of It:
 
 - Path methods → “construct geometry.”
 - Stroke/fill → “apply paint to geometry.”

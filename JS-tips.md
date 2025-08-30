@@ -46,7 +46,7 @@
   - [Promises](#promises)
     - [new Promise (executor)](#new-promise-executor)
     - [Static methods](#static-methods)
-    - [Instance methods](#instance-methods)
+    - [Instance methods (.then / .catch / .finally)](#instance-methods-then--catch--finally)
   - [Iterators \& Generators (sync and async)](#iterators--generators-sync-and-async)
   - [Error handling in async (try/catch with await)](#error-handling-in-async-trycatch-with-await)
 - [Web APIs](#web-apis)
@@ -3517,6 +3517,25 @@ Visualization:
                             [Meanwhile... A finishes later, result returned]
 ```
 
+Asynchrony in JavaScript is basically an act of tolerance with reality.
+
+**JavaScript is `single-threaded`. That means `it can’t do two things literally at once` in the same thread. So how does it “pretend” to `multitasking`? By compromising:**
+
+- Instead of blocking (like “I’ll just sit here and wait while the file downloads”),
+- it says “Okay, I’ll note that you’re downloading. Meanwhile, I’ll keep serving other requests, drawing the UI, running animations. Ping me when you’re done.”
+
+It’s like `human multitasking`, but not the kind where you truly do two things at once (brains are bad at that). It’s the kind where you set a task aside, let it run in the background, and pick it up when it’s ready.
+
+Example in human terms:
+
+- Synchronous life:
+
+  You put water on the stove to boil. You stand there staring at the pot, waiting, doing nothing else until it boils. Super inefficient.
+
+- Asynchronous life:
+
+  You put water on the stove to boil. While it’s heating, you chop vegetables and set the table. Later the pot whistles at you (callback/Promise resolution), and you handle it.
+
 ## async Function
 
 An async function is a special type of function in JavaScript that always returns a Promise. Inside it, you can use the await keyword to pause execution until another asynchronous operation finishes.
@@ -3698,7 +3717,7 @@ Promise.any    -> [✗ ✓ ✗] First SUCCESS wins
 Promise.allSettled -> [✓ ✗ ✓] Gives full report
 ```
 
-### Instance methods
+### Instance methods (.then / .catch / .finally)
 
 These are called on an existing Promise.
 

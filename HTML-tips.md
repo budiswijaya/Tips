@@ -51,4 +51,4 @@ Wave Web Accessibility Eval Tools. This gives you an evaluation of your website 
 
 ### CanvasRenderingContext2D API:
 
-- <canvas> → provides a drawing surface within a web page, allowing for dynamic, scriptable rendering of 2D shapes and bitmap images using JavaScript. It was introduced with HTML5.
+- `<canvas>` → provides a drawing surface within a web page, allowing for dynamic, scriptable rendering of 2D shapes and bitmap images using JavaScript. It was introduced with HTML5.

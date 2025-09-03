@@ -1,11 +1,3 @@
-- [Foundations (ECMAScript Core Language)](#foundations-ecmascript-core-language)
-  - [Character Encoding](#character-encoding)
-  - [Number Systems](#number-systems)
-  - [Variable Naming Conventions](#variable-naming-conventions)
-  - [Variable Declarations](#variable-declarations)
-  - [String Manipulation](#string-manipulation)
-  - [Console.logging for debugging](#consolelogging-for-debugging)
-  - [Modules \& Imports/Exports](#modules--importsexports)
 - [Data Types](#data-types)
   - [Primitive Data \& Non Primitive Data](#primitive-data--non-primitive-data)
   - [Type Checking](#type-checking)
@@ -67,7 +59,7 @@
     - [Other big families](#other-big-families)
     - [How to Think of It:](#how-to-think-of-it)
 
-# Foundations (ECMAScript Core Language)
+## JavaScript Concepts
 
 Variables: Store information.
 

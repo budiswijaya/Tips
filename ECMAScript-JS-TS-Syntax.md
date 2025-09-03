@@ -41,23 +41,14 @@
     - [Instance methods (.then / .catch / .finally)](#instance-methods-then--catch--finally)
   - [Iterators \& Generators (sync and async)](#iterators--generators-sync-and-async)
   - [Error handling in async (try/catch with await)](#error-handling-in-async-trycatch-with-await)
-- [Web APIs](#web-apis)
-  - [DOM (Document Object Model) Manipulation](#dom-document-object-model-manipulation)
-    - [Structure of the DOM](#structure-of-the-dom)
-    - [DOM Nodes](#dom-nodes)
-    - [Accessing the DOM in JavaScript](#accessing-the-dom-in-javascript)
-    - [DOM Event](#dom-event)
-      - [Key concepts for beginners](#key-concepts-for-beginners)
-  - [HTTP Request](#http-request)
-    - [fetch](#fetch)
-    - [axios (third-party library, not an API)](#axios-third-party-library-not-an-api)
-    - [XMLHttpRequest (XHR)](#xmlhttprequest-xhr)
-    - [Differences (purpose \& practical choice)](#differences-purpose--practical-choice)
-      - [Which to pick?](#which-to-pick)
-  - [localStorage](#localstorage)
-  - [CanvasRenderingContext2D API](#canvasrenderingcontext2d-api)
-    - [Other big families](#other-big-families)
-    - [How to Think of It:](#how-to-think-of-it)
+- [TypeScript vs JavaScript — Deep Technical Documentation](#typescript-vs-javascript--deep-technical-documentation)
+  - [1. Grammar (Syntax Layer)](#1-grammar-syntax-layer)
+  - [2. Constructs TypeScript Adds That JavaScript Lacks](#2-constructs-typescript-adds-that-javascript-lacks)
+  - [3. Semantics (Meaning \& Runtime Behavior)](#3-semantics-meaning--runtime-behavior)
+  - [4. React + TypeScript Event Deep Dive](#4-react--typescript-event-deep-dive)
+  - [5. Summary Table](#5-summary-table)
+  - [6. Why TypeScript Exists](#6-why-typescript-exists)
+  - [7. Mental Model](#7-mental-model)
 
 ## JavaScript Concepts
 
@@ -3786,739 +3777,370 @@ async function loadData() {
 
 This is cleaner than handling errors only with .catch() in promises.
 
-# Web APIs
+# TypeScript vs JavaScript — Deep Technical Documentation
 
-## DOM (Document Object Model) Manipulation
-
-DOM (Document Object Model) manipulation is how you interact with HTML elements using JavaScript. A programming interface for web documents.
-
-- It represents the HTML or XML document as a structured tree of objects, where each node corresponds to a part of the document, such as an element, attribute, or text.
-- It allows scripts (like JavaScript) to read, modify, and manipulate the content, structure, and style of a webpage dynamically.
-
-Think of it as a live map of the page that JavaScript can interact with.
-
-### Structure of the DOM
-
-- Tree structure: The DOM is like a family tree of nodes.
-  - document → root
-    - html → parent element
-      - head → contains metadata
-        - title
-      - body → visible page content
-        - h1 → heading
-          - p → paragraph
-          - div → container
-          - canvas → drawing area
-
-```js
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>My Page</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <p>This is a paragraph.</p>
-  </body>
-</html>
+```
+Core Idea:
+TypeScript is a superset of JavaScript.
+Every valid JavaScript program is valid TypeScript, but TypeScript adds compile-time types and tooling features that vanish at runtime, leaving pure JavaScript to execute.
 ```
 
-Corresponding DOM tree (simplified):
+Think of JavaScript as the runtime language, while TypeScript is a layer of metadata and constraints on top of it.
+
+TS gives your code eyes, but those eyes disappear before running.
+
+## 1. Grammar (Syntax Layer)
+
+Grammar defines what symbols and structures are legal.
+
+| Feature   | JavaScript                                | TypeScript                                                                                     |
+| --------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| Variables | `var`, `let`, `const`                     | Same, plus **type annotations**                                                                |
+| Functions | Standard function syntax, arrow functions | Same + typed parameters and return types                                                       |
+| Classes   | ES6 classes supported                     | Same + typed properties, access modifiers (`public`, `private`, `protected`), abstract classes |
+| Modules   | `import`, `export` (ES Modules)           | Same, plus TS-specific module resolution and `import type`                                     |
+| Comments  | `//`, `/* */`                             | Same, plus `/** JSDoc */` works for type hints                                                 |
+| Types     | Runtime only (dynamic)                    | Compile-time type annotations                                                                  |
+
+JavaScript
+
+```js
+function add(a, b) {
+  return a + b;
+}
+```
+
+TypeScript
+
+```ts
+function add(a: number, b: number): number {
+  return a + b;
+}
+```
+
+Type annotations (: number) do not exist in JS.
+
+## 2. Constructs TypeScript Adds That JavaScript Lacks
+
+These are the building blocks unique to TypeScript.
+
+Each of these introduces capabilities that don’t exist in plain JS.
+
+- Type Annotations
+
+  Attach explicit types to variables, parameters, and return values.
+
+  ```ts
+  let username: string = "Eeve";
+  let age: number = 25;
+  let isAdmin: boolean = true;
+  ```
+
+  At runtime: These annotations vanish — the emitted JS just has the values.
+
+- Interfaces and Type Aliases
+
+  Define custom shapes for objects and functions
+
+  ```ts
+  interface User {
+    id: number;
+    name: string;
+  }
+
+  type StringOrNumber = string | number;
+
+  function printId(id: StringOrNumber) {
+    console.log(id);
+  }
+  ```
+
+  Interfaces are extensible (extends) and perfect for modeling structured data like API responses.
+
+- Union and Intersection Types
+
+  Unions express either/or, intersections express both at once.
+
+  ```ts
+  // Union
+  let input: string | number;
+  input = "hello";
+  input = 42;
+
+  // Intersection
+  type A = { a: number };
+  type B = { b: string };
+  type AB = A & B; // must have both `a` and `b`
+  ```
+
+  JavaScript cannot declare these relationships at compile time.
+
+- Generics
+
+  Reusable, type-safe code.
+
+  ```ts
+  function identity<T>(value: T): T {
+    return value;
+  }
+
+  let result = identity<string>("Hello"); // `T` inferred as string
+  ```
+
+  JavaScript has no way to express this safety — you’d rely on documentation or runtime checks.
+
+- Enums
+
+  Named constants for better readability.
+
+  ```ts
+  enum Direction {
+    Up,
+    Down,
+    Left,
+    Right,
+  }
+
+  let move: Direction = Direction.Up;
+  ```
+
+  At runtime, compiled to a JS object:
+
+  ```hs
+  {
+    0: "Up",
+    1: "Down",
+    2: "Left",
+    3: "Right",
+    Up: 0,
+    Down: 1,
+    Left: 2,
+    Right: 3
+  }
+  ```
+
+- Tuples
+
+  Fixed-size arrays with known types per index.
+
+  ```ts
+  let point: [number, number] = [0, 0];
+  let person: [string, number, boolean] = ["Alice", 30, true];
+  ```
+
+  JavaScript only has plain arrays — no way to enforce structure at compile time.
+
+- Access Modifiers in Classes
+
+  ```ts
+  class Person {
+    private ssn: string; // only inside class
+    protected birthDate: Date; // inside class + subclasses
+    public name: string; // anywhere
+
+    constructor(name: string, ssn: string, birthDate: Date) {
+      this.name = name;
+      this.ssn = ssn;
+      this.birthDate = birthDate;
+    }
+  }
+  ```
+
+  JS has no private/protected enforcement except for recent #private syntax — TS provides static enforcement
+
+- Utility Types (Built-in Helpers)
+
+  Reusable type transformations:
+
+  | Utility Type  | Purpose                       |
+  | ------------- | ----------------------------- |
+  | `Partial<T>`  | Make all properties optional  |
+  | `Required<T>` | Make all properties required  |
+  | `Pick<T, K>`  | Select a subset of properties |
+  | `Omit<T, K>`  | Exclude specific properties   |
+  | `Readonly<T>` | Prevent modification          |
+
+  ```ts
+  interface User {
+    id: number;
+    name: string;
+    email: string;
+  }
+
+  type UserPreview = Pick<User, "id" | "name">;
+  ```
+
+- Decorators (Experimental)
+
+  Attach metadata or behavior to classes and methods.
+
+  ```ts
+  function log(target: any) {
+    console.log("Decorator applied to:", target);
+  }
+
+  @log
+  class MyClass {}
+  ```
+
+  Only in TS (or with experimental JS proposals).
+
+- Type-Only Imports
+
+  Avoid importing runtime code when you only need types.
+
+  ```ts
+  import type { User } from "./models";
+  ```
+
+  JavaScript can’t distinguish between type-only and runtime imports.
+
+## 3. Semantics (Meaning & Runtime Behavior)
+
+| Aspect          | JavaScript             | TypeScript                                 |
+| --------------- | ---------------------- | ------------------------------------------ |
+| Type Checking   | Runtime only           | Compile-time                               |
+| Error detection | Only when code runs    | Before running (compiler catches)          |
+| Tooling         | Basic autocomplete     | Rich autocomplete, refactoring, navigation |
+| Scalability     | Harder for large teams | Easier with shared type contracts          |
+| Output code     | Original JS            | JS with types removed                      |
+
+## 4. React + TypeScript Event Deep Dive
+
+This is where many niche TypeScript-only constructs live, such as:
+
+```tsx
+(e: React.ChangeEvent<HTMLInputElement>)
+```
+
+JavaScript doesn’t have these because JS events are untyped until runtime and TS provides synthetic event types from @types/react.
+
+- Why You Need e.currentTarget
+
+  e.target is very generic (EventTarget) and does not guarantee .value exists.
+
+  TS will error on:
+
+  ```tsx
+  const handleChange = (e) => {
+    console.log(e.target.value); // ❌ Type error
+  };
+  ```
+
+  Correct way:
+
+  ```tsx
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.currentTarget.value); // ✅ Fully typed
+  };
+  ```
+
+- Common React Event Types
+
+| Element               | Event                                    | Type Annotation (for handler parameter)       |
+| --------------------- | ---------------------------------------- | --------------------------------------------- |
+| `<input>` onChange    | `React.ChangeEvent<HTMLInputElement>`    | `(e: React.ChangeEvent<HTMLInputElement>)`    |
+| `<textarea>` onChange | `React.ChangeEvent<HTMLTextAreaElement>` | `(e: React.ChangeEvent<HTMLTextAreaElement>)` |
+| `<select>` onChange   | `React.ChangeEvent<HTMLSelectElement>`   | `(e: React.ChangeEvent<HTMLSelectElement>)`   |
+| `<form>` onSubmit     | `React.FormEvent<HTMLFormElement>`       | `(e: React.FormEvent<HTMLFormElement>)`       |
+| `<button>` onClick    | `React.MouseEvent<HTMLButtonElement>`    | `(e: React.MouseEvent<HTMLButtonElement>)`    |
+| Keyboard events       | `React.KeyboardEvent<HTMLInputElement>`  | `(e: React.KeyboardEvent<HTMLInputElement>)`  |
+
+- Example: Fully Typed React Component
+
+  ```tsx
+  import React, { useState } from "react";
+
+  function SignupForm(): JSX.Element {
+    const [email, setEmail] = useState<string>("");
+    const [agree, setAgree] = useState<boolean>(false);
+
+    const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(e.currentTarget.value); // safe access to value
+    };
+
+    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      setAgree(e.currentTarget.checked); // safe access to checked
+    };
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      console.log({ email, agree });
+    };
+
+    return (
+      <form onSubmit={handleSubmit}>
+        <input type="email" value={email} onChange={handleEmailChange} />
+        <input
+          type="checkbox"
+          checked={agree}
+          onChange={handleCheckboxChange}
+        />
+        <button type="submit">Sign Up</button>
+      </form>
+    );
+  }
+
+  export default SignupForm;
+  ```
+
+- Niche Situations
+
+  File Input
+
+  ```tsx
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.currentTarget.files?.[0];
+    if (file) console.log(file.name);
+  };
+  ```
+
+  Casting when using e.target
+
+  ```tsx
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const target = e.target as HTMLInputElement;
+    console.log(target.value);
+  };
+  ```
+
+  Generic event handler
+
+  ```tsx
+  function handleEvent<T extends HTMLElement>(e: React.SyntheticEvent<T>) {
+    console.log(e.currentTarget.tagName);
+  }
+  ```
+
+## 5. Summary Table
+
+| Layer             | JavaScript                   | TypeScript                                                                         |
+| ----------------- | ---------------------------- | ---------------------------------------------------------------------------------- |
+| Grammar           | Pure ECMAScript syntax       | ECMAScript + type annotations                                                      |
+| Constructs        | Functions, classes, modules  | + Interfaces, generics, enums, tuples, utility types, access modifiers, decorators |
+| Semantics         | Runtime-only type checking   | Compile-time safety, better tooling, erased types at runtime                       |
+| React Integration | `e` is untyped, runtime only | Strongly typed events, `React.ChangeEvent<HTMLInputElement>`, etc.                 |
+
+## 6. Why TypeScript Exists
+
+TypeScript gives you:
+
+- Early error detection before running code.
+- Confidence when refactoring large codebases.
+- Better developer experience with autocompletion and navigation.
+- Scalability for teams with clear type contracts.
+  And crucially — none of these features change the runtime behavior. The output is always plain JavaScript.
+
+## 7. Mental Model
+
+Think of TypeScript as a translator and enforcer:
 
 ```css
-document
- └── html
-      ├── head
-      │    └── title
-      └── body
-           ├── h1
-           └── p
+[ TypeScript Code + Types ]
+             ↓
+   Compiler removes types
+             ↓
+     [ Plain JavaScript ]
+             ↓
+        Runs in browser/Node
 ```
-
-### DOM Nodes
-
-1. Element nodes – HTML tags like `<div>`, `<p>`, `<canvas>`
-2. Text nodes – actual text inside elements
-3. Attribute nodes – element attributes like id, class, src
-4. Comment nodes – HTML comments
-
-### Accessing the DOM in JavaScript
-
-- You can select and manipulate elements using built-in DOM methods:
-
-1. Selecting Elements by ID (getElementById) - Finds a single element with the specified id attribute.
-
-   ```js
-   const element = document.getElementById("id-name");
-   ```
-
-   Example
-
-   ```html
-   <div id="header">Welcome</div>
-   ```
-
-   ```js
-   const header = document.getElementById("header");
-   header.textContent = "Hello World!"; // Changes text
-   ```
-
-2. Selecting Elements by Class (getElementsByClassName) - Finds all elements with a given class name.
-
-   ```js
-   const elements = document.getElementsByClassName("class-name");
-   ```
-
-   Example
-
-   ```html
-   <p class="highlight">First</p>
-   <p class="highlight">Second</p>
-   ```
-
-   ```js
-   const highlights = document.getElementsByClassName("highlight");
-   highlights[0].style.color = "red"; // Changes first element
-   ```
-
-3. Selecting Elements by Tag Name (getElementsByTagName) - Finds all elements with a given HTML tag (e.g., `<div>`, `<p>`).
-
-   ```js
-   const elements = document.getElementsByTagName("div");
-   ```
-
-   Example
-
-   ```html
-   <div>Box 1</div>
-   <div>Box 2</div>
-   ```
-
-   ```js
-   const divs = document.getElementsByTagName("div");
-   divs[1].style.backgroundColor = "blue"; // Changes second div
-   ```
-
-4. Query Selector (querySelector & querySelectorAll) - Finds elements using CSS-style selectors (more flexible).
-
-   | Method             | Returns                | Example                                    |
-   | ------------------ | ---------------------- | ------------------------------------------ |
-   | querySelector()    | First matching element | document.querySelector('.class')           |
-   | querySelectorAll() | NodeList (all matches) | document.querySelectorAll('div.highlight') |
-
-   Examples
-
-   ```js
-   // Single element
-   const button = document.querySelector("#submit-btn");
-
-   // Multiple elements
-   const redItems = document.querySelectorAll(".red");
-   redItems.forEach((item) => (item.style.color = "red"));
-   ```
-
-Summary Cheat Sheet
-
-```js
-// By ID (fastest)
-document.getElementById("id");
-
-// By Class (returns HTMLCollection)
-document.getElementsByClassName("class");
-
-// By Tag (e.g., div, p)
-document.getElementsByTagName("div");
-
-// CSS Selectors (modern)
-document.querySelector(".class"); // First match
-document.querySelectorAll("div.highlight"); // All matches
-```
-
-### DOM Event
-
-addEventListener is a method provided by the EventTarget interface in the web APIs that allows developers to register a function (called an event listener) to be called whenever a specific event occurs on a given DOM element, the document, or the window object.
-
-```js
-target.addEventListener(type, listener, options);
-```
-
-- Parameters:
-
-1. type (string) – The name of the event to listen for (e.g., "click", "keydown").
-2. listener (function) – The callback function to execute when the event fires. It receives an Event object.
-3. options (optional) – An object or boolean controlling event behavior:
-   - capture (boolean) – indicates if the event should be captured during the capture phase instead of bubbling.
-   - once (boolean) – the listener will be invoked at most once.
-   - passive (boolean) – signals the listener won’t call preventDefault(), improving performance for scrolling events.
-
-```js
-<button id="myButton">Click Me</button>
-<script>
-  const button = document.getElementById("myButton");
-
-  // Add a click event listener
-  button.addEventListener("click", (event) => {
-    alert("Button clicked!");
-    console.log(event); // The Event object
-  });
-
-  // Add a keydown listener to window
-  window.addEventListener("keydown", (event) => {
-    if (event.key === "ArrowUp") {
-      console.log("Up arrow pressed");
-    }
-  });
-</script>
-```
-
-1. Event Target:
-
-   - The object that can receive events. Most commonly:
-   - DOM elements (div, canvas, button)
-   - document
-   - window
-
-2. Event Types:
-
-   - Mouse events: "click", "mousedown", "mouseup", "mousemove", "mouseover", "mouseout"
-   - Keyboard events: "keydown", "keyup", "keypress"
-   - Window/document events: "resize", "scroll", "focus", "blur"
-   - Touch events (mobile): "touchstart", "touchmove", "touchend"
-   - Form/input events: "input", "change", "submit"
-   - Custom events: Developers can create their own events using new CustomEvent().
-
-3. Event phases (capturing and bubbling):
-
-   - Events travel in three phases:
-   - Capture phase: from window down to the target element
-   - Target phase: the event reaches the target element
-   - Bubble phase: from target element back up to window
-   - addEventListener can listen during capture by setting capture: true.
-
-4. Event object:
-
-   - Passed to the listener as a parameter.
-   - Contains details about the event:
-   - event.type → event type
-   - event.target → the element that triggered the event
-   - event.key → key pressed (for keyboard events)
-   - event.clientX, event.clientY → mouse coordinates
-
-5. Advantages over older methods:
-
-   - Older on<event> properties (e.g., element.onclick = ...) overwrite previous handlers.
-   - addEventListener allows multiple listeners on the same element/event type.
-
-| Event Category         | Examples                                                              | Typical Use Case                              |
-| ---------------------- | --------------------------------------------------------------------- | --------------------------------------------- |
-| Mouse events           | `click`, `dblclick`, `mousemove`, `mousedown`, `mouseup`, `mouseover` | Buttons, drag & drop, canvas drawing          |
-| Keyboard events        | `keydown`, `keyup`, `keypress`                                        | Games, form shortcuts, key controls           |
-| Window/Document events | `resize`, `scroll`, `focus`, `blur`                                   | Responsive UI, lazy loading, visibility logic |
-| Touch events (mobile)  | `touchstart`, `touchmove`, `touchend`                                 | Mobile gestures, swipes                       |
-| Form/input events      | `input`, `change`, `submit`                                           | Form validation, live updates                 |
-| Media events           | `play`, `pause`, `ended`                                              | Video/audio control                           |
-| Custom events          | `new CustomEvent("myEvent")`                                          | App-specific triggers                         |
-
-- Key Takeaways
-
-  - addEventListener is built-in, part of the browser API.
-  - Allows you to monitor user interactions and system events in real-time.
-  - Provides flexibility with capture, once, and passive options.
-  - Works for all standard events (mouse, keyboard, touch, etc.) and custom events.
-  - Safer and more versatile than older on<event> assignments.
-
-- DOM vs HTML
-  | HTML | DOM |
-  | ------------------------------------ | -------------------------------------- |
-  | Static markup | Dynamic object model |
-  | Written in HTML file | Built and updated in memory by browser |
-  | Cannot be directly manipulated by JS | Fully accessible and mutable via JS |
-
-#### Key concepts for beginners
-
-- Everything on the page is a node – even text and comments.
-- DOM is live – changes in the DOM immediately reflect on the page.
-- Events let you interact with the DOM.
-- Selection + manipulation = dynamic web – query elements, change them, listen for actions.
-
-## HTTP Request
-
-### fetch
-
-`fetch()` is the modern, built-in browser API for making network requests. It returns a Promise that resolves to a `Response` object; note that the Promise only rejects for network failures or a badly formed URL — it does not reject for HTTP error status like `404` or `500`. You must check `response.ok` or `response.status`.
-[MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch?utm_source=chatgpt.com)
-
-Promise-based:
-
-```js
-fetch("/api/user")
-  .then((res) => {
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return res.json();
-  })
-  .then((data) => console.log(data))
-  .catch((err) => console.error("Fetch error:", err));
-```
-
-async/await:
-
-```js
-async function getUser() {
-  const res = await fetch("/api/user");
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  const data = await res.json();
-  return data;
-}
-```
-
-Abort / timeout (fetch + `AbortController`):
-
-```js
-const controller = new AbortController();
-setTimeout(() => controller.abort(), 5000);
-
-try {
-  const res = await fetch("/api/long", { signal: controller.signal });
-  // ...check res.ok and process
-} catch (err) {
-  if (err.name === "AbortError") console.log("Request aborted");
-}
-```
-
-How it works (plain English)
-
-- `fetch(url, options)` returns a Promise for a `Response`.
-- The `Response` exposes body readers (`.json()`, `.text()`, `.blob()`, streaming via `body`), headers, `status`, and `ok`.
-- Because `fetch` resolves on HTTP errors, you must explicitly check `response.ok` (or `status`). Failure to do so is the #1 beginner bug.
-  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch?utm_source=chatgpt.com)
-
-Visualization (simple flow)
-
-```
-Your code -> fetch()  --> network --> server
-          <- Promise resolves to Response (even if 404)
-          -> call res.json() to read body
-```
-
-Pros
-
-- Native (no library).
-- Promise-based and ergonomic with `async/await`.
-- Modern features: streaming bodies, `AbortController`, readable streams.
-
-Cons / gotchas
-
-- Doesn’t reject on HTTP errors (you must check `response.ok`).
-  MDN Web Docs
-- Credentials/cookies: default credentials policy is `same-origin`; to send cookies cross-site you must set `credentials: 'include'`.
-  MDN Web Docs
-- No built-in interceptors or automatic JSON error parsing — you roll those yourself.
-
-### axios (third-party library, not an API)
-
-`axios` is a widely used, promise-based HTTP client library that works both in the browser (wraps XHR) and in Node.js (wraps the native `http` module). It offers features that make real-world API work easier: auto JSON transforms, request/response interceptors, timeouts, cancellation, and convenient config defaults.
-[Axios](https://axios-http.com/docs/intro?utm_source=chatgpt.com)
-Promise-based:
-
-```js
-axios
-  .get("/api/user")
-  .then((res) => console.log(res.data))
-  .catch((err) => console.error(err));
-```
-
-async/await:
-
-```js
-try {
-  const res = await axios.get("/api/user");
-  console.log(res.data);
-} catch (err) {
-  // err.response, err.request, err.message help diagnose
-}
-```
-
-Interceptors (attach headers, handle auth):
-
-```js
-axios.interceptors.request.use((config) => {
-  config.headers.Authorization = `Bearer ${token}`;
-  return config;
-});
-
-axios.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    if (err.response && err.response.status === 401) {
-      // refresh token or redirect
-    }
-    return Promise.reject(err);
-  }
-);
-```
-
-Timeout and cookies:
-
-```js
-axios.get("/private", { timeout: 5000, withCredentials: true });
-```
-
-How it works (plain English)
-
-- In the browser axios issues requests via `XMLHttpRequest`; in Node it uses Node’s `http` module — same API across environments. It returns a Promise which resolves with a response object that has `.data` (parsed body), `.status`, `.headers`, `.config`.
-  [Axios](https://axios-http.com/docs/intro?utm_source=chatgpt.com)
-- By default, axios rejects the Promise when the HTTP status is outside the range `200 <= status < 300` (you can change this behavior with `validateStatus`). That difference vs `fetch` is a common reason folks pick axios.
-  [Axios](https://axios-http.com/docs/handling_errors?utm_source=chatgpt.com)
-
-Pros
-
-- Nice defaults (auto parse JSON to `res.data`), easy interceptors (for auth/metrics), built-in timeouts, cancelation helpers, widely used in tutorials and enterprise apps.
-  [Axios](https://axios-http.com/docs/intro?utm_source=chatgpt.com)
-
-Cons / gotchas
-
-- Adds a dependency and bundle size (tiny but not zero).
-- Behavior differences vs `fetch` (errors, defaults) — you should learn what axios returns on error (`err.response`, `err.request`).
-
-### XMLHttpRequest (XHR)
-
-`XMLHttpRequest` is the original browser API for AJAX-style requests. It uses an event/callback model (`onreadystatechange`, `onload`, `onerror`, `onprogress`) and exposes `readyState` values you can observe to track progress and completion. Modern `fetch` wraps the same underlying browser network primitives but with a Promise and friendlier API.
-[MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest?utm_source=chatgpt.com)
-
-Minimal example (classic)
-
-```js
-const xhr = new XMLHttpRequest();
-xhr.open("GET", "/api/user", true); // true = asynchronous
-xhr.onload = function () {
-  if (xhr.status >= 200 && xhr.status < 300) {
-    const data = JSON.parse(xhr.responseText);
-    console.log(data);
-  } else {
-    console.error("HTTP", xhr.status);
-  }
-};
-xhr.onerror = function () {
-  console.error("Network error");
-};
-xhr.send();
-```
-
-`readyState` values (brief):
-
-- `0` UNSENT — not opened
-- `1` OPENED — `open()` called
-- `2` HEADERS_RECEIVED — `send()` called and headers available
-- `3` LOADING — response body is being received (partial)
-- `4` DONE — complete [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest?utm_source=chatgpt.com)
-
-How it works (plain English)
-
-- Event-driven: you register handlers for state changes, load, error, and progress. It gives finer-grained progress callbacks (useful for file uploads/downloads).
-- Synchronous mode exists but should be avoided—the UI will freeze.
-- Pros
-- Fine-grained control (progress events).
-- Very widely supported (legacy browsers).
-
-Cons
-
-- Verbose, callback-style; Promise-based APIs (fetch/axios) are typically easier to read and compose.
-- More boilerplate to parse responses and handle common patterns.
-
-### Differences (purpose & practical choice)
-
-| Feature / concern              |                                                              `fetch` |                                                                             `axios` |                            `XHR` |
-| ------------------------------ | -------------------------------------------------------------------: | ----------------------------------------------------------------------------------: | -------------------------------: |
-| API style                      |                                               Promise-based (native) |                                                             Promise-based (library) |             Callback/event based |
-| Rejects on 4xx/5xx by default? |               **No** — resolves; check `res.ok`. ([MDN Web Docs][1]) | **Yes** — rejects by default outside 2xx (`validateStatus` overrides). ([Axios][2]) | No (you check `status` manually) |
-| Auto JSON parsing              |                                           No (you call `res.json()`) |                                              Yes — `res.data` auto-parsed when JSON |                               No |
-| Interceptors / middleware      |                                              No (you build wrappers) |                                                            ✅ built-in interceptors |                               No |
-| Cancellation                   |                                                    `AbortController` |                                         Cancel tokens / AbortController (supported) |                    `xhr.abort()` |
-| Credentials / cookies          | `credentials` option; defaults to `same-origin`. ([MDN Web Docs][3]) |                          `withCredentials: true/false` (configurable). ([Axios][4]) |     `xhr.withCredentials = true` |
-| Browser + Node?                |            Browser (Node has `fetch` in newer versions or polyfills) |                 Works in browser **and** Node (isomorphic) — same API. ([Axios][4]) |                     Browser only |
-| Streaming support              |                                          Yes (ReadableStream bodies) |                                               Some support (depends on environment) |                          Limited |
-
-[1]: https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch?utm_source=chatgpt.com "Using the Fetch API - MDN"
-[2]: https://axios-http.com/docs/handling_errors?utm_source=chatgpt.com "Handling Errors | Axios Docs"
-[3]: https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials?utm_source=chatgpt.com "Request: credentials property - MDN - Mozilla"
-[4]: https://axios-http.com/docs/intro?utm_source=chatgpt.com "Getting Started | Axios Docs"
-
-#### Which to pick?
-
-- Use `fetch` when you want a zero-dependency, standards-based approach for simple requests and you’re comfortable doing a couple things manually (checking response.ok, parsing JSON, wiring timeouts).
-  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch?utm_source=chatgpt.com)
-  +1
-- Use `axios` for production apps where you want convenience (automatic JSON handling), interceptors for auth and retries, easy timeouts, cross-platform (browser + Node), and a friendlier error object. [Axios](https://axios-http.com/docs/intro?utm_source=chatgpt.com)
-- Learn XHR so you understand legacy code, progress events, and the lower-level mechanics — but prefer fetch/axios for new code.
-  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest?utm_source=chatgpt.com)
-
-Beginner-friendly pitfall checklist (tell-it-like-it-is)
-
-- If you used `fetch` and can’t figure out why 404s don’t trigger .`catch()` — that’s by design: check `response.ok`.
-  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch?utm_source=chatgpt.com)
-- If cookies aren’t being sent with requests across domains, you probably need `credentials: 'include'` (fetch) or `{ withCredentials: true }` (axios), and the server must set proper CORS headers.
-  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/API/Request/credentials?utm_source=chatgpt.com)
-  [Axios](https://axios-http.com/docs/intro?utm_source=chatgpt.com)
-- If you need request/response logging, auth injection, retries, or consistent error shapes — axios interceptors save you from reinventing wheels.
-  [Axios](https://axios-http.com/docs/interceptors?utm_source=chatgpt.com)
-
-So at the programming style level:
-
-- XHR = HTTP request API, callback/event style.
-- fetch = HTTP request API, Promise-native.
-- axios = HTTP request library, Promise-wrapped (built on XHR/Node http).
-
-Visualization (Venn diagram idea)
-
-```
-               ┌────────────────────────────┐
-               │   HTTP request mechanisms  │
-               │                            │
-   ┌───────────┼─────────────┐              │
-   │           │             │              │
-   │       XMLHttpRequest    │              │
-   │                         │              │
-   │   ┌─────────────────────┼───────┐      │
-   │   │   Promise-based APIs │       │      │
-   │   │                      │       │      │
-   │   │    fetch, axios ◀────┘       │      │
-   │   └──────────────────────────────┘      │
-   │                                         │
-   └─────────────────────────────────────────┘
-```
-
-- XHR = inside “HTTP request” only.
-- fetch = overlap between “HTTP request” and “Promises” (native).
-- axios = overlap too, but it’s a library rather than a native API.
-
-## localStorage
-
-`localStorage` is the Web Storage API’s persistent key-value store: simple, synchronous string storage scoped per origin. Data persists across page loads and browser restarts until explicitly removed.
-
-```js
-// Store a string
-localStorage.setItem("theme", "dark");
-
-// Read it back
-const theme = localStorage.getItem("theme"); // "dark"
-
-// Store a JS object (serialize)
-localStorage.setItem("todos", JSON.stringify([{ id: 1, text: "learn JS" }]));
-const todos = JSON.parse(localStorage.getItem("todos") || "[]");
-
-// Remove
-localStorage.removeItem("theme");
-
-// Clear all keys for this origin
-localStorage.clear();
-```
-
-Explanation & important caveats (beginners must know)
-
-- localStorage only stores strings. Use JSON.stringify / JSON.parse for objects/arrays.
-- It's synchronous: reading/writing can block the main thread. Don’t store large data or do heavy localStorage operations in tight loops. For larger or structured storage, prefer IndexedDB.
-- Storage size limits vary by browser (commonly ~5MB); don’t assume unlimited space.
-- localStorage is accessible to any JavaScript running on the same origin — meaning it’s vulnerable to XSS (if an attacker can run JS on your page, they can read localStorage). Never store secrets or tokens you don’t want client scripts to see.
-- localStorage changes trigger a storage event in other tabs/windows of the same origin (but not in the same window that performed the change), which is useful to sync state across tabs.
-
-Simple visualization (where to store what)
-
-```
-Cookie
-sent to server on every request (small, used for auth/cookie-based sessions)
-
-localStorage
-client-only, persistent, strings, synchronous (good for small app prefs)
-
-sessionStorage
-like localStorage but cleared when tab closes
-
-IndexedDB
-client-only, async, large structured data for bigger offline-capable data
-```
-
-Quick cheat sheet / TL;DR (practical rules)
-localStorage is great for small, non-sensitive, persistent data (UI prefs, small caches). For big data or secure tokens, use IndexedDB or server storage.
-
-## CanvasRenderingContext2D API
-
-When you’re inside `<canvas>`, everything comes from the CanvasRenderingContext2D API.
-
-```js
-const ctx = canvas.getContext("2d");
-```
-
-1. Path Methods (building geometric paths)
-
-   These define shapes by constructing a sequence of connected lines/curves.
-
-   - beginPath() - Resets the list of sub-paths, starting a new empty path.
-
-     Use case: Prevents new shapes from being connected to old ones.
-
-   Syntax:
-
-   ```js
-   ctx.beginPath();
-   ```
-
-   Example:
-
-   ```js
-   ctx.beginPath();
-   ctx.moveTo(50, 50);
-   ctx.lineTo(200, 50);
-   ctx.stroke();
-   ```
-
-   - moveTo(x, y) - Moves the “pen” to (x, y) without drawing.
-
-   Use case: Starting a new line at a specific coordinate.
-
-   - lineTo(x, y) - Creates a straight line from current point → (x, y).
-
-   Use case: Building polygons or free-hand drawings.
-
-   - arc(x, y, radius, startAngle, endAngle [, anticlockwise]) - Adds an arc or circle to the path. Angles in radians (not degrees).
-
-   Use case: Circles, arcs, pie charts.
-
-   ```js
-   ctx.beginPath();
-   ctx.arc(100, 75, 50, 0, Math.PI * 2);
-   ctx.stroke();
-   ```
-
-   - closePath() - Connects the last point to the start point automatically.
-
-   Use case: Completing polygons.
-
-   Example:
-
-   ```js
-   ctx.beginPath();
-   ctx.moveTo(50, 50);
-   ctx.lineTo(150, 50);
-   ctx.lineTo(100, 150);
-   ctx.closePath();
-   ctx.stroke(); // outline triangle
-   ```
-
-2. Fill and Stroke (rendering paths)
-
-   - fill() - Fills the interior of the current path with the current fillStyle.
-
-   Use case: Filled shapes (buttons, circles, areas).
-
-   - stroke() - Outlines the current path with strokeStyle and lineWidth.
-
-   Use case: Drawing outlines.
-
-   Example:
-
-   ```js
-   ctx.fillStyle = "red";
-   ctx.strokeStyle = "black";
-
-   ctx.beginPath();
-   ctx.rect(80, 80, 120, 100);
-   ctx.fill(); // red interior
-   ctx.stroke(); // black border
-   ```
-
-   - fillRect(x, y, width, height) - Shortcut to fill a rectangle (no beginPath() needed).
-
-   Use case: Quick background blocks, UI panels.
-
-   - strokeRect(x, y, width, height) - Shortcut to fill a rectangle (no beginPath() needed).
-
-   Use case: Quick background blocks, UI panels.
-
-   ```js
-   ctx.fillStyle = "red";
-   ctx.fillRect(20, 20, 100, 80);
-
-   ctx.strokeStyle = "black";
-   ctx.strokeRect(20, 20, 100, 80);
-   ```
-
-   - clearRect(x, y, width, height) - Clears part of the canvas, making it fully transparent.
-
-   Use case: Game loops (redraw screen each frame).
-
-   ```js
-   ctx.clearRect(0, 0, canvas.width, canvas.height);
-   ```
-
-3. Image methods
-
-   - drawImage(image, dx, dy [, dWidth, dHeight]) - Draws an image or video onto the canvas.
-
-   ```
-   - drawImage(img, x, y)
-   - drawImage(img, dx, dy, dw, dh)
-   - drawImage(img, sx, sy, sw, sh, dx, dy, dw, dh)
-   ```
-
-   Example:
-
-   ```js
-   const img = new Image();
-   img.src = "sprite.png";
-   img.onload = () => ctx.drawImage(img, 50, 50, 100, 100);
-   ```
-
-4. State & Styles
-
-   - fillStyle / strokeStyle - Sets the color/gradient/pattern used for filling/stroking.
-
-   ```js
-   ctx.fillStyle = "#00FF00";
-   ctx.strokeStyle = "rgba(0,0,255,0.5)";
-   ```
-
-   - lineWidth, lineJoin, lineCap
-
-   ```
-   lineWidth: thickness of strokes.
-   lineJoin: corner style (miter, bevel, round).
-   lineCap: end of lines (butt, round, square).
-   ```
-
-   ```js
-   ctx.lineWidth = 8;
-   ctx.lineJoin = "round";
-   ctx.lineCap = "square";
-   ```
-
-   - save() / restore() - Save/restore the drawing state (colors, transforms, clipping).
-
-   ```js
-   ctx.save();
-   ctx.fillStyle = "red";
-   ctx.fillRect(10, 10, 50, 50);
-   ctx.restore(); // back to old style
-   ```
-
-   ###⚡ Big Picture Classification
-
-   - Path Construction → beginPath, moveTo, lineTo, arc, closePath.
-   - Rendering → fill, stroke, fillRect, strokeRect, clearRect.
-   - Images → drawImage.
-   - State & Styles → fillStyle, strokeStyle, lineWidth, save/restore.
-
-### Other big families
-
-- Text methods: fillText(), strokeText(), measureText().
-- Transformations: translate(), rotate(), scale().
-- Compositing: globalCompositeOperation (blending modes like Photoshop).
-- Pixel manipulation: getImageData(), putImageData() (low-level bitmap access).
-
-### How to Think of It:
-
-- Path methods → “construct geometry.”
-- Stroke/fill → “apply paint to geometry.”
-- Direct shapes → “shortcuts for rectangles.”
-- Images → “place photos/sprites on canvas.”
-- Styling → “set brush/pen look.”
-- Text, transform, pixels → “extra tools for text, effects, advanced drawing.”

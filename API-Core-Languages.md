@@ -21,7 +21,7 @@
   - [2 Constructs — how you write these things](#2-constructs--how-you-write-these-things)
   - [3 Semantics — what happens at runtime](#3-semantics--what-happens-at-runtime)
     - [Common gotchas \& advice — tell it like it is](#common-gotchas--advice--tell-it-like-it-is)
-- [React — A pre-built rules + helpers that keeps your UI in sync with your data being updated automatically](#react--a-pre-built-rules--helpers-that-keeps-your-ui-in-sync-with-your-data-being-updated-automatically)
+- [React — A pre-built rules + helpers that keeps and wrap your UI or HTML-CSS-JS in one system that updates itself automatically sync data](#react--a-pre-built-rules--helpers-that-keeps-and-wrap-your-ui-or-html-css-js-in-one-system-that-updates-itself-automatically-sync-data)
   - [1. Grammar — the building blocks (what kinds of constructs exist)](#1-grammar--the-building-blocks-what-kinds-of-constructs-exist)
   - [2. Constructs — how you write the grammar in code (with examples)](#2-constructs--how-you-write-the-grammar-in-code-with-examples)
   - [3. Semantics — how these constructs behave at runtime](#3-semantics--how-these-constructs-behave-at-runtime)
@@ -911,7 +911,7 @@ process.nextTick abuse: small helpful tool — large misuse causes starvation. U
 Assume web parity carefully: Node now includes many web globals (e.g., fetch), but file paths, module resolution, and process lifecycle are Node-specific. Check docs for version differences.
 [Node.js](https://nodejs.org/api/globals.html?utm_source=chatgpt.com)
 
-## React — A pre-built rules + helpers that keeps your UI in sync with your data being updated automatically
+## React — A pre-built rules + helpers that keeps and wrap your UI or HTML-CSS-JS in one system that updates itself automatically sync data
 
 React is a JavaScript UI library for building user interfaces as a tree of reusable components. It provides a small “language layer” on top of JavaScript (JSX, component conventions, hooks, a rendering model) that describes how to declare UI, manage local state, respond to events, and coordinate rendering.
 

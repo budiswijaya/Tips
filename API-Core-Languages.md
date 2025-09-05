@@ -27,6 +27,11 @@
   - [3. Semantics — how these constructs behave at runtime](#3-semantics--how-these-constructs-behave-at-runtime)
   - [4. Classification cheat-sheets (quick reference)](#4-classification-cheat-sheets-quick-reference)
   - [Ten Commandments Rules](#ten-commandments-rules)
+- [PapaParse](#papaparse)
+  - [PapaParse Core Concepts](#papaparse-core-concepts)
+  - [Multiple Input Sources](#multiple-input-sources)
+  - [PapaParse Output Structure](#papaparse-output-structure)
+  - [Visualization of PapaParse Workflow](#visualization-of-papaparse-workflow)
 - [CanvasRenderingContext2D API](#canvasrenderingcontext2d-api)
   - [Other big families](#other-big-families)
   - [How to Think of It:](#how-to-think-of-it)
@@ -1397,6 +1402,153 @@ Meta Rules (ecosystem/JS habits)
  ├─ No import mutation
  ├─ Avoid main-thread blocks
  └─ ESLint for safety
+```
+
+## PapaParse
+
+Papa Parse is a JavaScript library for parsing CSV (Comma Separated Values) files in both browser and Node.js environments.
+
+### PapaParse Core Concepts
+
+| Feature             | Default Behavior                 | What You Can Customize                   |     |
+| ------------------- | -------------------------------- | ---------------------------------------- | --- |
+| **Input Source**    | Local file only                  | Local file, remote URL, raw text         |     |
+| **Header Handling** | Treats first line as normal data | Turn first line into `keys` for JSON     |     |
+| **Empty Lines**     | Kept as-is                       | Skip or treat as `null`                  |     |
+| **Chunking**        | Process all at once              | Process line-by-line (streaming)         |     |
+| **Delimiter**       | Auto-detects (`,` by default)    | Manually set (`;`, \` `, `\t\`)          |     |
+| **Error Handling**  | Throws default error             | Custom error callbacks                   |     |
+| **Download Mode**   | Off                              | Parse CSV directly from a URL            |     |
+| **Dynamic Typing**  | Everything is a string           | Convert numbers & booleans automatically |     |
+
+Example: Advanced PapaParse Config
+
+```tsx
+Papa.parse(file, {
+  header: true, // Convert first row to keys
+  skipEmptyLines: true, // Ignore blank rows
+  delimiter: ",", // Optional, defaults to comma
+  dynamicTyping: true, // Auto-convert numbers and booleans
+  preview: 10, // Only parse first 10 rows
+  encoding: "UTF-8", // Handle different file encodings
+  complete: (result) => {
+    console.log("Final Parsed Data:", result.data);
+    setData(result.data);
+  },
+  error: (error) => {
+    console.error("Error parsing CSV:", error.message);
+  },
+});
+```
+
+Explanation of New Options
+| Option | Type | What It Does | Example Value |
+| --------------- | -------- | ----------------------------------------------- | ---------------- |
+| `delimiter` | String | Manually sets the CSV separator | `";"` or `"\t"` |
+| `dynamicTyping` | Boolean | Converts `"42"` → `42`, `"true"` → `true` | `true` |
+| `preview` | Number | Limit number of rows parsed | `10` |
+| `encoding` | String | Specify file encoding (UTF-8, ISO-8859-1, etc.) | `"UTF-8"` |
+| `error` | Function | Custom error handling | `(err) => {}` |
+| `complete` | Function | Runs when parsing finishes | `(result) => {}` |
+
+### Multiple Input Sources
+
+PapaParse isn’t limited to `<input type="file" />`.
+
+You can also parse:
+
+- Raw Text
+
+  ```js
+  const csvText = "name,age\nAlice,30\nBob,25";
+
+  const result = Papa.parse(csvText, { header: true });
+  console.log(result.data);
+  // Output: [ { name: "Alice", age: "30" }, { name: "Bob", age: "25" } ]
+  ```
+
+- Remote File (URL)
+
+  If your CSV file lives on a server:
+
+  ```js
+  Papa.parse("https://example.com/data.csv", {
+    download: true, // Required for URLs
+    header: true,
+    complete: (result) => {
+      console.log(result.data);
+    },
+  });
+  ```
+
+- Streaming Large Files
+
+  When working with huge CSV files (like 100MB+), you can process it chunk-by-chunk so you don’t run out of memory:
+
+  ```js
+  Papa.parse(file, {
+    header: true,
+    chunk: (chunk) => {
+      console.log("Chunk received:", chunk.data);
+    },
+    complete: () => {
+      console.log("Finished processing large CSV!");
+    },
+  });
+  ```
+
+### PapaParse Output Structure
+
+PapaParse always gives you a result object that looks like this:
+
+```js
+{
+  data: [
+    { name: "Alice", age: "30" },
+    { name: "Bob", age: "25" }
+  ],
+  errors: [
+    // Any parsing errors will appear here
+  ],
+  meta: {
+    delimiter: ",",
+    linebreak: "\n",
+    aborted: false,
+    truncated: false,
+    cursor: 57
+  }
+}
+```
+
+Breakdown:
+
+- `data` → The parsed rows in array form.
+- `errors` → Parsing issues (e.g., missing columns).
+- `meta` → Information about how PapaParse processed the file.
+
+### Visualization of PapaParse Workflow
+
+```
+CSV Input (User Upload / URL / Text)
+    ↓
+Papa.parse()
+    ↓
+Options Applied:
+  - header
+  - delimiter
+  - dynamicTyping
+  - chunk/complete
+    ↓
+Output Object:
+  {
+    data: [...],
+    errors: [...],
+    meta: {...}
+  }
+    ↓
+React State
+    ↓
+Rendered Table on UI
 ```
 
 ## CanvasRenderingContext2D API

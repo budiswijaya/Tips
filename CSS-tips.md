@@ -10,6 +10,7 @@
 - [The flex-wrap Property](#the-flex-wrap-property)
 - [Pixel to rem calc](#pixel-to-rem-calc)
 - [All in one group of setting format](#all-in-one-group-of-setting-format)
+- [Optional Resetting to Default](#optional-resetting-to-default)
 
 ## Tailwind CSS
 
@@ -417,9 +418,7 @@ Cross axis = vertical
 --gray70: hsla(0, 0%, 70%);
 --gray90: hsla(0, 0%, 90%);
 --white: #fff;
-```
 
-```css
 /* Font-size family and Line Height */
 --font-family: Arial, Helvetica, sans-serif;
 --h1-X: bold 4rem/1em var(--font-family);
@@ -436,9 +435,7 @@ Cross axis = vertical
 --font-size-large: 1rem/1.6em var(--font-family);
 --font-size-medium: 0.8rem/1.6em var(--font-family);
 --font-size-small: 0.75rem/1.8em var(--font-family);
-```
 
-```css
 /* Margin and Padding */
 --margin-xxs: 0.25rem;
 --margin-xs: 0.5rem;
@@ -454,9 +451,7 @@ Cross axis = vertical
 --padding-l: 1.25rem;
 --padding-xl: 1.75rem;
 --padding-xxl: 2.5rem;
-```
 
-```css
 /* Effect */
 --shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 --shadow-img: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -465,8 +460,9 @@ Cross axis = vertical
 --border-radius: 10px;
 ```
 
+## Optional Resetting to Default
+
 ```css
-/* Resetting to Default */
 * {
   margin: 0;
   padding: 0;

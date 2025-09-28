@@ -1,3 +1,12 @@
+- [Basic Concepts](#basic-concepts)
+  - [JavaScript Concepts](#javascript-concepts)
+  - [Character Encoding](#character-encoding)
+  - [Number Systems](#number-systems)
+  - [Variable Naming Conventions](#variable-naming-conventions)
+  - [Variable Declarations](#variable-declarations)
+  - [String Manipulation](#string-manipulation)
+  - [Console.logging for debugging](#consolelogging-for-debugging)
+  - [Modules \& Imports/Exports](#modules--importsexports)
 - [Data Types](#data-types)
   - [Primitive Data \& Non Primitive Data](#primitive-data--non-primitive-data)
   - [Type Checking](#type-checking)
@@ -49,6 +58,8 @@
   - [5. Summary Table](#5-summary-table)
   - [6. Why TypeScript Exists](#6-why-typescript-exists)
   - [7. Mental Model](#7-mental-model)
+
+# Basic Concepts
 
 ## JavaScript Concepts
 

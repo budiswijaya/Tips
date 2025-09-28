@@ -1,5 +1,5 @@
 - [Basic Concepts](#basic-concepts)
-  - [Python Concepts](#python-concepts)
+  - [Python Introduction](#python-introduction)
   - [Character Encoding](#character-encoding)
   - [Number Systems](#number-systems)
   - [Variable Naming Conventions](#variable-naming-conventions)
@@ -7,40 +7,144 @@
   - [String Manipulation](#string-manipulation)
   - [Console.logging for debugging](#consolelogging-for-debugging)
   - [Modules \& Imports/Exports](#modules--importsexports)
+- [Data Types](#data-types)
+  - [Primitive (Built-ins): int, float, bool, str, bytes, NoneType](#primitive-built-ins-int-float-bool-str-bytes-nonetype)
+  - [Composite / Collections: list, tuple, dict, set, frozenset](#composite--collections-list-tuple-dict-set-frozenset)
+  - [Special: complex, range, memoryview](#special-complex-range-memoryview)
+  - [Dynamic Typing: type(), isinstance(), id()](#dynamic-typing-type-isinstance-id)
+  - [int("42"), float("3.14"), str(123)](#int42-float314-str123)
+  - [Casting collections: list("abc"), tuple(\[1,2\])](#casting-collections-listabc-tuple12)
+  - [Truthiness rules: empty structures → False](#truthiness-rules-empty-structures--false)
+- [Operators](#operators)
+  - [Arithmetic: + - \* / // % \*\*](#arithmetic--------)
+  - [Comparison: \< \> \<= \>= == !=](#comparison------)
+  - [Logical: and or not](#logical-and-or-not)
+  - [Membership / Identity: in, not in, is, is not](#membership--identity-in-not-in-is-is-not)
+  - [Assignment (Augmented): +=, -=, \*=, /=, etc.](#assignment-augmented------etc)
+- [Collections \& Objects](#collections--objects)
+  - [Literal Syntax: \[\], {}, ()](#literal-syntax---)
+  - [Dict: {"a":1}, methods like .keys(), .values()](#dict-a1-methods-like-keys-values)
+  - [Set: {1,2,3}, .union(), .intersection()](#set-123-union-intersection)
+  - [Object Orientation: class, **init**, self](#object-orientation-class-init-self)
+  - [Data Model Hooks: **str**, **repr**, **len**, **iter**](#data-model-hooks-str-repr-len-iter)
+- [Control Flow](#control-flow)
+  - [Conditionals: if/elif/else](#conditionals-ifelifelse)
+  - [Loops: for, while, break, continue](#loops-for-while-break-continue)
+  - [Loop Tools: enumerate(), zip(), range()](#loop-tools-enumerate-zip-range)
+  - [Exception Handling: try/except/finally/else, raise](#exception-handling-tryexceptfinallyelse-raise)
+- [Functions \& Scope](#functions--scope)
+  - [Definitions: def, lambda](#definitions-def-lambda)
+  - [Closures: inner functions capturing variables](#closures-inner-functions-capturing-variables)
+  - [Decorators: @decorator syntax](#decorators-decorator-syntax)
+  - [Scopes: LEGB rule (Local, Enclosing, Global, Built-in)](#scopes-legb-rule-local-enclosing-global-built-in)
+  - [Generators: yield, yield from](#generators-yield-yield-from)
+- [Asynchronous Python](#asynchronous-python)
+  - [Coroutines: async def, await](#coroutines-async-def-await)
+  - [Event Loop: asyncio.run()](#event-loop-asynciorun)
+  - [Tasks / Futures: asyncio.create_task, Future](#tasks--futures-asynciocreate_task-future)
+  - [Async Iteration: async for, async with](#async-iteration-async-for-async-with)
+- [Modules \& Imports](#modules--imports)
+  - [Import Variants: import, from ... import ..., import as](#import-variants-import-from--import--import-as)
+  - [Packages: **init**.py, namespace packages](#packages-initpy-namespace-packages)
+  - [Built-in Modules: math, os, sys, json](#built-in-modules-math-os-sys-json)
+  - [Virtual Environments: venv, pip](#virtual-environments-venv-pip)
+- [Advanced Constructs](#advanced-constructs)
+  - [Comprehensions: \[x\*x for x in range(5)\]](#comprehensions-xx-for-x-in-range5)
+  - [Context Managers: with, custom **enter** / **exit**](#context-managers-with-custom-enter--exit)
+  - [Iterators \& Iterables: iter(), next()](#iterators--iterables-iter-next)
+  - [Metaclasses: class X(metaclass=...)](#metaclasses-class-xmetaclass)
+  - [Typing: from typing import List, Dict, Optional](#typing-from-typing-import-list-dict-optional)
+- [Error \& Debugging](#error--debugging)
+  - [Exceptions: built-in (ValueError, TypeError)](#exceptions-built-in-valueerror-typeerror)
+  - [Assertion: assert condition](#assertion-assert-condition)
+  - [Logging: import logging](#logging-import-logging)
+  - [Debugging: pdb, breakpoint()](#debugging-pdb-breakpoint)
+- [Common Gotchas \& Semantics](#common-gotchas--semantics)
+  - [Mutability (list vs tuple)](#mutability-list-vs-tuple)
+  - [Default argument traps (def f(x=\[\]))](#default-argument-traps-def-fx)
+  - [is vs ==](#is-vs-)
+  - [Integer caching and interning](#integer-caching-and-interning)
+  - [Late binding in closures](#late-binding-in-closures)
 
 # Basic Concepts
 
-## Python Concepts
+## Python Introduction
 
 Variables: Store information.
 
-```python
-name = 'John Doe'
-age = 25
+```py
+message = "Hello!"
 ```
 
 Functions: Block of code that runs when called.
 
-```js
-function greet() {
-  alert("Hi!");
-}
+```py
+def greet():
+    print("Hi!")
 ```
 
-Event Listeners: Run code when an event happens.
+Collections: Group multiple values together.
 
-```js
-button.addEventListener("click", greet);
+```py
+numbers = [1, 2, 3]        # list
+person = {"name": "Alice"} # dictionary
 ```
 
-Accessing HTML Elements:
+Control Flow: Run code conditionally or repeatedly.
 
-```js
-document.querySelector("button") gets the first <button>
-document.getElementById("important")
-document.getElementsByClassName("")
-document.querySelctorAll("")
+```py
+if message == "Hello!":
+    print("Greeting detected")
+
+for num in numbers:
+    print(num)
 ```
+
+Print Function
+
+```py
+print(*objects, sep=' ', end='\n', file=sys.stdout, flush=False)
+```
+
+- objects: The data you want to print. The \* sign means that you can print multiple things to the terminal by passing in multiple objects (in other words, strings, variables, numbers, and so on) separated by commas.
+- sep=' ': The separator between the objects. This defaults to a single space character (' ').
+- end='\n': What to print at the end of the object. This defaults to a new line character ('\n').
+- file=sys.stdout: Determines where to send the output. The default is the terminal, but it can be a file.
+- flush=False: Determines whether to show the output data right away. The default is False, which means Python may wait before displaying the output.
+
+```py
+print('Footballers:', 'Ronaldo', 'Messi', 'Hazard', 'Kante', 'Okocha', sep=', ')
+# Output: Footballers:, Ronaldo, Messi, Hazard, Kante, Okocha
+
+print('Footballers:', end=' ')
+print('Ronaldo', end=', ')
+print('Messi', end=', ')
+print('Hazard', end=', ')
+print('Kante', end=', ')
+print('Okocha', end='.')
+#Output: Footballers: Ronaldo, Messi, Hazard, Kante, Okocha.
+```
+
+Here's how you can use the file argument to write the output of the print function to a separate file:
+
+```py
+with open('output.txt', 'w') as f:
+  print('Hello world!', file=f)
+```
+
+This will print the text Hello world! into a file named output.txt. If the file doesn't exist, it will be automatically created. You will learn more about how working with the filesystem in future lectures.
+
+The last argument is flush. When this is set to True, whatever you're outputting is shown immediately rather than waiting for potential delays in the program's execution:
+
+```py
+import time
+
+print('Processing...', end=' ', flush=True)
+time.sleep(2)
+print('Done!')
+```
+
+In this case, the Processing… text immediately appears in the terminal, then time.sleep(2) delays the Done text from appearing for 2 seconds. This makes flush a great tool for displaying progress bars and loading text.
 
 ## Character Encoding
 
@@ -319,3 +423,119 @@ Visualization (module graph).
   [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await?utm_source=chatgpt.com)
 
 Modules & Imports/Exports → Program structure (ESM): import, export, import(), import.meta, top-level await. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules?utm_source=chatgpt.com)
+
+# Data Types
+
+## Primitive (Built-ins): int, float, bool, str, bytes, NoneType
+
+## Composite / Collections: list, tuple, dict, set, frozenset
+
+## Special: complex, range, memoryview
+
+## Dynamic Typing: type(), isinstance(), id()
+
+## int("42"), float("3.14"), str(123)
+
+## Casting collections: list("abc"), tuple([1,2])
+
+## Truthiness rules: empty structures → False
+
+# Operators
+
+## Arithmetic: + - \* / // % \*\*
+
+## Comparison: < > <= >= == !=
+
+## Logical: and or not
+
+## Membership / Identity: in, not in, is, is not
+
+## Assignment (Augmented): +=, -=, \*=, /=, etc.
+
+# Collections & Objects
+
+## Literal Syntax: [], {}, ()
+
+## Dict: {"a":1}, methods like .keys(), .values()
+
+## Set: {1,2,3}, .union(), .intersection()
+
+## Object Orientation: class, **init**, self
+
+## Data Model Hooks: **str**, **repr**, **len**, **iter**
+
+# Control Flow
+
+## Conditionals: if/elif/else
+
+## Loops: for, while, break, continue
+
+## Loop Tools: enumerate(), zip(), range()
+
+## Exception Handling: try/except/finally/else, raise
+
+# Functions & Scope
+
+## Definitions: def, lambda
+
+## Closures: inner functions capturing variables
+
+## Decorators: @decorator syntax
+
+## Scopes: LEGB rule (Local, Enclosing, Global, Built-in)
+
+## Generators: yield, yield from
+
+# Asynchronous Python
+
+## Coroutines: async def, await
+
+## Event Loop: asyncio.run()
+
+## Tasks / Futures: asyncio.create_task, Future
+
+## Async Iteration: async for, async with
+
+# Modules & Imports
+
+## Import Variants: import, from ... import ..., import as
+
+## Packages: **init**.py, namespace packages
+
+## Built-in Modules: math, os, sys, json
+
+## Virtual Environments: venv, pip
+
+# Advanced Constructs
+
+## Comprehensions: [x*x for x in range(5)]
+
+## Context Managers: with, custom **enter** / **exit**
+
+## Iterators & Iterables: iter(), next()
+
+## Metaclasses: class X(metaclass=...)
+
+## Typing: from typing import List, Dict, Optional
+
+# Error & Debugging
+
+## Exceptions: built-in (ValueError, TypeError)
+
+## Assertion: assert condition
+
+## Logging: import logging
+
+## Debugging: pdb, breakpoint()
+
+# Common Gotchas & Semantics
+
+## Mutability (list vs tuple)
+
+## Default argument traps (def f(x=[]))
+
+## is vs ==
+
+## Integer caching and interning
+
+## Late binding in closures

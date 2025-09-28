@@ -1,5 +1,5 @@
 - [Basic Concepts](#basic-concepts)
-  - [JavaScript Concepts](#javascript-concepts)
+  - [JavaScript Introduction](#javascript-introduction)
   - [Character Encoding](#character-encoding)
   - [Number Systems](#number-systems)
   - [Variable Naming Conventions](#variable-naming-conventions)
@@ -61,7 +61,7 @@
 
 # Basic Concepts
 
-## JavaScript Concepts
+## JavaScript Introduction
 
 Variables: Store information.
 

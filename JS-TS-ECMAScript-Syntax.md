@@ -9,6 +9,7 @@
   - [Modules \& Imports/Exports](#modules--importsexports)
 - [Data Types](#data-types)
   - [Primitive Data \& Non Primitive Data](#primitive-data--non-primitive-data)
+    - [The Real Meaning of “Primitive” vs “Non-Primitive”](#the-real-meaning-of-primitive-vs-non-primitive)
   - [Type Checking](#type-checking)
   - [Type Conversion](#type-conversion)
   - [Math Operations](#math-operations)
@@ -388,12 +389,13 @@ Modules & Imports/Exports → Program structure (ESM): import, export, import(),
 
 Primitive Data Types: These data types include numbers, strings, booleans, null, undefined, and symbols. These types are called "primitive" because they represent single values and are not objects. Primitive values are immutable, which means once they are created, their value cannot be changed.
 
-Non Primitive Data Types: In JavaScript, these are objects, which include regular objects,
-arrays, and functions. Unlike primitives, non-primitive types can hold multiple values as properties or elements.
-
 - **string** - Text in quotes ("Hello" or 'Hello')
 - **number** - Numeric values (1, 3.14)
 - **boolean** - true/false values
+
+Non Primitive Data Types: In JavaScript, these are objects, which include regular objects,
+arrays, and functions. Unlike primitives, non-primitive types can hold multiple values as properties or elements.
+
 - **array** - Collections of items [1, 2, 3]
 - **object** - Key-value pairs { name: "John" }
 
@@ -437,6 +439,76 @@ Shay, 30, true, ["reading", "coding", "gaming"], { firstName: "Shay", lastName: 
   ```js
   console.log("freeCodeCamp".indexOf("F")); // -1
   ```
+
+### The Real Meaning of “Primitive” vs “Non-Primitive”
+
+Think of a primitive value as a direct box of data, like a sticky note with the number “10” written on it.
+
+A non-primitive value is a box that points to another box, like a label that says “look over there” — it doesn’t hold the data itself, just a reference to where it lives in memory.
+
+- Example 1 — Numbers (Primitive)
+
+  ```js
+  let x = 10;
+  let y = x;
+  y = 20;
+
+  console.log(x); // 10
+  console.log(y); // 20
+  ```
+
+  Why both behave the same:
+
+  - Both numbers are primitive.
+  - When you assign y = x, you copy the value, not a pointer.
+  - Changing y does not affect x, because they’re separate values in memory.
+
+- Example 2 — Arrays (Non-Primitive)
+
+  ```js
+  let a = [1, 2, 3];
+  let b = a;
+  b.push(4);
+
+  console.log(a); // [1, 2, 3, 4]
+  console.log(b); // [1, 2, 3, 4]
+  ```
+
+  Why both behave the same again—but differently from primitives:
+
+  - Arrays are non-primitive — stored by reference.
+  - b = a doesn’t make a new copy; it makes a new label pointing to the same list in memory.
+  - When you modify b, you’re really modifying the shared data both labels point to.
+
+  If you want a separate copy, you must do it explicitly:
+
+  ```js
+  let b = a.slice();
+  ```
+
+- Example 3 — Strings: a tricky “in-between” case
+
+  ```js
+  let s1 = "hello";
+  let s2 = s1;
+  s2 = "world";
+
+  console.log(s1); // "hello"
+  console.log(s2); // "world"
+  ```
+
+  Explanation:
+
+  - Strings look like objects, but they’re immutable primitives.
+  - When you assign or “change” them, you’re not editing the same string — you’re creating a new one.
+
+🧭 The Real Difference (In Simple Words)
+| Property | Primitive | Non-Primitive |
+| ----------- | ---------------------------- | -------------------------------------- |
+| Stored as | Actual value | Reference (pointer) |
+| Mutability | Immutable (can’t be changed) | Mutable (can be changed) |
+| When copied | Creates a _new value_ | Shares the _same memory address_ |
+| Examples | numbers, strings, booleans | lists/arrays, objects/dicts, functions |
 
 ## Type Checking
 
@@ -1460,7 +1532,7 @@ Memory Tips:
 // (Special Case) Bracket notation
 let greeting = "hello";
 console.log(greeting[1]); // Output: "e"
-console.log(greeting[greeting.length - 1]); // Output: "o"
+console.log(greeting[greeting.length - 1]); // Output:
 ```
 
 ## Object Manipulation Structure Levels

@@ -8,13 +8,11 @@
   - [Console.logging for debugging](#consolelogging-for-debugging)
   - [Modules \& Imports/Exports](#modules--importsexports)
 - [Data Types](#data-types)
-  - [Primitive (Built-ins): int, float, bool, str, bytes, NoneType](#primitive-built-ins-int-float-bool-str-bytes-nonetype)
-  - [Composite / Collections: list, tuple, dict, set, frozenset](#composite--collections-list-tuple-dict-set-frozenset)
-  - [Special: complex, range, memoryview](#special-complex-range-memoryview)
-  - [Dynamic Typing: type(), isinstance(), id()](#dynamic-typing-type-isinstance-id)
-  - [int("42"), float("3.14"), str(123)](#int42-float314-str123)
-  - [Casting collections: list("abc"), tuple(\[1,2\])](#casting-collections-listabc-tuple12)
-  - [Truthiness rules: empty structures → False](#truthiness-rules-empty-structures--false)
+  - [Primitive Data \& Non Primitive Data](#primitive-data--non-primitive-data)
+    - [The Real Meaning of “Primitive” vs “Non-Primitive”](#the-real-meaning-of-primitive-vs-non-primitive)
+  - [Type Checking System](#type-checking-system)
+  - [Type Conversion](#type-conversion)
+  - [Truthiness rules](#truthiness-rules)
 - [Operators](#operators)
   - [Arithmetic: + - \* / // % \*\*](#arithmetic--------)
   - [Comparison: \< \> \<= \>= == !=](#comparison------)
@@ -23,8 +21,13 @@
   - [Assignment (Augmented): +=, -=, \*=, /=, etc.](#assignment-augmented------etc)
 - [Collections \& Objects](#collections--objects)
   - [Literal Syntax: \[\], {}, ()](#literal-syntax---)
-  - [Dict: {"a":1}, methods like .keys(), .values()](#dict-a1-methods-like-keys-values)
-  - [Set: {1,2,3}, .union(), .intersection()](#set-123-union-intersection)
+  - [Dictionary (Object) Manipulation Structure Levels](#dictionary-object-manipulation-structure-levels)
+    - [Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}](#natural-hierarchical-structure-levels-in-different-variable-declarations-classification)
+  - [String Methods](#string-methods)
+  - [List Methods: append(), extend(), insert(), pop(), remove(), sort()](#list-methods-append-extend-insert-pop-remove-sort)
+  - [Tuple Operations: indexing, slicing, unpacking](#tuple-operations-indexing-slicing-unpacking)
+  - [Dict Methods: .keys(), .values(), .items(), .get(), .update()](#dict-methods-keys-values-items-get-update)
+  - [Set Methods: .add(), .remove(), .union(), .intersection()](#set-methods-add-remove-union-intersection)
   - [Object Orientation: class, **init**, self](#object-orientation-class-init-self)
   - [Data Model Hooks: **str**, **repr**, **len**, **iter**](#data-model-hooks-str-repr-len-iter)
 - [Control Flow](#control-flow)
@@ -250,195 +253,680 @@ Remember the goal is to make your code as self explanatory as possible. A good r
 
 ## Variable Declarations
 
-There are three main ways to declare variables:
-
-- **const** - For values that won't change
-- **let** - For variables that can change, but not globally
-- **var** - For variables that can change globally (not recommended in modern JS)
-
-There are also other keyway manipulation methods:
-
-- **function** - For function declarations
-- **delete** - Does not delete variables declared with var/let/const; it only deletes object properties.
-- **new** - For creating objects with constructors
-- **class** - For class declarations
-
 ## String Manipulation
 
-The newline character (\n) functions similarly to the line break element (< br >) in HTML/CSS
+A string is a sequence of characters surrounded by either single or double quotation marks. In some programming languages, characters surrounded by single quotes are treated differently than characters surrounded by double quotes, but in Python, they're treated equally. So, you can use either when working with strings. Here are some examples of strings:
 
-Another great feature of template literals is that they support multiline strings. With regular strings, you would need to use escape characters (\n) to create new lines. With template literals, you can simply write the string across multiple lines, and the formatting is preserved:
-
-```js
-let poem = `Roses are red,
-Violets are blue,
-JavaScript is fun,
-And so are you.`;
-console.log(poem);
-
-// Output:
-Roses are red,
-Violets are blue,
-JavaScript is fun,
-And so are you.
+```py
+my_str_1 = 'Hello'
+my_str_2 = "World"
 ```
 
-Escape quotes with backslash:
+If you need a multi-line string, you can use triple double quotes or single quotes:
 
-```js
-let statement = "She said, \\"Hello!\\"";
-console.log(statement); // Output: She said, "Hello!"
+```py
+my_str_3 = """Multiline
+string"""
+my_str_4 = '''Another
+multiline
+string'''
 ```
 
-You can also escape other special characters,
-such as the backslash itself (\\), or single quotes within a string surrounded by single quotes (\').
+If your string contains either single or double quotation marks, then you have two options:
 
-```js
-let quote = 'It\\'s a beautiful day!';
-console.log(quote); // Output: It's a beautiful day!
+- Use the opposite kind of quotes. That is, if your string contains single quotes, use double quotes to wrap the string, and vice versa:
+
+  ```py
+  msg = "It's a sunny day"
+  quote = 'She said, "Hello World!"'
+  ```
+
+- Escape the single or double quotation mark in the string with a backslash (\). With this method, you can use either single or double quotation marks to wrap the string itself:
+
+  ```py
+  msg = 'It\'s a sunny day'
+  quote = "She said, \"Hello!\""
+  ```
+
+You can also combine multiple strings together with the plus (+) operator. This process is called string concatenation. Here's how to concatenate two strings with the plus operator:
+
+```py
+my_str_1 = 'Hello'
+my_str_2 = "World"
+
+str_plus_str = my_str_1 + ' ' + my_str_2
+print(str_plus_str) # Hello World
 ```
 
-String interpolation with template literals:
+But note that this only works with strings. If you try to concatenate a string with a number, you'll get a TypeError:
 
-```js
-// Allow for embedding variables directly inside a string,
-let name = "Alice";
-let greeting = `Hello, ${name}!`; // Output: "Hello, Alice!"
+```py
+name = 'John Doe'
+age = 26
 
-// Example using string concatenation and the plus (+) operator:
-let name = "Alice";
-let age = 25;
-let message = "My name is " + name + " and I am " + age + " years old.";
-console.log(message); // Output: "My name is Alice and I am 25 years old."
+name_and_age = name + age
+print(name_and_age) # TypeError: can only concatenate str (not "int") to str
+```
 
-// And here is an example using template literals and string interpolation:
-let message = `My name is ${name} and I am ${age} years old.`;
-console.log(message); // Output: "My name is Alice and I am 25 years old."
+This happens because Python does not automatically convert other data types like integers into strings when you concatenate them. Python requires all elements to be strings before it can concatenate them. To fix that, you can convert the number into a string with the built-in str() function:
+
+```py
+name = 'John Doe'
+age = 26
+
+name_and_age = name + str(age)
+print(name_and_age) # John Doe26
+```
+
+You can also use the augmented assignment operator for concatenation. This is represented by a plus and equals sign (+=), and performs both concatenation and assignment in one step. Here's it in action:
+
+```py
+name = 'John Doe'
+age = 26
+
+name_and_age = name  # Start with the name
+name_and_age += str(age)  # Append the age as string
+
+print(name_and_age)  # John Doe26
+```
+
+Apart from regular strings, Python also has a category of string called f-strings, which is short for formatted string literals. It allows you to handle interpolation and also do some concatenation with a compact and readable syntax.
+
+F-strings start with f (either lowercase or uppercase) before the quotes, and allow you to embed variables or expressions inside replacement fields indicated by curly braces ({}). Here's an example:
+
+```py
+name = 'John Doe'
+age = 26
+name_and_age = f'My name is {name} and I am {age} years old'
+print(name_and_age) # My name is John Doe and I am 26 years old
+
+num1 = 5
+num2 = 10
+print(f'The sum of {num1} and {num2} is {num1 + num2}') # The sum of 5 and 10 is 15
+```
+
+Now that you've learned about string concatenation and f-strings, let's look at how you can get the length of a string and work with the individual characters in a string, a process called indexing. To get the length of a string, you can use the built-in len() function. Here's an example:
+
+```py
+my_str = 'Hello world'
+print(len(my_str))  # 11
+```
+
+Now onto indexing. Each character in a string has a position called an index. The index is zero-based, meaning that the index of the first character of a string is 0, the index of the second character is 1, and so on. To access a character by its index, you use square brackets ([]) with the index of the character you want to access inside. Here are some examples:
+
+```py
+my_str = "Hello world"
+
+print(my_str[0])  # H
+print(my_str[6])  # w
+```
+
+Negative indexing is also allowed, so you can get the last character of any string with -1, the second-to-last character with -2, and so on:
+
+```py
+my_str = 'Hello world'
+print(my_str[-1])  # d
+print(my_str[-2]) # l
+```
+
+Now that you're familiar with indexing, let's take things a bit further with string slicing. String slicing lets you extract a portion of a string or work with only a specific part of it. Here's the basic syntax:
+
+```py
+string[start:stop]
+```
+
+If you want to extract characters from a certain index to another, you just separate the start and stop indices with a colon:
+
+```py
+my_str = 'Hello world'
+print(my_str[1:4]) # ell
+```
+
+Note that the stop index is non-inclusive, so [1:4] just extracted the characters from index 1, and up to, but not including, the character at index 4.
+
+You can also omit the start and stop indices, and Python will default to 0 or the end of the string, respectively. For example, here's what happens if you omit the start index:
+
+```py
+my_str = 'Hello world'
+print(my_str[:7])  # Hello w
+```
+
+This extracts everything from index 0 up to (but not including), the character at index 7. And here's what happens if you omit the stop index:
+
+```py
+my_str = 'Hello world'
+print(my_str[8:])  # rld
+```
+
+This extracts everything from the character at index 8 until the end of the string.
+
+You can also omit both the start and stop indices, which will extract the whole string:
+
+```py
+my_str = 'Hello world'
+print(my_str[:])  # Hello world
+```
+
+Apart from the start and stop indices, there's also an optional step parameter, which is used to specify the increment between each index in the slice.
+
+Here's the syntax for that:
+
+```py
+string[start:stop:step]
+```
+
+In the example below, the slicing starts at index 0, stops before 11, and extracts every second character:
+
+```py
+my_str = 'Hello world'
+print(my_str[0:11:2])  # Hlowrd
+```
+
+A helpful trick you can do with the step parameter is to reverse a string by setting step to -1, and leaving start and stop blank:
+
+```py
+my_str = 'Hello world'
+print(my_str[::-1]) # dlrow olleH
+```
+
+It can also be helpful to check if a character or set of characters exist in a string before slicing it. To do that, Python provides the in operator, which returns a boolean that specifies whether the character or characters exist in the string or not.
+
+Here are some examples:
+
+```py
+my_str = 'Hello world'
+
+print('Hello' in my_str)  # True
+print('hey' in my_str)    # False
+print('hi' in my_str)    # False
+print('e' in my_str)  # True
+print('f' in my_str)  # False
 ```
 
 ## Console.logging for debugging
 
-```js
-console.log()    : is used to print messages to the console for debugging purposes.
-console.warn()   : is used to print warning messages.
-console.error()  : is used to print error messages.
-
-// Example below:
-console.log("This is a console log message.");
-console.warn("This is a warning message.");
-console.error("This is an error message.");
-
-// Result below:
-This  a console log message.
-! This is a warning message.
-X This is an error message.
-```
-
 ## Modules & Imports/Exports
-
-Modules are files that explicitly declare what they export (make public) and what they import (use from other modules). They give JavaScript a first-class, standardized way to structure programs across files. ES Modules (ESM) are static (the imports/exports are known at parse time), support live bindings (imports “see” updates), and enable features like top-level `await`.
-[MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules?utm_source=chatgpt.com)
-
-Why it exists. Before ESM, developers used script tags, IIFEs, or bundler conventions. Modules bring portability, better tooling, and clear boundaries. Node.js also supports ESM alongside the older CommonJS (require, module.exports).
-[Node.js](https://nodejs.org/api/esm.html?utm_source=chatgpt.com)
-
-- Named exports & imports
-
-  ```js
-  // math.js
-  export const TWO = 2;
-  export function add(a, b) {
-    return a + b;
-  }
-
-  // app.js
-  import { TWO, add } from "./math.js";
-  ```
-
-- Default export (one per module)
-
-  ```js
-  // api.js
-  export default function request(url) {
-    /* ... */
-  }
-
-  // app.js
-  import request from "./api.js";
-  ```
-
-- Renaming & namespace imports
-
-  ```js
-  import { add as plus } from "./math.js";
-  import * as MathLib from "./math.js";
-  ```
-
-- Re-exporting
-
-  ```js
-  export { add } from "./math.js"; // pass-through
-  export * as MathLib from "./math.js"; // namespace re-export
-  ```
-
-- Dynamic import (async)
-
-  ```js
-  const mod = await import("./heavy.js"); // returns a Promise
-  mod.run(); // use when needed
-  ```
-
-  Dynamic import() loads a module on demand and returns a Promise.
-  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import?utm_source=chatgpt.com)
-
-- Module metadata
-
-  ```js
-  console.log(import.meta.url); // URL of this module file
-  ```
-
-  `import.meta` exposes context info about the current module. Some environments also provide `import.meta.resolve()`.
-  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta?utm_source=chatgpt.com)
-
-- Top-level await (in modules only)
-  ```js
-  // config.js (ES module)
-  const resp = await fetch("/config.json");
-  export const config = await resp.json();
-  ```
-  `await` is allowed at the module’s top level; the module pauses loading until the awaited Promise settles.
-  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await?utm_source=chatgpt.com)
-
-Visualization (module graph).
-
-```
-[ app.js ] --imports--> [ math.js ]
-        \--dynamic-->   [ heavy.js ] (only when needed)
-```
-
-- You can’t use `import`/`export` inside blocks or conditionals (they’re static).
-- Imported bindings are live: if the exporter updates a binding, importers “see” it.
-  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export?utm_source=chatgpt.com)
-- Top-level `await` works in modules, not classic scripts.
-  [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await?utm_source=chatgpt.com)
-
-Modules & Imports/Exports → Program structure (ESM): import, export, import(), import.meta, top-level await. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules?utm_source=chatgpt.com)
 
 # Data Types
 
-## Primitive (Built-ins): int, float, bool, str, bytes, NoneType
+Python is a dynamically-typed language like JavaScript, meaning you don't need to explicitly declare types for variables. The language knows what data type a variable is based on what you assign to it.
 
-## Composite / Collections: list, tuple, dict, set, frozenset
+Here are some examples:
 
-## Special: complex, range, memoryview
+```py
+name = 'John Doe' # Python knows this is a string
+age = 25 # Python knows this is an integer
+```
 
-## Dynamic Typing: type(), isinstance(), id()
+This is in contrast to some statically-typed languages like C#, Java, and C++, where you have to declare types with variables, like this:
 
-## int("42"), float("3.14"), str(123)
+```py
+string name = 'John Doe'
+int age = 25
+```
 
-## Casting collections: list("abc"), tuple([1,2])
+The dynamic-typing nature of Python makes coding really fast and more flexible, but it can lead to unexpected bugs because type errors are detected only when a program runs, not when the program compiles.
 
-## Truthiness rules: empty structures → False
+Here are the most common data types you'll use in Python:
+
+```py
+my_string_var = 'hello'
+print('String:', my_string_var) # String: hello
+```
+
+Integer: A whole number without decimals, for example, 10 or -5.
+
+```py
+my_integer_var = 10
+print('Integer:', my_integer_var) # Integer: 10
+```
+
+Float: A number with a decimal point, like 4.41 or -0.4.
+
+```py
+my_float_var = 4.50
+print('Float:', my_float_var) # Float 4.50
+```
+
+Complex: A number with a real and imaginary part, like 6 + 7j.
+
+```py
+my_complex_var = 3 + 4j
+print('Complex:', my_complex_var) # Complex: (3+4j)
+```
+
+Boolean: A true or false type, written as True or False.
+
+```py
+my_boolean_var = True
+print('Boolean:', my_boolean_var) # Boolean: True
+```
+
+Set: An unordered collection of unique elements, like {4, 2, 0}.
+
+```py
+my_set_var = {7, 5, 8}
+print('Set:', my_set_var) # Set: {7, 5, 8}
+```
+
+Dictionary: A collection of key-value pairs enclosed in curly braces, like {'name': 'John Doe', 'age': 28}.
+
+```py
+my_dictionary_var = {'name': 'Alice', 'age': 25}
+print('Dictionary:', my_dictionary_var) # Dictionary: {'name': 'Alice', 'age': 25}
+```
+
+Tuple: An immutable ordered collection, enclosed in brackets, like (7, 8, 4).
+
+```py
+my_tuple_var = (7, 5, 8)
+print('Tuple:', my_tuple_var) # Tuple: (7, 5, 8)
+```
+
+Range: A sequence of numbers, often used in loops, for example, range(5).
+
+```py
+my_range_var = range(5)
+print(my_range_var) # range(0, 5)
+```
+
+List: An ordered collection of elements that supports different data types.
+
+```py
+my_list = [22, 'Hello world', 3.14, True]
+print(my_list) # [22, 'Hello world', 3.14, True]
+```
+
+NoneType: A special value that represents the absence of a value.
+
+```py
+my_none_var = None
+print('None:', my_none_var) # None: None
+```
+
+| Category                    | Examples                                           | Description                              |
+| --------------------------- | -------------------------------------------------- | ---------------------------------------- |
+| **Primitive (Built-ins)**   | `int`, `float`, `bool`, `str`, `bytes`, `NoneType` | Basic immutable value types.             |
+| **Composite / Collections** | `list`, `tuple`, `dict`, `set`, `frozenset`        | Group or structure multiple values.      |
+| **Special**                 | `complex`, `range`, `memoryview`                   | Less common, but part of core built-ins. |
+
+Many other programming languages group data types broadly as either primitive or reference types. Primitive types are simple and immutable, meaning they can't be changed once declared. Reference types can hold multiple values, and are either mutable or immutable. But Python doesn't draw a hard line between those two groups. Instead, all data gets treated as objects, and some objects are immutable while others are mutable.
+
+Immutable data types can't be modified or altered once they're declared. You can point their variables at something new, which is called reassignment, but you can't change the original object itself by adding, removing, or replacing any of its elements. Examples of immutable data types in Python are string, integer, float, boolean, tuple, and range.
+
+Here's an example showing that, while you can reassign a different string to a variable, direct modification of a string isn't allowed because strings are immutable:
+
+```py
+greeting = 'hi'
+greeting = 'hello'
+print(greeting) # hello
+
+greeting[0] = 'H' # TypeError: 'str' object does not support item assignment
+```
+
+On the other hand, you can change mutable types without giving them a new name. You can add, remove, or update items right where they live. Examples are a list and a dictionary.
+
+Here's an example of updating an element in a list:
+
+```py
+nums = [1, 2, 3]
+nums[0] = 4
+
+print(nums) # [4, 2, 3]
+```
+
+## Primitive Data & Non Primitive Data
+
+Python technically treats everything as an object, even integers and strings.
+But for learning and classification (mirroring your ECMAScript doc), we can still divide them conceptually into two categories:
+
+- Primitive (Immutable) Data Types
+
+  They behave like JavaScript’s primitives:
+  their values cannot be changed once created — only replaced.
+
+  | Type       | Example              | Description                             |
+  | ---------- | -------------------- | --------------------------------------- |
+  | `int`      | `42`, `-10`, `0`     | Whole numbers (arbitrary precision).    |
+  | `float`    | `3.14`, `-2.5`       | Decimal numbers.                        |
+  | `bool`     | `True`, `False`      | Boolean logic.                          |
+  | `str`      | `"Hello"`, `'World'` | Text, immutable sequence of characters. |
+  | `NoneType` | `None`               | Represents “no value” (like JS `null`). |
+  | `complex`  | `3+4j`               | Complex numbers (real + imaginary).     |
+
+  All of these are immutable — if you “change” one, Python actually makes a new object behind the scenes.
+
+- Non-Primitive (Mutable / Composite) Data Types
+
+  These can hold multiple values, or can be modified after creation.
+
+  | Type                  | Example                        | Description                        |
+  | --------------------- | ------------------------------ | ---------------------------------- |
+  | `list`                | `[1, 2, 3]`                    | Ordered, mutable collection.       |
+  | `tuple`               | `(1, 2, 3)`                    | Ordered, immutable collection.     |
+  | `dict`                | `{"name": "Alice", "age": 25}` | Key-value pairs (like JS objects). |
+  | `set`                 | `{1, 2, 3}`                    | Unordered unique values.           |
+  | `frozenset`           | `frozenset({1, 2, 3})`         | Immutable version of `set`.        |
+  | `bytes` / `bytearray` | `b"abc"` / `bytearray(b"abc")` | Raw binary data.                   |
+
+### The Real Meaning of “Primitive” vs “Non-Primitive”
+
+Think of a primitive value as a direct box of data, like a sticky note with the number “10” written on it.
+A non-primitive value is a box that points to another box, like a label that says “look over there” — it doesn’t hold the data itself, just a reference to where it lives in memory.
+
+- Example 1 — Numbers (Primitive in both JS and Python)
+
+  JavaScript
+
+  ```js
+  let x = 10;
+  let y = x;
+  y = 20;
+  console.log(x); // 10
+  console.log(y); // 20
+  ```
+
+  Python
+
+  ```py
+  x = 10
+  y = x
+  y = 20
+  print(x)  # 10
+  print(y)  # 20
+  ```
+
+  Why both behave the same:
+
+  - Both numbers are primitive.
+  - When you assign y = x, you copy the value, not a pointer.
+  - Changing y does not affect x, because they’re separate values in memory.
+
+  This is the same in Java, C#, C, etc.
+
+- Example 2 — Lists / Arrays (Non-Primitive)
+
+  JavaScript
+
+  ```js
+  let a = [1, 2, 3];
+  let b = a;
+  b.push(4);
+
+  console.log(a); // [1, 2, 3, 4]
+  console.log(b); // [1, 2, 3, 4]
+  ```
+
+  Python
+
+  ```py
+  a = [1, 2, 3]
+  b = a
+  b.append(4)
+
+  print(a)  # [1, 2, 3, 4]
+  print(b)  # [1, 2, 3, 4]
+  ```
+
+  Why both behave the same again—but differently from primitives:
+
+  - Arrays (JS) and lists (Python) are non-primitive — stored by reference.
+  - b = a doesn’t make a new copy; it makes a new label pointing to the same list in memory.
+  - When you modify b, you’re really modifying the shared data both labels point to.
+
+  If you want a separate copy, you must do it explicitly:
+
+  - JS: let b = a.slice();
+  - Python: b = a.copy() or b = a[:]
+
+- Example 3 — Strings: a tricky “in-between” case
+
+  JavaScript
+
+  ```js
+  let s1 = "hello";
+  let s2 = s1;
+  s2 = "world";
+
+  console.log(s1); // "hello"
+  console.log(s2); // "world"
+  ```
+
+  Python
+
+  ```py
+  s1 = "hello"
+  s2 = s1
+  s2 = "world"
+
+  print(s1)  # "hello"
+  print(s2)  # "world"
+  ```
+
+  Explanation:
+
+  - Strings look like objects, but they’re immutable primitives.
+  - When you assign or “change” them, you’re not editing the same string — you’re creating a new one.
+  - So even though "hello" is an object in Python, it behaves like a primitive.
+
+## Type Checking System
+
+- To get the data type of a variable, you can use the type() function:
+
+  ```py
+  my_var_1 = 'Hello world'
+  my_var_2 = 21
+
+  print(type(my_var_1)) # <class 'str'>
+  print(type (my_var_2)) # <class 'int'>
+  ```
+
+  And here's are all the data types covered in this lesson, along with their types in the terminal:
+
+  ```py
+  my_integer_var = 10
+  print('Integer:', my_integer_var, '| Type:', type(my_integer_var))  # Integer: 10 | Type: <class 'int'>
+
+  my_float_var = 4.50
+  print('Float:', my_float_var, '| Type:', type(my_float_var))  # Float: 4.50 | Type: <class 'float'>
+
+  my_complex_var = 3 + 4j
+  print('Complex:', my_complex_var, '| Type:', type(my_complex_var))  # Complex: (3+4j) | Type: <class 'complex'>
+
+  my_string_var = 'hello'
+  print('String:', my_string_var, '| Type:', type(my_string_var))  # String: hello | Type: <class 'str'>
+
+  my_boolean_var = True
+  print('Boolean:', my_boolean_var, '| Type:', type(my_boolean_var))  # Boolean: True | Type: <class 'bool'>
+
+  my_set_var = {7, 5, 8}
+  print('Set:', my_set_var, '| Type:', type(my_set_var))  # Set: {7, 5, 8} | Type: <class 'set'>
+
+  my_dictionary_var = {'name': 'Alice', 'age': 25}
+  print('Dictionary:', my_dictionary_var, '| Type:', type(my_dictionary_var))  # Dictionary: {'name': 'Alice', 'age': 25} | Type: <class 'dict'>
+
+  my_tuple_var = (7, 5, 8)
+  print('Tuple:', my_tuple_var, '| Type:', type(my_tuple_var))  # Tuple: (7, 5, 8) | Type: <class 'tuple'>
+
+  my_range_var = range(5)
+  print('Range:', list(my_range_var), '| Type:', type(my_range_var))  # Range: [0, 1, 2, 3, 4] | Type: <class 'range'>
+
+  my_list = [22, 'Hello world', 3.14, True]
+  print('List:', list(my_list), '| Type:', type(my_list)) # List: [22, 'Hello world', 3.14, True] | Type: <class 'list'>
+
+  my_none_var = None
+  print('None:', my_none_var, '| Type:', type(my_none_var))  # None: None | Type: <class 'NoneType'>
+  ```
+
+- isinstance() takes in an object and the type you want to check it against, then returns a boolean. Here are some examples:
+
+  ```py
+  isinstance('Hello world', str) # True
+  isinstance(True, bool) # True
+  isinstance(42, int) # True
+  isinstance('John Doe', int) # False
+  ```
+
+  Although Python is dynamically typed, you can still add type hints. These are optional signals that tell other developers what the data type of a variable or function is expected to be. Here's a quick example for variable types:
+
+  ```py
+  user_name: str = 'John Doe'
+  user_age: int = 24
+  ```
+
+  Here's another example showing hints for function parameters and a return type:
+
+  ```py
+  def greet(name: str, age: int) -> str:
+      return f'Hello, {name}, age {age}.'
+  ```
+
+  And here's a combination of the two:
+
+  ```py
+  def greet(name: str, age: int) -> str:
+      return f'Hello, {name}, age {age}.'
+
+  user_name: str = 'John Doe'
+  user_age: int = 24
+
+  print(greet(user_name, user_age)) # Hello, John Doe, age 24.
+  ```
+
+- id(obj) returns an integer that uniquely identifies an object during its lifetime.
+
+  Think of it as a temporary name tag Python gives each object in memory.
+  When you run:
+
+  ```py
+  x = 42
+  print(id(x))
+  ```
+
+  you’ll get something like:
+
+  ```py
+  140737348041232
+  ```
+
+  That number is not random — it’s usually the memory address where the object lives (on CPython, the default Python implementation).
+
+  So:
+
+  - Each new object gets its own unique id.
+  - When an object is destroyed (garbage-collected), that id can be reused later for something else.
+
+  🧩 Example: Different Objects, Different IDs
+
+  ```py
+  a = 10
+  b = 10
+  print(id(a), id(b))
+  ```
+
+  You might expect different numbers, but both are usually the same.
+  That’s because Python caches small integers (usually from -5 to 256) for efficiency.
+  So a and b are actually pointing to the same preallocated object.
+
+  Try with larger numbers:
+
+  ```py
+  x = 1000
+  y = 1000
+  print(id(x), id(y))
+  ```
+
+  You’ll probably see different ids — because those integers are not cached.
+
+  🧩 Example: Lists and Mutability
+
+  ```py
+  a = [1, 2, 3]
+  b = a
+  print(id(a), id(b))  # same
+
+  b.append(4)
+  print(a)  # [1, 2, 3, 4]
+  print(id(a), id(b))  # still same
+  ```
+
+  Both a and b point to the same object in memory.
+  That’s why the list contents change for both.
+
+  Now if you reassign:
+
+  ```py
+  b = [1, 2, 3, 4]
+  print(id(a), id(b))  # different now
+  ```
+
+  You’ve created a new list; b no longer points to the same object.
+
+  🧩 Example: Immutables Create New IDs
+
+  ```py
+  x = "hello"
+  print(id(x))  # e.g. 140337
+
+  x += " world"
+  print(id(x))  # different id!
+  ```
+
+  Strings are immutable, so modifying them doesn’t alter the original object — it creates a new one.
+
+  🔍 Why id() Matters
+
+  - It’s a quick way to check whether two names refer to the same object.
+  - It helps explain mutability and reference behavior.
+  - It can reveal optimizations (like integer or string interning).
+
+  This is why id() pairs nicely with the is operator:
+
+  ```py
+  a = [1, 2]
+  b = a
+  print(a is b)  # True
+  print(id(a) == id(b))  # True
+
+  b = [1, 2]
+  print(a is b)  # False, same content but different object
+  ```
+
+  is is essentially just id(a) == id(b) under the hood — but written more clearly.
+
+## Type Conversion
+
+You can convert between compatible types explicitly.
+
+```py
+int("42")     # 42
+float("3.14") # 3.14
+str(123)      # '123'
+```
+
+Casting collections:
+
+```py
+list("abc")      # ['a', 'b', 'c']
+tuple([1, 2, 3]) # (1, 2, 3)
+set([1, 2, 2])   # {1, 2}
+```
+
+## Truthiness rules
+
+In Python, every value has an inherent truth value when evaluated in a Boolean context.
+
+```py
+bool(0)        # False
+bool("")       # False
+bool([])       # False
+bool(None)     # False
+bool("Hi!")    # True
+bool([1])      # True
+```
+
+- Falsy values: 0, 0.0, "", [], {}, set(), None, False
+- Truthy values: Everything else
 
 # Operators
 
@@ -456,9 +944,442 @@ Modules & Imports/Exports → Program structure (ESM): import, export, import(),
 
 ## Literal Syntax: [], {}, ()
 
-## Dict: {"a":1}, methods like .keys(), .values()
+```py
+Curly Braces {}         - Objects & Code Blocks
+    Objects             : { name: "John", age: 25 }
+    Code blocks         : if (condition) { ... }
+    Function bodies     : function() { return "hello"; }
+    Destructuring       : const { name } = person
+```
 
-## Set: {1,2,3}, .union(), .intersection()
+```py
+Square Brackets []      - Arrays & Property Access
+    Arrays              : [1, 2, 3, "hello"]
+    Array access        : array[0]
+    Dynamic properties  : object[variableName]
+    Computed properties : { [key]: value }
+```
+
+```py
+Parentheses ()          - Functions & Grouping
+    Function calls      : myFunction()
+    Parameters          : function(a, b) { }
+    Grouping            : (2 + 3) * 4
+    Conditions          : if (x > 5)
+```
+
+```jpy
+Memory Tips:
+{} = "Container for properties" (objects) or "group statements" (blocks)
+[] = "List of items" (arrays) or "get item by position/key"
+() = "Execute this" (functions) or "do this first" (grouping)
+```
+
+```py
+# (Special Case) Bracket notation
+greeting = "hello"
+print(greeting[1])  # Output: e
+print(greeting[len(greeting) - 1])  # Output: o
+```
+
+## Dictionary (Object) Manipulation Structure Levels
+
+Accessing Nested Dictionary Data
+
+```py
+person = {
+    "name": "Alice",
+    "age": 30,
+    "contact": {
+        "email": "alice@example.com",
+        "phone": {
+            "home": "123-456-7890",
+            "work": "098-765-4321",
+        },
+    },
+}
+
+print(person["name"])                 # Alice
+print(person["age"])                  # 30
+print(person["contact"]["phone"]["work"])  # 098-765-4321
+```
+
+Object property operations:
+
+- Add properties: `person["job"] = "Engineer"` or `person["hobby"] = "Knitting"`
+
+  ```py
+  person["job"] = "Engineer"
+  person["hobby"] = "Knitting"
+  print(person)
+  # {'name': 'Alice', 'age': 30, 'contact': {...}, 'job': 'Engineer', 'hobby': 'Knitting'}
+  ```
+
+- Delete properties: del person["job"]
+
+  ```py
+  del person["job"]
+  print(person.get("job"))  # None
+  ```
+
+- Check if property exists: 'name' in person
+
+  ```py
+  print("name" in person)  # True
+  ```
+
+- Check if a dictionary has a specific key: .get() or .keys()
+  ```py
+  print("name" in person.keys())  # True
+  print("job" in person.keys())   # False
+  ```
+- Get a property safely with default value (like optional chaining):
+
+  ```py
+  print(person.get("nickname", "No nickname"))  # "No nickname"
+  ```
+
+  Unlike JavaScript, Python dictionaries don’t throw an error when you access a missing key via .get().
+
+  Instead, they return None (or a default you specify).
+
+### Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}
+
+Single level, no structure.
+
+```py
+name = "John"    # Single level, no structure
+age = 25         # Single level, no structure
+score = 100      # Single level, no structure
+```
+
+It doesn't matter how you call the identifier or classification as long as clear on structure.
+
+```py
+record_collection = {
+    # This is the main (records) dictionary
+    5439: {
+        # This is a key (id) in the main dictionary
+        "albumTitle": "ABBA Gold",  # (property) of the id dictionary
+        "artist": "",                # (property) of the id dictionary
+        "tracks": [],                # (property) of the id dictionary
+    },
+}
+
+
+def update_records(records, record_id, prop, value):
+    if record_id not in records:
+        return records
+    if value == "":
+        records[record_id].pop(prop, None)
+    else:
+        records[record_id][prop] = value
+    return records
+
+
+print(update_records(record_collection, 5439, "artist", "ABBA"))
+#                        ^records          ^id      ^prop      ^value
+```
+
+Example of Well-Identified Dictionary Structure
+
+```py
+students = {
+    "STU_001": {  # Identifier with clear prefix
+        "name": "John",           # Property with string value
+        "grades": [90, 85],       # Property with list value
+        "active": True,           # Property with boolean value
+    },
+}
+```
+
+Numeric identifier style
+
+```py
+records = {
+    2548: {                       # Numeric identifier
+        "albumTitle": "...",      # String property
+        "tracks": [],             # List property
+    },
+}
+```
+
+More explicit classification
+
+```py
+inventory = {
+    "itemId": {                   # Named identifier
+        "type": "product",        # Classification property
+        "metadata": {             # Nested classification
+            "category": "electronics",
+            "subCategory": "phones",
+        },
+    },
+}
+```
+
+E-commerce System
+
+```py
+ecommerce_system = {
+    "STORE_001": {  # Level 1: Store ID
+        "details": {  # Level 2: Store Details
+            "name": "Main Branch",
+            "location": {  # Level 3: Location Details
+                "street": "123 Main St",
+                "city": "Boston",
+                "zip": "02108",
+            },
+        },
+        "inventory": {  # Level 2: Inventory
+            "products": [  # Level 3: Product List
+                {  # Level 4: Product Details
+                    "id": "P001",
+                    "name": "Laptop",
+                    "specs": {  # Level 5: Product Specifications
+                        "brand": "Dell",
+                        "model": "XPS",
+                    },
+                },
+            ],
+        },
+    },
+}
+```
+
+School Management System
+
+```py
+school_system = {
+    "departments": {  # Level 1: Department Structure
+        "DEPT_001": {  # Level 2: Department ID
+            "name": "Computer Science",
+            "courses": {  # Level 3: Course Structure
+                "CS101": {  # Level 4: Course Details
+                    "title": "Intro to Programming",
+                    "students": [  # Level 5: Student List
+                        {  # Level 6: Student Details
+                            "id": "STU_001",
+                            "grades": {
+                                "midterm": 95,
+                                "final": 88,
+                            },
+                        },
+                    ],
+                },
+            },
+        },
+    },
+}
+```
+
+File System Structure
+
+```py
+file_system = {
+    "root": {  # Level 1: Root Directory
+        "documents": {  # Level 2: Subdirectory
+            "work": {  # Level 3: Nested Directory
+                "files": [  # Level 4: File List
+                    {  # Level 5: File Details
+                        "name": "report.doc",
+                        "metadata": {
+                            "size": "1.2MB",
+                            "created": "2023-01-01",
+                            "type": "document",
+                        },
+                    },
+                ],
+            },
+        },
+    },
+}
+```
+
+Safe Nested Access (Equivalent to JS Optional Chaining ?.)
+
+Python doesn’t have ?., but you can chain .get() calls safely:
+
+```py
+user = {
+    "name": "John",
+    "profile": {
+        "email": "john@example.com",
+        "address": {
+            "street": "123 Main St",
+            "city": "Somewhere",
+        },
+    },
+}
+
+print(user.get("profile", {}).get("address", {}).get("street"))  # "123 Main St"
+print(user.get("profile", {}).get("phone", {}).get("number"))    # None
+```
+
+Or define a small helper for optional chaining-like access:
+
+```py
+def safe_get(data, *keys):
+    for key in keys:
+        if isinstance(data, dict):
+            data = data.get(key)
+        else:
+            return None
+    return data
+
+print(safe_get(user, "profile", "address", "street"))  # "123 Main St"
+print(safe_get(user, "profile", "phone", "number"))    # None
+```
+
+✅ Summary Comparison
+
+| Operation                | JavaScript Syntax        | Python Equivalent                       |
+| ------------------------ | ------------------------ | --------------------------------------- |
+| Access property          | `obj.key` / `obj["key"]` | `dict["key"]`                           |
+| Add property             | `obj.newKey = val`       | `dict["newKey"] = val`                  |
+| Delete property          | `delete obj.key`         | `del dict["key"]`                       |
+| Check if property exists | `"key" in obj`           | `"key" in dict`                         |
+| Get safely (avoid error) | `obj.key ?? "default"`   | `dict.get("key", "default")`            |
+| Optional chaining        | `obj?.key?.sub`          | `dict.get("key", {}).get("sub")`        |
+| Loop through properties  | `for (let k in obj)`     | `for k in dict:`                        |
+| Nested hierarchy         | Objects inside objects   | Dicts inside dicts / lists inside dicts |
+
+## String Methods
+
+Python provides a number of built-in methods that make working with strings a breeze. They include, but are not limited to, the following:
+
+- upper(): Returns a new string with all characters converted to uppercase.
+  my_str = 'hello world'
+
+  ```py
+  uppercase_my_str = my_str.upper()
+  print(uppercase_my_str) # HELLO WORLD
+  ```
+
+- lower(): Returns a new string with all characters converted to lowercase.
+
+  ```py
+  my_str = 'Hello World'
+
+  lowercase_my_str = my_str.lower()
+  print(lowercase_my_str) # hello world
+  ```
+
+- strip(): Returns a new string with the specified leading and trailing characters removed. If no argument is passed it removes leading and trailing whitespace.
+
+  ```py
+  my_str = ' hello world '
+
+  trimmed_my_str = my_str.strip()
+  print(trimmed_my_str) # "hello world"
+  ```
+
+- replace(old, new): Returns a new string with all occurrences of old replaced by new.
+
+  ```py
+  my_str = 'hello world'
+
+  replaced_my_str = my_str.replace('hello', 'hi')
+  print(replaced_my_str) # hi world
+  ```
+
+- split(separator): Splits a string on a specified separator into a list of strings. If no separator is specified, it splits on whitespace.
+
+  ```py
+  my_str = 'hello world'
+
+  split_words = my_str.split()
+  print(split_words) # ['hello', 'world']
+  ```
+
+- join(iterable): Joins elements of an iterable into a string with a separator.
+
+  ```py
+  my_list = ['hello', 'world']
+
+  joined_my_str = ' '.join(my_list)
+  print(joined_my_str) # hello world
+  ```
+
+- startswith(prefix): Returns a boolean indicating if a string starts with the specified prefix.
+
+  ```py
+  my_str = 'hello world'
+
+  starts_with_hello = my_str.startswith('hello')
+  print(starts_with_hello) # True
+  ```
+
+- endswith(suffix): Returns a boolean indicating if a string ends with the specified suffix.
+
+  ```py
+  my_str = 'hello world'
+
+  ends_with_world = my_str.endswith('world')
+  print(ends_with_world) # True
+  ```
+
+- find(substring): Returns the index of the first occurrence of substring, or -1 if it doesn't find one.
+
+  ```py
+  my_str = 'hello world'
+
+  world_index = my_str.find('world')
+  print(world_index) # 6
+  ```
+
+- count(substring): Returns the number of times a substring appears in a string.
+
+  ```py
+  my_str = 'hello world'
+
+  o_count = my_str.count('o')
+  print(o_count) # 2
+  ```
+
+- capitalize(): Returns a new string with the first character capitalized and the other characters lowercased.
+
+  ```py
+  my_str = 'hello world'
+
+  capitalized_my_str = my_str.capitalize()
+  print(capitalized_my_str) # Hello world
+  ```
+
+- isupper(): Returns True if all letters in the string are uppercase and False if not.
+
+  ```py
+  my_str = 'hello world'
+
+  is_all_upper = my_str.isupper()
+  print(is_all_upper) # False
+  ```
+
+- islower(): Returns True if all letters in the string are lowercase and False if not.
+
+  ```py
+  my_str = 'hello world'
+
+  is_all_lower = my_str.islower()
+  print(is_all_lower) # True
+  ```
+
+- title(): Returns a new string with the first letter of each word capitalized.
+
+  ```py
+  my_str = 'hello world'
+
+  title_case_my_str = my_str.title()
+  print(title_case_my_str) # Hello World
+  ```
+
+## List Methods: append(), extend(), insert(), pop(), remove(), sort()
+
+## Tuple Operations: indexing, slicing, unpacking
+
+## Dict Methods: .keys(), .values(), .items(), .get(), .update()
+
+## Set Methods: .add(), .remove(), .union(), .intersection()
 
 ## Object Orientation: class, **init**, self
 

@@ -12,7 +12,7 @@
     - [The Real Meaning of “Primitive” vs “Non-Primitive”](#the-real-meaning-of-primitive-vs-non-primitive)
   - [Type Checking](#type-checking)
   - [Type Conversion](#type-conversion)
-  - [Math Operations](#math-operations)
+  - [`Math` Operations](#math-operations)
   - [JSON](#json)
 - [Operator](#operator)
   - [Arithmetic Operators](#arithmetic-operators)
@@ -21,7 +21,7 @@
   - [Logical Operators](#logical-operators)
   - [Other Important Operators](#other-important-operators)
 - [Objects \& Arrays](#objects--arrays)
-  - [Braces in JavaScript (object literal syntax)](#braces-in-javascript-object-literal-syntax)
+  - [Braces Literal Syntax](#braces-literal-syntax)
   - [Object Manipulation Structure Levels](#object-manipulation-structure-levels)
     - [Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}](#natural-hierarchical-structure-levels-in-different-variable-declarations-classification)
     - [Object Constructors](#object-constructors)
@@ -709,7 +709,7 @@ The meaning it's just number system conversion that use in computer. There are 4
 
 - toString(2) - Binary: Base-2 (0,1) with 8 digits
 - toString(16) - Hexadecimal: Base-16 (0-9, A-F) with 2 digits
-- toString(10 - Decimal: Base-10 (0-9) with values 0-127
+- toString(10) - Decimal: Base-10 (0-9) with values 0-127
 - toString(8) - Octal: Base-8 (0-7) with 3 digits
 
 You can also use the toString() method to convert arrays and objects to strings. Arrays have a custom implementation of toString() that converts each element to a string and joins them with commas. Here's an example:
@@ -808,76 +808,56 @@ console.log(person.toString()); // "[object Object]"
   writing clear and error-free JavaScript code.*/
   ```
 
-## Math Operations
+## `Math` Operations
 
-Common math methods:
+In JavaScript, mathematical operations are handled by the built-in `Math` object, which provides a collection of properties and methods for numerical calculations.
 
-- `Math.random()` - Generate random number between 0 (inclusive) and 1 (exclusive). This means the possible output can be 0, but it will never actually reach 1.
+You don’t need to import anything — the `Math` object is available globally.
 
-  ```js
-  const randomNum = Math.random();
-  console.log(randomNum);
-  // any number between 0 and 1 – 0 inclusive and 1 exclusive
-  ```
-
-- `Math.min()/Math.max()` - Both take a set of numbers and return the minimum and maximum value, respectively.
-
-  ```js
-  const smallest = Math.min(1, 5, 3, 9);
-  console.log(smallest); // 1
-
-  const largest = Math.max(1, 5, 3, 9);
-  console.log(largest); // 9
-  ```
-
-- `Math.ceil()/Math.floor()` - To round numbers up or down to the nearest whole integer
-
-  ```js
-  console.log(Math.ceil(4.3)); // 5
-  console.log(Math.floor(4.7)); // 4
-  ```
-
-- `Math.round()` - Round to nearest integer
-  ```js
-  console.log(Math.round(2.3)); // 2
-  console.log(Math.round(4.5)); // 5
-  console.log(Math.round(4.8)); // 5
-  ```
-
-A practical application of Math.floor() and Math.random() is
-to generate a random number between two whole numbers.
+Common Methods
 
 ```js
-const randomNumBtw1And20 = Math.floor(Math.random() * 20) + 1;
-console.log(randomNumBtw1And20);
+console.log(Math.sqrt(25)); // 5  → square root
+console.log(Math.pow(2, 3)); // 8  → power (2³)
+console.log(Math.floor(3.7)); // 3  → round down
+console.log(Math.ceil(3.7)); // 4  → round up
+console.log(Math.abs(-9)); // 9  → absolute value
+console.log(Math.trunc(4.9)); // 4  → remove decimal part
+console.log(Math.round(3.5)); // 4  → round to nearest integer
+console.log(Math.log10(100)); // 2  → base-10 logarithm
+console.log(Math.log(100)); // 4.605... → natural log (base e)
+console.log(Math.max(1, 5, 9)); // 9  → highest value
+console.log(Math.min(1, 5, 9)); // 1  → lowest value
 ```
 
-- `Math.trunc()` - Remove decimal portion
+Common Constants
 
-  ```js
-  console.log(Math.trunc(2.9)); // 2
-  console.log(Math.trunc(9.1)); // 9
-  ```
+```js
+console.log(Math.PI); // 3.141592653589793
+console.log(Math.E); // 2.718281828459045
+console.log(Math.SQRT2); // 1.4142135623730951
+console.log(Math.LN10); // 2.302585092994046
+console.log(Math.LOG10E); // 0.4342944819032518
+```
 
-- `Math.sqrt()/Math.cbrt()` - Square (x√x) / cube (∛) root
+Random and Advanced Functions
 
-  ```js
-  console.log(Math.sqrt(81)); // 9
-  console.log(Math.cbrt(27)); // 3
-  ```
+```js
+console.log(Math.random()); // Random number between 0 and 1
+console.log(Math.sin(Math.PI)); // 0  → sine
+console.log(Math.cos(Math.PI)); // -1 → cosine
+console.log(Math.tan(Math.PI)); // ~0 → tangent
+console.log(Math.sqrt(49)); // 7
+console.log(Math.hypot(3, 4)); // 5  → Pythagorean theorem √(3² + 4²)
+```
 
-- `Math.abs()` - Absolute value
+Example Usage
 
-  ```js
-  console.log(Math.abs(-5)); // 5
-  console.log(Math.abs(5)); // 5
-  ```
-
-- `Math.pow()` - Takes two numbers and raise the first to the power of the second
-  ```js
-  console.log(Math.pow(2, 3)); // 8
-  console.log(Math.pow(8, 2)); // 64
-  ```
+```js
+const radius = 5;
+const area = Math.PI * Math.pow(radius, 2);
+console.log("Circle area:", area); // Circle area: 78.53981633974483
+```
 
 ## JSON
 
@@ -994,31 +974,99 @@ Used for mathematical calculations:
 - (+) (Addition): Adds numbers or concatenates strings
 
   ```js
-  `let sum = 5 + 3;` // 8
-  `let text = "Hello" + " World";`; // "Hello World"
+  let sum = 5 + 3; // 8
+  let text = "Hello" + " World"; // "Hello World"
   ```
 
 - (-) (Subtraction): Subtracts numbers
 
   ```js
-  `let difference = 10 - 5;`; // 5
+  let difference = 10 - 5; // 5
   ```
 
 - (\*) (Multiplication): Multiplies numbers
 
   ```js
-  `let product = 4 * 3;`; // 12
+  let product = 4 * 3; // 12
   ```
 
 - (/) (Division): Divides numbers
 
   ```js
-  `let quotient = 15 / 3;`; // 5
+  let quotient = 15 / 3; // 5
   ```
 
 - (%) (Modulus): Returns the division remainder
+
   ```js
-  `let remainder = 10 % 3;`; // 1
+  let remainder = 10 % 3; // 1
+  ```
+
+- \*\* (Exponentiation): is right-to-left associative/precedence. Same as x^2 or x² in mathematical notation.
+
+  ```js
+  const result = 2 ** (3 ** 2);
+  console.log(result); // 512
+
+  /*Evaluates 3 ** 2, which equals 9, then, it evaluates 2 ** 9, which equals 512. 
+  If the exponent operator had left-to-right associativity, 
+  would have calculated 2 ** 3 first to get 8, then 8 ** 2 to get 64*/
+  ```
+
+- (++) Increment and (--) Decrements operators (It was for main loop function)
+
+  Dev choose "i" as the loop variable recognized by every programmer, stands for "index" or "iterator"
+
+  Increment Operator (++) - Increments the value of the variable by 1.
+
+  Excrement Operator (--) - Decrements the value of the variable by 1.
+
+  ```
+  What they do:
+      ++ = add 1
+      -- = subtract 1
+  Two ways to write them:
+  (x++, x--)
+      Returns the current value
+      Then changes the variable
+  (++x, --x)
+      Changes the variable first
+      Then returns the new value
+  ```
+
+  ```js
+  // Example below: (Read Below Note First!!)
+  let x = 5;  console.log(x++ *2);
+      x = 5;  console.log(++x *2);
+      x = 5;  console.log(x-- *2);
+      x = 5;  console.log(--x *2);
+
+  /*Explanation:
+  You still have to declare x=5 after the first one, it's there
+  because to reset it, if not the answer will be related to the first statement.)
+  First Statement Explain
+  ++ is after X. So the X value is still 5 and next time it will be 6
+  Second Statement Explain
+  ++ is before X. So the X value will be 6 and next time it will be 7
+  Third Statement Explain
+  -- is after X. S. So the X value is still 5 and next time it will be 4
+  Forth Statement Explain
+  -- is before X. So the X value will be 4 and next time it will be 3*/
+
+  // Result below: (Reset condition or Not reset condition)
+  10
+  12 or 14
+  10 or 14
+  8 or 10
+  ```
+
+  **Explanation**
+
+  What they do conceptually:
+
+  ```
+  x += 1   →  x = x + 1
+  x -= 1   →  x = x - 1
   ```
 
 ## Assignment Operators
@@ -1028,36 +1076,41 @@ Used to assign values to variables:
 - (=) Basic assignment
 
   ```js
-  `let x = 10;`;
+  let x = 10;
   ```
 
 - (+=) Addition assignment
 
   ```js
-  `let y = 5; y += 3;`; // Same as y = y + 3 (y becomes 8)
+  let y = 5;
+  y += 3; // Same as y = y + 3 (y becomes 8)
   ```
 
 - (-=) Subtraction assignment
 
   ```js
-  `let z = 10; z -= 4;`; // Same as z = z - 4 (z becomes 6)
+  let z = 10;
+  z -= 4; // Same as z = z - 4 (z becomes 6)
   ```
 
 - (\*=) Multiplication assignment
 
   ```js
-  `let a = 3; a *= 2;`; // Same as a = a * 2 (a becomes 6)
+  let a = 3;
+  a *= 2; // Same as a = a * 2 (a becomes 6)
   ```
 
 - (/=) Division assignment
 
   ```js
-  `let b = 8; b /= 2;`; // Same as b = b / 2 (b becomes 4)
+  let b = 8;
+  b /= 2; // Same as b = b / 2 (b becomes 4)
   ```
 
 - (%=) Modulus assignment
   ```js
-  `let c = 7; c %= 2;`; // Same as c = c % 2 (c becomes 1)
+  let c = 7;
+  c %= 2; // Same as c = c % 2 (c becomes 1)
   ```
 
 ## Comparison Operators
@@ -1067,13 +1120,13 @@ Used to compare values:
 - (==) Loose equality: It does check type but more emphasis on the value, so it performs type coercion, converting values to the same type before comparing them.
 
   ```js
-  `5 == "5"`; // true (string is converted to number)
+  5 == "5"; // true (string is converted to number)
   ```
 
 - (===) Strict equality: It checks both value and type, providing more precise, strict, predictable results.
 
   ```js
-  `5 === "5"`; // false (different types)
+  5 === "5"; // false (different types)
   ```
 
   ```js
@@ -1093,13 +1146,13 @@ Used to compare values:
 - (!=) Loose inequality: It does check type but more emphasis on the value, so it performs type coercion, converting values to the same type before comparing them.
 
   ```js
-  `5 != "6"`; // true
+  5 != "6"; // true
   ```
 
 - (!==) Strict inequality: It checks both value and type, providing more precise, strict, predictable results.
 
   ```js
-  `5 !== "5"`; // true (different types)
+  5 !== "5"; // true (different types)
   ```
 
   ```js
@@ -1119,24 +1172,24 @@ Used to compare values:
 - (>) (Greater than): Checks if left value is greater
 
   ```js
-  `10 > 5`; // true
+  10 > 5; // true
   ```
 
 - (<) (Less than): Checks if left value is smaller
 
   ```js
-  `5 < 10`; // true
+  5 < 10; // true
   ```
 
 - (>=) (Greater than or equal): Checks if left value is greater or equal
 
   ```js
-  `5 >= 5`; // true
+  5 >= 5; // true
   ```
 
 - (<=) (Less than or equal): Checks if left value is smaller or equal
   ```js
-  `5 <= 10`; // true
+  5 <= 10; // true
   ```
 
 ## Logical Operators
@@ -1146,8 +1199,8 @@ Used to determine logic between variables or values:
 - (&&) AND: Returns true if both operands are true
 
   ```js
-  `true && true` // true
-  `true && false`; // false
+  true && true; // true
+  true && false; // false
   ```
 
   ```js
@@ -1175,8 +1228,8 @@ Used to determine logic between variables or values:
 - (||) OR: Returns true if at least one operand is true
 
   ```js
-  `true || false` // true
-  `false || false`; // false
+  true || false; // true
+  false || false; // false
   ```
 
   ```js
@@ -1202,8 +1255,8 @@ Used to determine logic between variables or values:
 - (!) NOT: Reverses the boolean result
 
   ```js
-  `!true` // false
-  `!false`; // true
+  !true; // false
+  !false; // true
   ```
 
   ```js
@@ -1239,7 +1292,7 @@ Used to determine logic between variables or values:
 - **Ternary operator (?:)**: Shorthand for if-else statements ? expression if true : expression if false
 
   ```js
-  `let status = (age >= 18) ? "Adult" : "Minor";`;
+  let status = age >= 18 ? "Adult" : "Minor";
   ```
 
   ```js
@@ -1275,7 +1328,7 @@ Used to determine logic between variables or values:
 - **?.** (Optional chaining): Safely access nested properties or call methods without worrying wether they exist. It’s like a safety net for working with objects that might have missing parts.
 
   ```js
-  `user.profile?.address?.street`; // Returns undefined if any property in chain is null/undefined
+  user.profile?.address?.street; // Returns undefined if any property in chain is null/undefined
   ```
 
   ```js
@@ -1298,7 +1351,7 @@ Used to determine logic between variables or values:
 - **??** (Nullish coalescing): Return a value only if the first one is null or undefined.
 
   ```js
-  `let username = null ?? "Anonymous";`; // "Anonymous"
+  let username = null ?? "Anonymous"; // "Anonymous"
   ```
 
   ```js
@@ -1318,7 +1371,7 @@ Used to determine logic between variables or values:
 - **...** (Spread): Expands an iterable (like an array or string) into individual elements.
 
   ```js
-  `let newArray = [...oldArray, newItem];`;
+  let newArray = [...oldArray, newItem];
   ```
 
   ```js
@@ -1328,64 +1381,6 @@ Used to determine logic between variables or values:
   console.log(copyArray); // [1, 2, 3]
   console.log(copyArray === originalArray); // false
   ```
-
-- \*\* (Exponentiation): is right-to-left associative/precedence. Same as x^2 or x² in mathematical notation.
-
-  ```js
-  const result = 2 ** (3 ** 2);
-  console.log(result); // 512
-
-  /*Evaluates 3 ** 2, which equals 9, then, it evaluates 2 ** 9, which equals 512. 
-  If the exponent operator had left-to-right associativity, 
-  would have calculated 2 ** 3 first to get 8, then 8 ** 2 to get 64*/
-  ```
-
-- (++) Increment and (--) Decrements operators (It was for main loop function)
-
-Dev choose "i" as the loop variable recognized by every programmer, stands for "index" or "iterator"
-
-Increment Operator (++) - Increments the value of the variable by 1.
-
-Excrement Operator (--) - Decrements the value of the variable by 1.
-
-```
-What they do:
-    ++ = add 1
-    -- = subtract 1
-Two ways to write them:
-(x++, x--)
-    Returns the current value
-    Then changes the variable
-(++x, --x)
-    Changes the variable first
-    Then returns the new value
-```
-
-```js
-// Example below: (Read Below Note First!!)
-let x = 5;  console.log(x++ *2);
-    x = 5;  console.log(++x *2);
-    x = 5;  console.log(x-- *2);
-    x = 5;  console.log(--x *2);
-
-/*Explanation:
-You still have to declare x=5 after the first one, it's there
-because to reset it, if not the answer will be related to the first statement.)
-First Statement Explain
-++ is after X. So the X value is still 5 and next time it will be 6
-Second Statement Explain
-++ is before X. So the X value will be 6 and next time it will be 7
-Third Statement Explain
--- is after X. S. So the X value is still 5 and next time it will be 4
-Forth Statement Explain
--- is before X. So the X value will be 4 and next time it will be 3*/
-
-// Result below: (Reset condition or Not reset condition)
-10
-12 or 14
-10 or 14
-8 or 10
-```
 
 - Bitwise Operators (&, |, ^, ~, <<, >>)
 
@@ -1437,65 +1432,65 @@ Forth Statement Explain
 - Unary operators (+, -, !, ~, void, typeof)
   Act on a single operand to perform operations like type conversion, value manipulation, or checking certain conditions.
 
-      (+) unary plus operator converts its operand into a number.
-      If the operand is already a number, it remains unchanged.
+  (+) unary plus operator converts its operand into a number.
+  If the operand is already a number, it remains unchanged.
 
-      ```js
-      const str = "42";
-      const strToNum = +str;
+  ```js
+  const str = "42";
+  const strToNum = +str;
 
-      console.log(strToNum); // 42
-      console.log(typeof str); // string
-      console.log(typeof strToNum); // number
-      ```
+  console.log(strToNum); // 42
+  console.log(typeof str); // string
+  console.log(typeof strToNum); // number
+  ```
 
-      (-) unary negation operator negates the value of the operand.
+  (-) unary negation operator negates the value of the operand.
 
-      ```js
-      const str = "42";
-      const strToNegativeNum = -str;
+  ```js
+  const str = "42";
+  const strToNegativeNum = -str;
 
-      console.log(strToNegativeNum); // -42
-      console.log(typeof str); // string
-      console.log(typeof strToNegativeNum); // number
-      ```
+  console.log(strToNegativeNum); // -42
+  console.log(typeof str); // string
+  console.log(typeof strToNegativeNum); // number
+  ```
 
-      (!) unary logical NOT operator flips the boolean value of its operand
+  (!) unary logical NOT operator flips the boolean value of its operand
 
-      ```js
-      let isOnline = true;
-      console.log(!isOnline); // false
+  ```js
+  let isOnline = true;
+  console.log(!isOnline); // false
 
-      let isOffline = false;
-      console.log(!isOffline); // true
-      ```
+  let isOffline = false;
+  console.log(!isOffline); // true
+  ```
 
-      (~) bitwise NOT operator inverts the binary representation of a number
+  (~) bitwise NOT operator inverts the binary representation of a number
 
-      ```js
-      const num = 5; // The binary for 5 is 00000101 becomes 11111010 which total is 6
-      console.log(~num); // -6
-      ```
+  ```js
+  const num = 5; // The binary for 5 is 00000101 becomes 11111010 which total is 6
+  console.log(~num); // -6
+  ```
 
-      (void) unary operator that evaluates an expression and returns undefined.
+  (void) unary operator that evaluates an expression and returns undefined.
 
-      ```js
-      const result = void (2 + 2);
-      console.log(result); // undefined
+  ```js
+  const result = void (2 + 2);
+  console.log(result); // undefined
 
-      <a href="javascript:void(0);">Click Me</a>; // commonly used in hyperlinks HTML
-      ```
+  <a href="javascript:void(0);">Click Me</a>; // commonly used in hyperlinks HTML
+  ```
 
-      (typeof) is used to determine the type of a variable.
+  (typeof) is used to determine the type of a variable.
 
-      ```js
-      let num = 42;
-      console.log(typeof num); // "number"
-      ```
+  ```js
+  let num = 42;
+  console.log(typeof num); // "number"
+  ```
 
 # Objects & Arrays
 
-## Braces in JavaScript (object literal syntax)
+## Braces Literal Syntax
 
 ```js
 Curly Braces {}         - Objects & Code Blocks

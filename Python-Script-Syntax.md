@@ -40,9 +40,10 @@
   - [Exception Handling: try/except/finally/else, raise](#exception-handling-tryexceptfinallyelse-raise)
 - [Functions \& Scope](#functions--scope)
   - [Closures](#closures)
-  - [Decorators: @decorator syntax](#decorators-decorator-syntax)
-  - [Scopes: LEGB rule (Local, Enclosing, Global, Built-in)](#scopes-legb-rule-local-enclosing-global-built-in)
-  - [Generators: yield, yield from](#generators-yield-yield-from)
+  - [Decorators: `@decorator` syntax](#decorators-decorator-syntax)
+  - [Scopes: LEGB rule](#scopes-legb-rule)
+    - [Global and Nonlocal Keywords](#global-and-nonlocal-keywords)
+  - [Generators: `yield`, `yield from`](#generators-yield-yield-from)
 - [Asynchronous Python](#asynchronous-python)
   - [Coroutines: async def, await](#coroutines-async-def-await)
   - [Event Loop: asyncio.run()](#event-loop-asynciorun)
@@ -1019,13 +1020,13 @@ A non-primitive value is a box that points to another box, like a label that say
 
   Strings are immutable, so modifying them doesn’t alter the original object — it creates a new one.
 
-  🔍 Why id() Matters
+  🔍 Why `id()` Matters
 
   - It’s a quick way to check whether two names refer to the same object.
   - It helps explain mutability and reference behavior.
   - It can reveal optimizations (like integer or string interning).
 
-  This is why id() pairs nicely with the is operator:
+  This is why `id()` pairs nicely with the is operator:
 
   ```py
   a = [1, 2]
@@ -1037,7 +1038,7 @@ A non-primitive value is a box that points to another box, like a label that say
   print(a is b)  # False, same content but different object
   ```
 
-  is is essentially just id(a) == id(b) under the hood — but written more clearly.
+  is is essentially just `id(a) == id(b)` under the hood — but written more clearly.
 
 ## Type Conversion
 
@@ -1109,6 +1110,7 @@ However, Python’s conversions are explicit and type-safe — there’s no auto
   ```py
   print(bool(1))        # True
   print(bool(0))        # False
+  print(bool(0.0))      # False
   print(bool("Hello"))  # True
   print(bool(""))       # False
   print(bool([]))       # False
@@ -1665,10 +1667,9 @@ Used to determine logic between variables or values:
   print(bool(None))    # False
 
   # Using NOT in conditions
-  const isLoggedIn = false;
-  if (!isLoggedIn) {
-    console.log("Please log in first!"); // This will execute
-  }
+  const isLoggedIn = false
+  if not isLoggedIn
+    print("Please log in first!"); # This will execute
   ```
 
 ## Other Important Operators
@@ -2534,11 +2535,459 @@ def calculate_area(width, height): return width * height
 
 ## Closures
 
-## Decorators: @decorator syntax
+A closure in Python is a function that remembers variables from its enclosing scope — even after that scope has finished executing.
 
-## Scopes: LEGB rule (Local, Enclosing, Global, Built-in)
+Closures are powerful tools for encapsulation and function factories.
 
-## Generators: yield, yield from
+```py
+def outer_function(x):
+    y = 10
+    def inner_function():
+        print(x + y)
+    return inner_function
+
+closure = outer_function(5)
+closure()  # 15
+```
+
+Even though outer_function() has finished, inner_function() still “remembers” x and y.
+
+Another example — similar to JavaScript’s counter closure:
+
+```py
+def create_counter():
+    count = 0
+    def counter():
+        nonlocal count
+        count += 1
+        return count
+    return counter
+
+counter = create_counter()
+print(counter())  # 1
+print(counter())  # 2
+```
+
+Here, `nonlocal` tells Python to modify the variable from the outer (but not global) scope.
+
+You can also use closures for configuration or function factories:
+
+```py
+def multiply(x):
+def inner(y):
+return x \* y
+return inner
+
+double = multiply(2)
+print(double(5)) # 10
+```
+
+## Decorators: `@decorator` syntax
+
+Definition:
+A decorator in Python is a special function that wraps another function to modify or extend its behavior — without permanently changing its code.
+
+Think of a decorator as a “function enhancer.”
+It’s like taking an existing tool and adding an attachment that gives it new abilities.
+
+🧩 Basic Example
+
+```py
+def my_decorator(func):
+    def wrapper():
+        print("Before the function runs")
+        func()
+        print("After the function runs")
+    return wrapper
+
+@my_decorator
+def greet():
+    print("Hello, world!")
+
+greet()
+```
+
+Output:
+
+```pgsql
+Before the function runs
+Hello, world!
+After the function runs
+```
+
+Here’s what happens:
+
+1. `@my_decorator` is applied above `greet()`.
+2. When Python reads this, it transforms the function into:
+
+```py
+greet = my_decorator(greet)
+```
+
+3. So when you call `greet()`, it actually runs the `wrapper()` function inside the decorator.
+
+🧰 Decorators with Parameters
+
+You can use `*args` and `**kwargs` to support any arguments:
+
+```py
+def log_calls(func):
+def wrapper(*args, **kwargs):
+print(f"Calling {func.**name**} with args={args}, kwargs={kwargs}")
+result = func(*args, **kwargs)
+print(f"{func.**name**} returned {result}")
+return result
+return wrapper
+
+@log_calls
+def add(a, b):
+return a + b
+
+add(2, 3)
+```
+
+Output:
+
+```csharp
+Calling add with args=(2, 3), kwargs={}
+add returned 5
+```
+
+🎨 Decorator Factories (Decorators with Arguments)
+
+You can even make decorators that accept their own parameters:
+
+```py
+def repeat(n):
+def decorator(func):
+def wrapper(*args, \*\*kwargs):
+for \_ in range(n):
+func(*args, \*\*kwargs)
+return wrapper
+return decorator
+
+@repeat(3)
+def say_hi():
+print("Hi!")
+
+say_hi()
+```
+
+Output:
+
+```
+Hi!
+Hi!
+Hi!
+```
+
+⚙️ Built-in Decorators
+
+Python provides some built-in decorators commonly used with classes and methods:
+
+| Decorator       | Purpose                                                        |
+| --------------- | -------------------------------------------------------------- |
+| `@staticmethod` | Defines a static method (no access to class or instance)       |
+| `@classmethod`  | Defines a method that receives the class as the first argument |
+| `@property`     | Converts a method into a read-only attribute                   |
+
+Example:
+
+```py
+class Circle:
+def **init**(self, radius):
+self.\_radius = radius
+
+    @property
+    def area(self):
+        return 3.14 * (self._radius ** 2)
+
+c = Circle(5)
+print(c.area) # 78.5
+```
+
+✅ In short:
+
+Decorators are a clean, readable way to “wrap” functionality around other functions or methods — like adding filters, logs, validation, or caching — without cluttering the original code.
+
+## Scopes: LEGB rule
+
+Scope determines where a variable can be accessed or modified.
+Python has four scope levels, known as the LEGB rule:
+
+- Local scope (L): Variables defined in functions or classes.
+
+  Variable declared inside a function or class can only be accessed within that function or class.
+
+  ```py
+  def my_func():
+      my_var = 10
+      print(my_var)
+  ```
+
+  In this case, the my_func function has its own scope which cannot be accessed from outside the function. Calling my_func will output 10, but printing my_var outside the function will lead to a NameError:
+
+  ```py
+  def my_func():
+      my_var = 10 # Locally scoped to my_func
+      print(my_var)
+
+  my_func() # 10
+
+  print(my_var) # NameError: name 'my_var' is not defined
+  ```
+
+- Enclosing (Nonlocal) scope (E): Variables defined in enclosing or nested functions.
+
+  Function that's nested inside another function can access the variables of the function it's nested within.
+
+  ```py
+  def outer_func():
+      msg = 'Hello there!'
+
+      def inner_func():
+          print(msg)
+
+      inner_func()
+
+  outer_func() # Hello there!
+  ```
+
+  In this example, the inner function, inner_func, can freely access the msg variable defined in the outer function, outer_func. However, note that outer functions cannot access variables defined within any nested functions:
+
+  ```py
+  def outer_func():
+      msg = 'Hello there!'
+      print(res)
+
+      def inner_func():
+          res = 'How are you?'
+          print(msg)
+
+      inner_func()
+
+  outer_func() # NameError: name 'res' is not defined
+  ```
+
+  That's because res is locally scoped to inner_func. Also, notice that outer_func tries to print res before inner_func is called.
+
+  One solution is to initialize res as an empty string in the enclosing scope, which is within outer_func. Then within inner_func, make res a non-local variable with the nonlocal keyword:
+
+  ```py
+  def outer_func():
+      msg = 'Hello there!'
+      res = ""  # Declare res in the enclosing scope
+
+      def inner_func():
+          nonlocal res  # Allow modification of an enclosing variable
+          res = 'How are you?'
+          print(msg)  # Accessing msg from outer_func()
+
+      inner_func()
+      print(res)  # Now res is accessible and modified
+
+  outer_func()
+
+  # Output:
+  # Hello there!
+  # How are you?
+  ```
+
+- Global scope (G): Variables defined at the top level of the module or file.
+
+  Variables that are declared outside any functions or classes which can be accessed from anywhere in the program. Here, my_var can be accessed anywhere, even inside a function it's not defined in:
+
+  ```py
+  my_var = 100
+
+  def show_var():
+      print(my_var)
+
+  show_var() # 100
+  print(my_var) # 100
+  ```
+
+  And if you want to make a locally scoped variable defined inside a function globally accessible, you can use the global keyword:
+
+  ```py
+  my_var_1 = 7
+
+  def show_vars():
+      global my_var_2
+      my_var_2 = 10
+      print(my_var_1)
+      print(my_var_2)
+
+  show_vars() # 7 10
+
+  # my_var_2 is now a global variable and can be accessed anywhere in the program
+  print(my_var_2) # 10
+  ```
+
+  You can also use the global keyword to modify a global variable:
+
+  ```py
+  my_var = 10 # A global variable
+
+  def change_var():
+  global my_var # Allows modification of a global variable
+  my_var = 20
+
+  change_var()
+
+  print(my_var) # my_var is now modified globally to 20
+  ```
+
+- Built-in scope (B): Reserved names in Python for predefined functions, modules, keywords, and objects.
+
+  Block Scope in Python?
+
+  Python does not have block-level scope like JavaScript (let or const).
+  Variables declared inside an if, for, or while block leak into the outer scope.
+
+  ```py
+  if True:
+  block_var = "I'm in a block"
+
+  print(block_var) # Works fine in Python
+  ```
+
+  This differs from JavaScript, where block-scoped variables disappear after the block ends.
+
+  Refers to all of Python's built-in functions, modules, and keywords, and are available anywhere in your program:
+
+  ```py
+  print(str(45)) # '45'
+  print(type(3.14)) # <class 'float'>
+  print(isinstance(3, str)) # False
+  ```
+
+### Global and Nonlocal Keywords
+
+If you need to modify global variables inside a function, declare them explicitly:
+
+```py
+count = 0
+
+def increment():
+global count
+count += 1
+
+increment()
+print(count) # 1
+```
+
+✅ Summary Comparison Table
+| Concept | JavaScript | Python |
+| ------------------- | ------------------------ | ------------------- |
+| Function definition | `function greet(){}` | `def greet():` |
+| Anonymous function | `const x = function(){}` | `lambda:` |
+| Arrow function | `(x) => {}` | `lambda x:` |
+| Default parameter | `function f(x=5)` | `def f(x=5):` |
+| Closure | Yes | Yes |
+| Block scope | Yes (`let`, `const`) | No |
+| Global keyword | Implicit (`var`) | Explicit (`global`) |
+| Lexical scope rule | Yes | Yes (LEGB rule) |
+
+## Generators: `yield`, `yield from`
+
+Definition:
+Generators are iterators created using functions that yield values one at a time instead of returning them all at once.
+They’re memory-efficient and perfect for working with large or infinite sequences.
+
+🔁 Basic Generator
+
+```py
+def count_up_to(n):
+    count = 1
+    while count <= n:
+        yield count
+        count += 1
+
+for number in count_up_to(5):
+    print(number)
+```
+
+Output:
+
+```
+1
+2
+3
+4
+5
+```
+
+When the function hits a `yield` statement:
+
+- It pauses execution and returns that value.
+- On the next iteration, it resumes right after the last `yield`.
+
+🧠 Generator vs. Regular Function
+| Regular Function (`return`) | Generator (`yield`) |
+| ------------------------------ | ---------------------------------------- |
+| Returns **once** | Can **yield multiple times** |
+| Returns a value | Returns an **iterator** |
+| Stores entire result in memory | Produces items **lazily** (on demand) |
+| Faster for small data | More efficient for large data or streams |
+
+⚙️ Using next()
+
+You can manually control generator execution:
+
+```py
+gen = count_up_to(3)
+print(next(gen))  # 1
+print(next(gen))  # 2
+print(next(gen))  # 3
+# next(gen) → StopIteration
+```
+
+🧩 yield from
+
+The yield from syntax allows a generator to delegate part of its operations to another generator.
+
+```py
+def generator_a():
+    yield 1
+    yield 2
+
+def generator_b():
+    yield from generator_a()
+    yield 3
+
+for val in generator_b():
+    print(val)
+```
+
+Output:
+
+```
+1
+2
+3
+```
+
+🌊 Real-World Example
+
+Generators are great for streaming data:
+
+```py
+def read_file_line_by_line(filename):
+    with open(filename, 'r') as file:
+        for line in file:
+            yield line.strip()
+
+for line in read_file_line_by_line('data.txt'):
+    print(line)
+```
+
+This approach reads one line at a time without loading the entire file into memory.
+
+✅ In short:
+
+Generators let you process data on demand using `yield`, keeping memory usage low.
+They’re essential for efficient iteration, pipelines, and async programming.
 
 # Asynchronous Python
 

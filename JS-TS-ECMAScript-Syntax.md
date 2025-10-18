@@ -40,7 +40,7 @@
   - [throw](#throw)
   - [try / catch / finally](#try--catch--finally)
 - [Functions \& Scope](#functions--scope)
-  - [Closure](#closure)
+  - [Closures](#closures)
   - [Scope Accessibility](#scope-accessibility)
 - [Asynchronous JavaScript](#asynchronous-javascript)
   - [async Function](#async-function)
@@ -3282,149 +3282,149 @@ then produces an output. Functions can be called by their name, and they can tak
 
 Different ways to define functions:
 
-Function declaration:
+- Function declaration:
 
-```js
-function greet(name) {
-  console.log("Hello, " + name + "!");
-}
-greet("Alice"); // Hello, Alice!
-```
+  ```js
+  function greet(name) {
+    console.log("Hello, " + name + "!");
+  }
+  greet("Alice"); // Hello, Alice!
+  ```
 
-It's like a simple variable declaration like let, const,var but it can store more complicated value. It can perform a specific task or calculate a value. Think of functions as a machine that takes some input, does some operations on it, and then produces an output. Functions can be called by their name, and they can take parameters.
+  It's like a simple variable declaration like let, const,var but it can store more complicated value. It can perform a specific task or calculate a value. Think of functions as a machine that takes some input, does some operations on it, and then produces an output. Functions can be called by their name, and they can take parameters.
 
-Parameters act as placeholders for the values that will be passed to the function when it is called. They allow functions to accept input and work with that input. Arguments are the actual values passed to the function when it is called. Here is an updated version of the greet function that uses parameters and arguments:
+  Parameters act as placeholders for the values that will be passed to the function when it is called. They allow functions to accept input and work with that input. Arguments are the actual values passed to the function when it is called. Here is an updated version of the greet function that uses parameters and arguments:
 
-```js
-function greet(name) {
-  console.log("Hello, " + name + "!");
-}
+  ```js
+  function greet(name) {
+    console.log("Hello, " + name + "!");
+  }
 
-greet("Alice"); // Hello, Alice!
-greet("Nick"); // Hello, Nick!
-```
+  greet("Alice"); // Hello, Alice!
+  greet("Nick"); // Hello, Nick!
+  ```
 
-The name serves as the parameter while the strings Alice and Nick serve as the arguments. Now we have a reusable function that can be used dozens of times throughout our code with different arguments.
+  The name serves as the parameter while the strings Alice and Nick serve as the arguments. Now we have a reusable function that can be used dozens of times throughout our code with different arguments.
 
-When a function finishes its execution, it will always return a value.
-By default, the return value will be undefined.
+  When a function finishes its execution, it will always return a value.
+  By default, the return value will be undefined.
 
-```js
-function doSomething() {
-  console.log("Doing something...");
-}
+  ```js
+  function doSomething() {
+    console.log("Doing something...");
+  }
 
-let result = doSomething();
-console.log(result); // undefined
-```
+  let result = doSomething();
+  console.log(result); // undefined
+  ```
 
-If you need your function to return a specific value, then
-you will need to use the return statement.
+  If you need your function to return a specific value, then
+  you will need to use the return statement.
 
-```js
-function calculateSum(num1, num2) {
-  return num1 + num2;
-}
+  ```js
+  function calculateSum(num1, num2) {
+    return num1 + num2;
+  }
 
-console.log(calculateSum(3, 4)); // 7
-```
+  console.log(calculateSum(3, 4)); // 7
+  ```
 
-In this example, we have a const variable called sum and we are assigning it an anonymous function that returns the sum of num1 and num2. We are then able to call sum and pass in the numbers 3 and 4 to get the result of 7.
+  In this example, we have a const variable called sum and we are assigning it an anonymous function that returns the sum of num1 and num2. We are then able to call sum and pass in the numbers 3 and 4 to get the result of 7.
 
-```js
-const sum = function (num1, num2) {
-  return num1 + num2;
-};
+  ```js
+  const sum = function (num1, num2) {
+    return num1 + num2;
+  };
 
-console.log(sum(3, 4)); // 7
-```
+  console.log(sum(3, 4)); // 7
+  ```
 
-Functions support default parameters, allowing you to set default values for parameters.
-These default values are used if the function is called without an argument for that parameter.
+  Functions support default parameters, allowing you to set default values for parameters.
+  These default values are used if the function is called without an argument for that parameter.
 
-```js
-function greetings(name = "Guest") {
-  console.log("Hello, " + name + "!");
-}
+  ```js
+  function greetings(name = "Guest") {
+    console.log("Hello, " + name + "!");
+  }
 
-greetings(); // Hello, Guest!
-greetings("Anna"); // Hello, Anna!
+  greetings(); // Hello, Guest!
+  greetings("Anna"); // Hello, Anna!
 
-function mystery(a, b = 3) {
-  return a * b;
-}
-console.log(mystery(4));
-```
+  function mystery(a, b = 3) {
+    return a * b;
+  }
+  console.log(mystery(4));
+  ```
 
-=> Arrow functions
+- `=>` Arrow functions
 
-```js
-//same output, different method
-function greetings(name) {
-  console.log("Hello, " + name + "!");
-}
+  ```js
+  //same output, different method
+  function greetings(name) {
+    console.log("Hello, " + name + "!");
+  }
 
-//same output, different method
-const greetings = (name) => {
-  console.log("Hello, " + name + "!");
-};
-```
+  //same output, different method
+  const greetings = (name) => {
+    console.log("Hello, " + name + "!");
+  };
+  ```
 
-In this revised example, we are creating a const variable called greetings and assigning it an anonymous function. Most of the syntax will look familiar to you except for the missing function keyword and the addition of the arrow (=>) between the name parameter and the function body. If your parameter list only has one parameter in it, then you can remove the parentheses like this:
+  In this revised example, we are creating a const variable called greetings and assigning it an anonymous function. Most of the syntax will look familiar to you except for the missing function keyword and the addition of the arrow (=>) between the name parameter and the function body. If your parameter list only has one parameter in it, then you can remove the parentheses like this:
 
-```js
-const greetings = (name) => {
-  console.log("Hello, " + name + "!");
-};
-```
+  ```js
+  const greetings = (name) => {
+    console.log("Hello, " + name + "!");
+  };
+  ```
 
-If your arrow function has no parameters, then you must use the parentheses like this:
+  If your arrow function has no parameters, then you must use the parentheses like this:
 
-```js
-const greetings = () => {
-  console.log("Hello");
-};
-```
+  ```js
+  const greetings = () => {
+    console.log("Hello");
+  };
+  ```
 
-When first learning about functions, you had to wrap the function body in curly braces. But if your function body only contains a single line of code, you can remove the curly braces like this:
+  When first learning about functions, you had to wrap the function body in curly braces. But if your function body only contains a single line of code, you can remove the curly braces like this:
 
-```js
-const greetings = (name) => console.log("Hello, " + name + "!");
-```
+  ```js
+  const greetings = (name) => console.log("Hello, " + name + "!");
+  ```
 
-It is important to note that removing the parentheses and curly braces for regular function syntax will not work. You will get errors if you tried to do something like this:
+  It is important to note that removing the parentheses and curly braces for regular function syntax will not work. You will get errors if you tried to do something like this:
 
-```js
-function greetings name console.log("Hello, " + name + "!");
-			// This will produce syntax errors
-```
+  ```js
+  function greetings name console.log("Hello, " + name + "!");
+        // This will produce syntax errors
+  ```
 
-These types of one line functions only work if you are using the arrow function syntax. Another key concept is the return statement.
+  These types of one line functions only work if you are using the arrow function syntax. Another key concept is the return statement.
 
-```js
-const calculateArea = (width, height) => {
-  const area = width * height;
-  return area;
-};
+  ```js
+  const calculateArea = (width, height) => {
+    const area = width * height;
+    return area;
+  };
 
-console.log(calculateArea(5, 3)); // 15
-```
+  console.log(calculateArea(5, 3)); // 15
+  ```
 
-We are creating a variable inside the function called area and then returning that variable. But we could clean up our code a bit and return the calculation itself:
+  We are creating a variable inside the function called area and then returning that variable. But we could clean up our code a bit and return the calculation itself:
 
-```js
-const calculateArea = (width, height) => {
-  return width * height;
-};
-```
+  ```js
+  const calculateArea = (width, height) => {
+    return width * height;
+  };
+  ```
 
-If you tried to remove the curly braces and place the calculation on the same line, then you would get an Uncaught SyntaxError: Unexpected token 'return' message:
+  If you tried to remove the curly braces and place the calculation on the same line, then you would get an Uncaught SyntaxError: Unexpected token 'return' message:
 
-```js
-const calculateArea = (width, height) => width * height;
-```
+  ```js
+  const calculateArea = (width, height) => width * height;
+  ```
 
-## Closure
+## Closures
 
 Definition: A function that remembers and accesses variables from its outer (enclosing) scope, even after the outer function has finished executing.
 

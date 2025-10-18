@@ -39,8 +39,7 @@
   - [Loop Tools: enumerate(), zip(), range()](#loop-tools-enumerate-zip-range)
   - [Exception Handling: try/except/finally/else, raise](#exception-handling-tryexceptfinallyelse-raise)
 - [Functions \& Scope](#functions--scope)
-  - [Definitions: def, lambda](#definitions-def-lambda)
-  - [Closures: inner functions capturing variables](#closures-inner-functions-capturing-variables)
+  - [Closures](#closures)
   - [Decorators: @decorator syntax](#decorators-decorator-syntax)
   - [Scopes: LEGB rule (Local, Enclosing, Global, Built-in)](#scopes-legb-rule-local-enclosing-global-built-in)
   - [Generators: yield, yield from](#generators-yield-yield-from)
@@ -2425,9 +2424,115 @@ Python provides a number of built-in methods that make working with strings a br
 
 # Functions & Scope
 
-## Definitions: def, lambda
+Functions in Python are reusable blocks of code that perform specific tasks or compute values. They make code modular, easier to test, and reusable — just like in JavaScript.
 
-## Closures: inner functions capturing variables
+You define a function with the def keyword, optionally pass in parameters, and call it by name. Think of it as a “mini program” inside your main program.
+
+- Function declaration:
+
+```py
+def greet(name):
+    print("Hello,", name + "!")
+
+greet("Alice")  # Hello, Alice!
+```
+
+A function can take parameters (placeholders) that receive arguments (actual values). Parameters make functions flexible and reusable.
+
+```py
+def greet(name):
+    print("Hello,", name + "!")
+
+greet("Alice")
+greet("Nick")
+```
+
+Every function in Python returns a value.
+If you don’t use return, the function implicitly returns None.
+
+```py
+def do_something():
+    print("Doing something...")
+
+result = do_something()
+print(result)  # None
+```
+
+To return a specific value, use the return keyword.
+
+```py
+def calculate_sum(num1, num2):
+    return num1 + num2
+
+print(calculate_sum(3, 4))  # 7
+```
+
+You can also assign functions to variables — functions are first-class objects in Python:
+
+```py
+sum_func = lambda a, b: a + b
+print(sum_func(3, 4))  # 7
+```
+
+Python supports default parameter values — used when no argument is provided.
+
+```py
+def greetings(name="Guest"):
+    print("Hello,", name + "!")
+
+greetings()        # Hello, Guest!
+greetings("Anna")  # Hello, Anna!
+```
+
+You can even define multiple defaults:
+
+```py
+def mystery(a, b=3):
+    return a * b
+
+print(mystery(4))  # 12
+```
+
+- Lambda (Anonymous) Functions
+
+Arrow functions in JavaScript are conceptually similar to lambda functions in Python. They’re used for short, simple, one-line operations.
+
+```py
+# Regular function
+def add(a, b):
+    return a + b
+
+# Lambda equivalent
+add = lambda a, b: a + b
+
+print(add(3, 4))  # 7
+```
+
+Lambdas are often used inline with tools like map(), filter(), or sorted().
+
+```py
+numbers = [1, 2, 3, 4]
+doubles = list(map(lambda x: x * 2, numbers))
+print(doubles)  # [2, 4, 6, 8]
+```
+
+You can return values directly or assign them before returning:
+
+```py
+def calculate_area(width, height):
+    area = width * height
+    return area
+
+print(calculate_area(5, 3))  # 15
+```
+
+You can simplify one-liners like this:
+
+```py
+def calculate_area(width, height): return width * height
+```
+
+## Closures
 
 ## Decorators: @decorator syntax
 

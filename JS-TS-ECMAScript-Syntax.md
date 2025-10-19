@@ -27,7 +27,12 @@
     - [Object Constructors](#object-constructors)
   - [Array Constructors](#array-constructors)
   - [Array Methods](#array-methods)
-  - [Classes \& Prototypes (ongoing update)](#classes--prototypes-ongoing-update)
+  - [Tuple-like Structures (JS/TS)](#tuple-like-structures-jsts)
+  - [Object Methods](#object-methods)
+  - [Set Methods](#set-methods)
+  - [Classes and Constructors](#classes-and-constructors)
+  - [Object Model Hooks](#object-model-hooks)
+  - [Classes \& Prototypes (Object-Oriented JavaScript)](#classes--prototypes-object-oriented-javascript)
 - [Control Flow](#control-flow)
   - [if/else](#ifelse)
   - [switch](#switch)
@@ -2329,7 +2334,405 @@ console.log(arr); // [[1, 2, 3]] <-- an array inside an array
   console.log(text.slice(6)); // Output: "world"
   ```
 
-## Classes & Prototypes (ongoing update)
+## Tuple-like Structures (JS/TS)
+
+Definition
+
+JavaScript itself doesn’t have tuples, but TypeScript does. A tuple is a fixed-length, ordered array where each position has a specific type.
+
+```ts
+let tuple: [string, number, boolean];
+tuple = ["Alice", 30, true];
+```
+
+- Indexing
+
+  Access elements by position:
+
+  ```ts
+  console.log(tuple[0]); // "Alice"
+  console.log(tuple[1]); // 30
+  ```
+
+- Destructuring
+
+  Extract values into variables (like unpacking in Python):
+
+  ```ts
+  const [name, age, active] = tuple;
+  console.log(name); // "Alice"
+  console.log(age); // 30
+  ```
+
+- Optional and Rest Elements
+
+  Tuples can define optional or rest elements:
+
+  ```ts
+  type OptionalTuple = [string, number?];
+  type RestTuple = [string, ...number[]];
+
+  const user: OptionalTuple = ["John"];
+  const scores: RestTuple = ["Game 1", 10, 15, 20];
+  ```
+
+Summary
+Tuples are fixed-length arrays with defined types per position.
+Useful for structured returns and parameter pairs.
+
+## Object Methods
+
+Definition
+
+Objects in JavaScript are collections of key–value pairs. They’re the closest equivalent to Python dictionaries.
+
+```ts
+const person = { name: "Alice", age: 30, city: "Tokyo" };
+```
+
+- `Object.keys()`
+
+  Returns an array of keys.
+
+  ```js
+  console.log(Object.keys(person)); // ["name", "age", "city"]
+  ```
+
+- `Object.values()`
+
+  Returns an array of values.
+
+  ```js
+  console.log(Object.values(person)); // ["Alice", 30, "Tokyo"]
+  ```
+
+- `Object.entries()`
+
+  Returns key–value pairs as an array of arrays.
+
+  ```js
+  console.log(Object.entries(person));
+  // [["name", "Alice"], ["age", 30], ["city", "Tokyo"]]
+  ```
+
+- Property Access
+
+  ```js
+  console.log(person.name); // "Alice"
+  console.log(person["city"]); // "Tokyo"
+  ```
+
+- Spread Operator (Merging or Updating)
+
+  ```js
+  const updated = { ...person, job: "Developer" };
+  console.log(updated);
+  // { name: "Alice", age: 30, city: "Tokyo", job: "Developer" }
+  ```
+
+Summary
+Objects are dynamic, flexible key-value containers.
+
+Use `Object.\*()` methods to safely inspect and manipulate properties.
+
+## Set Methods
+
+Definition
+
+ES6 introduced the Set object — a collection of unique values.
+
+```js
+const fruits = new Set(["apple", "banana", "cherry"]);
+```
+
+- `.add()`
+
+  Adds an element.
+
+  ```js
+  fruits.add("orange");
+  console.log(fruits); // Set(4) {"apple", "banana", "cherry", "orange"}
+  ```
+
+- `.delete()`
+
+  Removes an element.
+
+  ```js
+  fruits.delete("banana");
+  console.log(fruits); // Set(3) {"apple", "cherry", "orange"}
+  ```
+
+- `.has()`
+
+  Checks membership.
+
+  ```js
+  console.log(fruits.has("apple")); // true
+  ```
+
+- Union and Intersection (via helpers)
+
+  ```js
+  const a = new Set([1, 2, 3]);
+  const b = new Set([3, 4, 5]);
+
+  const union = new Set([...a, ...b]);
+  const intersection = new Set([...a].filter((x) => b.has(x)));
+
+  console.log(union); // Set {1, 2, 3, 4, 5}
+  console.log(intersection); // Set {3}
+  ```
+
+Summary
+
+Set helps eliminate duplicates, perform quick membership checks, and supports math-like operations (union, intersection, difference).
+
+## Classes and Constructors
+
+Definition
+
+Classes in JavaScript define blueprints for creating objects. They encapsulate data and behavior just like Python classes.
+
+```js
+class Person {
+  constructor(name, age) {
+    this.name = name; // instance property
+    this.age = age;
+  }
+
+  greet() {
+    console.log(`Hello, my name is ${this.name}.`);
+  }
+}
+
+const p1 = new Person("Alice", 30);
+p1.greet(); // "Hello, my name is Alice."
+```
+
+Key Concepts
+
+- class → Defines a new object type.
+- constructor → Initializes new instances.
+- this → Refers to the instance (like self in Python).
+
+Summary
+Classes make JS more structured, supporting inheritance, encapsulation, and polymorphism (ES6+ OOP features).
+
+## Object Model Hooks
+
+Definition
+
+Like Python’s dunder methods, JS objects can override built-in behaviors using special methods.
+
+```js
+class Book {
+constructor(title, pages) {
+this.title = title;
+this.pages = pages;
+}
+
+toString() {
+return `Book: ${this.title}`;
+}
+
+valueOf() {
+return this.pages;
+}
+
+\*[Symbol.iterator]() {
+for (let i = 1; i <= this.pages; i++) {
+yield `Reading page ${i}`;
+}
+}
+}
+
+const book = new Book("JavaScript Mastery", 3);
+console.log(String(book)); // "Book: JavaScript Mastery"
+console.log(book + 2); // 5 (valueOf adds pages)
+for (const p of book) console.log(p);
+```
+
+Summary
+| Method | Purpose | Example |
+| ----------------- | ------------------------ | -------------- |
+| `toString()` | User-friendly string | `String(obj)` |
+| `valueOf()` | Primitive representation | `obj + 2` |
+| `Symbol.iterator` | Makes object iterable | `for...of obj` |
+
+## Classes & Prototypes (Object-Oriented JavaScript)
+
+JavaScript is a prototype-based language, not class-based like Python or Java — but since ES6, it includes the class syntax that acts as syntactic sugar over the prototype system.
+Both styles define objects with shared behavior and inheritance.
+
+- ES6 Class Syntax (Modern Approach)
+
+  ```js
+  class Person {
+    constructor(name, age) {
+      this.name = name;
+      this.age = age;
+    }
+
+    greet() {
+      console.log(`Hello, my name is ${this.name}.`);
+    }
+  }
+
+  const person1 = new Person("Alice", 25);
+  person1.greet(); // Output: Hello, my name is Alice.
+  ```
+
+  Key Notes:
+
+  - class defines a blueprint for creating objects.
+  - constructor() is automatically called when using new.
+  - this refers to the instance being created.
+  - Methods inside the class are stored on the prototype (shared by all instances).
+
+- Class Inheritance (extends, super)
+
+  ```js
+  class Animal {
+    constructor(name) {
+      this.name = name;
+    }
+
+    speak() {
+      console.log(`${this.name} makes a sound.`);
+    }
+  }
+
+  class Dog extends Animal {
+    constructor(name, breed) {
+      super(name); // calls Animal's constructor
+      this.breed = breed;
+    }
+
+    speak() {
+      console.log(`${this.name} barks.`);
+    }
+  }
+
+  const dog1 = new Dog("Buddy", "Golden Retriever");
+  dog1.speak(); // Output: Buddy barks.
+  ```
+
+  Key Notes:
+
+  - extends enables inheritance from another class.
+  - super() calls the parent’s constructor or methods.
+  - Method overriding is allowed.
+
+- Static Methods and Fields
+
+  ```js
+  class MathHelper {
+    static square(num) {
+      return num * num;
+    }
+  }
+
+  console.log(MathHelper.square(5)); // 25
+  ```
+
+  Notes:
+
+  - static defines methods or properties that belong to the class itself (not instances).
+  - Access them via ClassName.method(), not via an object.
+
+- Getters and Setters
+
+  ```js
+  class Temperature {
+    constructor(celsius) {
+      this._celsius = celsius;
+    }
+
+    get fahrenheit() {
+      return this._celsius * 1.8 + 32;
+    }
+
+    set fahrenheit(value) {
+      this._celsius = (value - 32) / 1.8;
+    }
+  }
+
+  const temp = new Temperature(25);
+  console.log(temp.fahrenheit); // 77
+  temp.fahrenheit = 86;
+  console.log(temp.fahrenheit); // 86
+  ```
+
+  Notes:
+
+  - get defines computed properties.
+  - set allows controlled modification.
+
+- Prototype-Based OOP (Pre-ES6)
+
+  Before class syntax, JavaScript used constructor functions and the prototype chain directly.
+
+  ```js
+  function Person(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  Person.prototype.greet = function () {
+    console.log(`Hi, I'm ${this.name}.`);
+  };
+
+  const p1 = new Person("Bob", 30);
+  p1.greet(); // Hi, I'm Bob.
+  ```
+
+  How It Works:
+
+  - Person is just a regular function used with new.
+  - Each instance gets its own properties (name, age).
+  - Shared methods (greet) live on Person.prototype.
+
+- Prototype Inheritance Manually
+
+  ```js
+  function Animal(name) {
+    this.name = name;
+  }
+
+  Animal.prototype.speak = function () {
+    console.log(`${this.name} makes a sound.`);
+  };
+
+  function Dog(name) {
+    Animal.call(this, name); // Inherit constructor properties
+  }
+
+  Dog.prototype = Object.create(Animal.prototype); // Inherit methods
+  Dog.prototype.constructor = Dog;
+
+  Dog.prototype.speak = function () {
+    console.log(`${this.name} barks.`);
+  };
+
+  const dog = new Dog("Charlie");
+  dog.speak(); // Charlie barks.
+  ```
+
+  Notes:
+
+  - Object.create() sets up inheritance manually.
+  - You must reset constructor to point to the child.
+  - This was the standard way before ES6 introduced class syntax.
+
+✅ Summary
+| Concept | Modern Syntax | Pre-ES6 Equivalent |
+| ------------------ | -------------------- | ------------------------------------------ |
+| Define a blueprint | `class` | `function Constructor()` |
+| Instance creation | `new ClassName()` | `new Constructor()` |
+| Shared methods | Inside `class {}` | `Constructor.prototype.method` |
+| Inheritance | `extends`, `super()` | `Object.create()` chain |
+| Static methods | `static` keyword | Attach directly: `Constructor.method = fn` |
 
 # Control Flow
 

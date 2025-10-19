@@ -26,18 +26,25 @@
   - [Braces Literal Syntax](#braces-literal-syntax)
   - [Dictionary (Object) Manipulation Structure Levels](#dictionary-object-manipulation-structure-levels)
     - [Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}](#natural-hierarchical-structure-levels-in-different-variable-declarations-classification)
-  - [String Methods](#string-methods)
-  - [List Methods: append(), extend(), insert(), pop(), remove(), sort()](#list-methods-append-extend-insert-pop-remove-sort)
-  - [Tuple Operations: indexing, slicing, unpacking](#tuple-operations-indexing-slicing-unpacking)
-  - [Dict Methods: .keys(), .values(), .items(), .get(), .update()](#dict-methods-keys-values-items-get-update)
-  - [Set Methods: .add(), .remove(), .union(), .intersection()](#set-methods-add-remove-union-intersection)
-  - [Object Orientation: class, **init**, self](#object-orientation-class-init-self)
-  - [Data Model Hooks: **str**, **repr**, **len**, **iter**](#data-model-hooks-str-repr-len-iter)
+  - [List Constructors (Array Equivalent in Python)](#list-constructors-array-equivalent-in-python)
+  - [List Methods (Array Methods Equivalent)](#list-methods-array-methods-equivalent)
+  - [Tuple Operations](#tuple-operations)
+  - [Dict Methods](#dict-methods)
+  - [Set Methods](#set-methods)
+  - [Object Orientation](#object-orientation)
+  - [Data Model Hooks](#data-model-hooks)
 - [Control Flow](#control-flow)
-  - [Conditionals: if/elif/else](#conditionals-ifelifelse)
-  - [Loops: for, while, break, continue](#loops-for-while-break-continue)
-  - [Loop Tools: enumerate(), zip(), range()](#loop-tools-enumerate-zip-range)
-  - [Exception Handling: try/except/finally/else, raise](#exception-handling-tryexceptfinallyelse-raise)
+  - [if/elif/else](#ifelifelse)
+  - [match / case (Python 3.10+)](#match--case-python-310)
+  - [Loops](#loops)
+    - [Primary Loop Structures (for... / while / do... while)](#primary-loop-structures-for--while--do-while)
+    - [Specialized Loops `for... in...`](#specialized-loops-for-in)
+    - [Loop Controls (break, continue, else)](#loop-controls-break-continue-else)
+    - [Loop Tools (Python): `enumerate()`, `zip()`, `range()`](#loop-tools-python-enumerate-zip-range)
+    - [There are a lot of purpose to use loop:](#there-are-a-lot-of-purpose-to-use-loop)
+  - [return](#return)
+  - [raise (Python’s throw)](#raise-pythons-throw)
+  - [try / except / finally](#try--except--finally)
 - [Functions \& Scope](#functions--scope)
   - [Closures](#closures)
   - [Decorators: `@decorator` syntax](#decorators-decorator-syntax)
@@ -347,6 +354,20 @@ name_and_age += str(age)  # Append the age as string
 print(name_and_age)  # John Doe26
 ```
 
+Create empty lists of fixed length:
+
+```py
+empty_list = [None] * 5
+print(empty_list)                 # [None, None, None, None, None]
+```
+
+Pre-fill with values:
+
+```py
+filled_list = [0] * 3
+print(filled_list)                # [0, 0, 0]
+```
+
 Apart from regular strings, Python also has a category of string called f-strings, which is short for formatted string literals. It allows you to handle interpolation and also do some concatenation with a compact and readable syntax.
 
 F-strings start with f (either lowercase or uppercase) before the quotes, and allow you to embed variables or expressions inside replacement fields indicated by curly braces ({}). Here's an example:
@@ -367,6 +388,11 @@ Now that you've learned about string concatenation and f-strings, let's look at 
 ```py
 my_str = 'Hello world'
 print(len(my_str))  # 11
+```
+
+```py
+arr = [1, None, None, 4]
+print(len(arr))                   # 4
 ```
 
 Now onto indexing. Each character in a string has a position called an index. The index is zero-based, meaning that the index of the first character of a string is 0, the index of the second character is 1, and so on. To access a character by its index, you use square brackets ([]) with the index of the character you want to access inside. Here are some examples:
@@ -2272,156 +2298,1342 @@ print(safe_get(user, "profile", "phone", "number"))    # None
 | Loop through properties  | `for (let k in obj)`     | `for k in dict:`                        |
 | Nested hierarchy         | Objects inside objects   | Dicts inside dicts / lists inside dicts |
 
-## String Methods
+## List Constructors (Array Equivalent in Python)
 
-Python provides a number of built-in methods that make working with strings a breeze. They include, but are not limited to, the following:
+Definition:
 
-- upper(): Returns a new string with all characters converted to uppercase.
-  my_str = 'hello world'
+In Python, lists are dynamic, mutable sequences that can hold mixed data types (like arrays in JavaScript).
 
-  ```py
-  uppercase_my_str = my_str.upper()
-  print(uppercase_my_str) # HELLO WORLD
-  ```
+You create them using:
 
-- lower(): Returns a new string with all characters converted to lowercase.
+- [] literal syntax (most common)
+- list() constructor (less common)
 
-  ```py
-  my_str = 'Hello World'
+```py
+list() # Empty list
+list(iterable) # Convert iterable (like string, range, tuple) to list
+```
 
-  lowercase_my_str = my_str.lower()
-  print(lowercase_my_str) # hello world
-  ```
+Examples:
 
-- strip(): Returns a new string with the specified leading and trailing characters removed. If no argument is passed it removes leading and trailing whitespace.
+```py
+arr1 = list()
+print(arr1) # [] → empty list
 
-  ```py
-  my_str = ' hello world '
+arr2 = [None] \* 3
+print(arr2) # [None, None, None] → pre-allocated with default value
 
-  trimmed_my_str = my_str.strip()
-  print(trimmed_my_str) # "hello world"
-  ```
+arr3 = list(("a", 2, True))
+print(arr3) # ['a', 2, True]
+```
 
-- replace(old, new): Returns a new string with all occurrences of old replaced by new.
+When to use list() constructor:
 
-  ```py
-  my_str = 'hello world'
+- Converting iterables (e.g., strings, tuples, sets).
+- Pre-allocating or generating lists programmatically.
 
-  replaced_my_str = my_str.replace('hello', 'hi')
-  print(replaced_my_str) # hi world
-  ```
+✅ Best Practice:
+Use literals [] for clarity and speed unless you need conversion.
 
-- split(separator): Splits a string on a specified separator into a list of strings. If no separator is specified, it splits on whitespace.
+```py
+arr = [1, 2, 3] # ✅ Preferred
+```
 
-  ```py
-  my_str = 'hello world'
+## List Methods (Array Methods Equivalent)
 
-  split_words = my_str.split()
-  print(split_words) # ['hello', 'world']
-  ```
-
-- join(iterable): Joins elements of an iterable into a string with a separator.
+- Finding Elements
 
   ```py
-  my_list = ['hello', 'world']
+  fruits = ["apple", "banana", "orange", "apple"]
 
-  joined_my_str = ' '.join(my_list)
-  print(joined_my_str) # hello world
+  print(fruits.index("apple"))       # 0 → first occurrence
+  print(fruits.count("apple"))       # 2 → count of value
+  print("mango" in fruits)           # False → membership check
   ```
 
-- startswith(prefix): Returns a boolean indicating if a string starts with the specified prefix.
+  Python lacks lastIndexOf() — but you can simulate it:
 
   ```py
-  my_str = 'hello world'
-
-  starts_with_hello = my_str.startswith('hello')
-  print(starts_with_hello) # True
+  last_index = len(fruits) - 1 - fruits[::-1].index("apple")
+  print(last_index)  # 3
   ```
 
-- endswith(suffix): Returns a boolean indicating if a string ends with the specified suffix.
+- Transforming Lists
 
   ```py
-  my_str = 'hello world'
+  numbers = [1, 4, 9]
+  roots = list(map(lambda x: x ** 0.5, numbers))
+  print(roots)  # [1.0, 2.0, 3.0]
 
-  ends_with_world = my_str.endswith('world')
-  print(ends_with_world) # True
+  words = ["spray", "limit", "elite", "exuberant"]
+  result = list(filter(lambda w: len(w) > 5, words))
+  print(result)  # ['exuberant']
+
+  from functools import reduce
+  sum_all = reduce(lambda acc, n: acc + n, [1, 2, 3, 4], 0)
+  print(sum_all)  # 10
+
+  fruits = ["banana", "cherry", "apple"]
+  fruits.sort()
+  print(fruits)  # ['apple', 'banana', 'cherry']
+
+  numbers = [1, 2, 3, 4, 5]
+  numbers.reverse()
+  print(numbers)  # [5, 4, 3, 2, 1]
   ```
 
-- find(substring): Returns the index of the first occurrence of substring, or -1 if it doesn't find one.
+- Combining / Splitting
 
   ```py
-  my_str = 'hello world'
+  # concat
 
-  world_index = my_str.find('world')
-  print(world_index) # 6
+  a1 = ["a", "b"]
+  a2 = ["c", "d"]
+  a3 = a1 + a2
+  print(a3) # ['a', 'b', 'c', 'd']
+
+  # slice
+
+  fruits = ["apple", "banana", "orange", "mango"]
+  citrus = fruits[1:3]
+  print(citrus) # ['banana', 'orange']
+
+  # join (string join)
+
+  elements = ["Fire", "Water", "Air"]
+  print(",".join(elements)) # Fire,Water,Air
+
+  # split (string → list)
+
+  s = "The quick brown fox"
+  words = s.split(" ")
+  print(words) # ['The', 'quick', 'brown', 'fox']
   ```
 
-- count(substring): Returns the number of times a substring appears in a string.
+  - Adding / Removing Elements
 
   ```py
-  my_str = 'hello world'
+  arr = []
+  arr.append([1, 2, 3]) # add nested list
+  print(arr) # [[1, 2, 3]]
 
-  o_count = my_str.count('o')
-  print(o_count) # 2
+  inv = []
+  inv.append({"name": "FLOUR", "quantity": 5})
+  print(inv) # [{'name': 'FLOUR', 'quantity': 5}]
+
+  plants = ["broccoli", "cauliflower", "kale"]
+  removed = plants.pop() # remove last
+  print(plants) # ['broccoli', 'cauliflower']
+  print(removed) # 'kale'
+
+  animals = ["pigs", "goats"]
+  animals.append("cows")
+  print(animals) # ['pigs', 'goats', 'cows']
+
+  arr = [1, 2, 3]
+  first = arr.pop(0) # remove first (no shift() in Python)
+  print(arr, first) # [2, 3], 1
+
+  array = [4, 5, 6]
+  array.insert(0, 1) # add to start
+  print(array) # [1, 4, 5, 6]
+
+  months = ["Jan", "March", "April", "June"]
+  months.insert(1, "Feb") # Insert at index
+  print(months) # ['Jan', 'Feb', 'March', 'April', 'June']
+
+  months[4:5] = ["May"] # Replace
+  print(months) # ['Jan', 'Feb', 'March', 'April', 'May']
   ```
 
-- capitalize(): Returns a new string with the first character capitalized and the other characters lowercased.
+  - Checking Elements
 
   ```py
-  my_str = 'hello world'
+  numbers = [1, 30, 39, 29, 10, 13]
+  all_below_40 = all(n < 40 for n in numbers)
+  print(all_below_40) # True
 
-  capitalized_my_str = my_str.capitalize()
-  print(capitalized_my_str) # Hello world
+  some_even = any(n % 2 == 0 for n in numbers)
+  print(some_even) # True
   ```
 
-- isupper(): Returns True if all letters in the string are uppercase and False if not.
+- String Methods
+
+  Python provides a number of built-in methods that make working with strings a breeze. They include, but are not limited to, the following:
+
+  - `upper()`: Returns a new string with all characters converted to uppercase.
+    my_str = 'hello world'
+
+    ```py
+    uppercase_my_str = my_str.upper()
+    print(uppercase_my_str) # HELLO WORLD
+    ```
+
+  - `lower()`: Returns a new string with all characters converted to lowercase.
+
+    ```py
+    my_str = 'Hello World'
+
+    lowercase_my_str = my_str.lower()
+    print(lowercase_my_str) # hello world
+    ```
+
+  - `strip()` `lstrip()` `rstrip()`: Returns a new string with the specified leading and trailing characters removed. If no argument is passed it removes leading and trailing whitespace.
+
+    ```py
+    text = "Hello world"
+
+    print(" Hello ".strip())                  # 'Hello'
+    print(" Hello ".lstrip())                 # 'Hello '
+    print(" Hello ".rstrip())                 # ' Hello'
+    ```
+
+  - `replace(old, new)`: Returns a new string with all occurrences of old replaced by new.
+
+    ```py
+    my_str = 'hello world'
+
+    replaced_my_str = my_str.replace('hello', 'hi')
+    print(replaced_my_str) # hi world
+    ```
+
+  - `split(separator)`: Splits a string on a specified separator into a list of strings. If no separator is specified, it splits on whitespace.
+
+    ```py
+    my_str = 'hello world'
+
+    split_words = my_str.split()
+    print(split_words) # ['hello', 'world']
+    ```
+
+  - `join(iterable)`: Joins elements of an iterable into a string with a separator.
+
+    ```py
+    my_list = ['hello', 'world']
+
+    joined_my_str = ' '.join(my_list)
+    print(joined_my_str) # hello world
+    ```
+
+  - `startswith(prefix)`: Returns a boolean indicating if a string starts with the specified prefix.
+
+    ```py
+    my_str = 'hello world'
+
+    starts_with_hello = my_str.startswith('hello')
+    print(starts_with_hello) # True
+    ```
+
+  - `endswith(suffix)`: Returns a boolean indicating if a string ends with the specified suffix.
+
+    ```py
+    my_str = 'hello world'
+
+    ends_with_world = my_str.endswith('world')
+    print(ends_with_world) # True
+    ```
+
+  - `find(substring)`: Returns the index of the first occurrence of substring, or -1 if it doesn't find one.
+
+    ```py
+    text = "Hello world world"
+    print(text.find("world"))         # 6  (indexOf)
+    print(text.rfind("world"))        # 12 (lastIndexOf)
+    ```
+
+  - `count(substring)`: Returns the number of times a substring appears in a string.
+
+    ```py
+    my_str = 'hello world'
+
+    o_count = my_str.count('o')
+    print(o_count) # 2
+    ```
+
+  - `capitalize()`: Returns a new string with the first character capitalized and the other characters lowercased.
+
+    ```py
+    my_str = 'hello world'
+
+    capitalized_my_str = my_str.capitalize()
+    print(capitalized_my_str) # Hello world
+    ```
+
+  - `isupper()`: Returns True if all letters in the string are uppercase and False if not.
+
+    ```py
+    my_str = 'hello world'
+
+    is_all_upper = my_str.isupper()
+    print(is_all_upper) # False
+    ```
+
+  - `islower()`: Returns True if all letters in the string are lowercase and False if not.
+
+    ```py
+    my_str = 'hello world'
+
+    is_all_lower = my_str.islower()
+    print(is_all_lower) # True
+    ```
+
+  - `title()`: Returns a new string with the first letter of each word capitalized.
+
+    ```py
+    my_str = 'hello world'
+
+    title_case_my_str = my_str.title()
+    print(title_case_my_str) # Hello World
+    ```
+
+🧭 Summary Table
+
+| JavaScript Concept | Python Equivalent            | Example                  |
+| ------------------ | ---------------------------- | ------------------------ |
+| `Array()`          | `list()`                     | `list(("a", 2))`         |
+| `indexOf()`        | `.index()`                   | `fruits.index("apple")`  |
+| `includes()`       | `in`                         | `"cat" in pets`          |
+| `map()`            | `map()` / list comprehension | `[x**2 for x in nums]`   |
+| `filter()`         | `filter()`                   | `filter(func, list)`     |
+| `reduce()`         | `functools.reduce()`         | `reduce(add, list)`      |
+| `concat()`         | `+`                          | `[1,2]+[3,4]`            |
+| `push()`           | `.append()`                  | `arr.append(5)`          |
+| `pop()`            | `.pop()`                     | `arr.pop()`              |
+| `shift()`          | `.pop(0)`                    | remove first             |
+| `unshift()`        | `.insert(0, val)`            | add first                |
+| `splice()`         | slicing assignment           | `arr[1:2]=[val]`         |
+| `every()`          | `all()`                      | `all(cond for x in arr)` |
+| `some()`           | `any()`                      | `any(cond for x in arr)` |
+| `join()`           | `str.join()`                 | `" ".join(arr)`          |
+| `split()`          | `str.split()`                | `s.split(" ")`           |
+| `toUpperCase()`    | `.upper()`                   | `'a'.upper()`            |
+| `toLowerCase()`    | `.lower()`                   | `'A'.lower()`            |
+
+## Tuple Operations
+
+Definition
+A tuple is an ordered, immutable (unchangeable) sequence of values.
+They’re like lists but cannot be modified after creation.
+
+```py
+# Create tuples
+t1 = (1, 2, 3)
+t2 = ("a", "b", "c")
+t3 = (1, "apple", True)
+```
+
+- Indexing
+
+  Access elements by position (starting from 0):
 
   ```py
-  my_str = 'hello world'
-
-  is_all_upper = my_str.isupper()
-  print(is_all_upper) # False
+  t = ("red", "green", "blue")
+  print(t[0])  # red
+  print(t[2])  # blue
   ```
 
-- islower(): Returns True if all letters in the string are lowercase and False if not.
+- Slicing
+
+  Extract portions of a tuple (returns a new tuple):
 
   ```py
-  my_str = 'hello world'
-
-  is_all_lower = my_str.islower()
-  print(is_all_lower) # True
+  t = (10, 20, 30, 40, 50)
+  print(t[1:4])   # (20, 30, 40)
+  print(t[:3])    # (10, 20, 30)
+  print(t[::2])   # (10, 30, 50)
   ```
 
-- title(): Returns a new string with the first letter of each word capitalized.
+- Unpacking
+
+  Assign tuple elements to variables:
 
   ```py
-  my_str = 'hello world'
-
-  title_case_my_str = my_str.title()
-  print(title_case_my_str) # Hello World
+  person = ("Alice", 25, "Engineer")
+  name, age, job = person
+  print(name)  # Alice
+  print(age)   # 25
+  print(job)   # Engineer
   ```
 
-## List Methods: append(), extend(), insert(), pop(), remove(), sort()
+Summary
+Tuples are lightweight, immutable containers perfect for fixed data.
+Use them when you don’t need to modify values.
 
-## Tuple Operations: indexing, slicing, unpacking
+## Dict Methods
 
-## Dict Methods: .keys(), .values(), .items(), .get(), .update()
+Definition
+Dictionaries store data as key–value pairs, similar to JavaScript objects.
+Each key must be unique and immutable.
 
-## Set Methods: .add(), .remove(), .union(), .intersection()
+```py
+person = {"name": "Alice", "age": 30, "city": "Tokyo"}
+```
 
-## Object Orientation: class, **init**, self
+- `.keys()`
 
-## Data Model Hooks: **str**, **repr**, **len**, **iter**
+  Returns all keys.
+
+  ```py
+  print(person.keys())  # dict_keys(['name', 'age', 'city'])
+  ```
+
+- `.values()`
+
+  Returns all values.
+
+  ```py
+  print(person.values())  # dict_values(['Alice', 30, 'Tokyo'])
+  ```
+
+- `.items()`
+
+  Returns key–value pairs as tuples.
+
+  ```py
+  print(person.items())  # dict_items([('name', 'Alice'), ('age', 30), ('city', 'Tokyo')])
+  ```
+
+- `.get()`
+
+  Safely retrieve a value without error if key missing.
+
+  ```py
+  print(person.get("age"))     # 30
+  print(person.get("gender"))  # None (no error)
+  ```
+
+- `.update()`
+
+  Add or modify multiple key–value pairs.
+
+  ```py
+  person.update({"city": "Osaka", "job": "Developer"})
+  print(person)
+  # {'name': 'Alice', 'age': 30, 'city': 'Osaka', 'job': 'Developer'}
+  ```
+
+Summary
+Dictionaries are dynamic, mutable mappings for structured data — essential in Python for representing objects, configs, and JSON-like data.
+
+## Set Methods
+
+Definition
+Sets are unordered collections of unique elements.
+Duplicates are automatically removed.
+
+```py
+fruits = {"apple", "banana", "cherry"}
+```
+
+- `.add()`
+
+  Add an element to the set.
+
+  ```py
+  fruits.add("orange")
+  print(fruits)  # {'banana', 'apple', 'orange', 'cherry'}
+  ```
+
+- `.remove()`
+
+  Remove an element (raises error if missing).
+
+  ```py
+  fruits.remove("banana")
+  print(fruits)  # {'apple', 'orange', 'cherry'}
+  ```
+
+- `.union()`
+
+  Combine two sets (no duplicates).
+
+  ```py
+  a = {1, 2, 3}
+  b = {3, 4, 5}
+  print(a.union(b))  # {1, 2, 3, 4, 5}
+  ```
+
+- `.intersection()`
+
+  Return only elements present in both sets.
+
+  ```py
+  print(a.intersection(b))  # {3}
+  ```
+
+Summary
+Sets are ideal for membership tests, removing duplicates, and performing mathematical set operations.
+
+## Object Orientation
+
+Definition
+Python is object-oriented — everything is an object.
+Classes define blueprints for creating objects with attributes and methods.
+
+Basic Structure
+
+```py
+class Person:
+    def __init__(self, name, age):
+        self.name = name  # instance variable
+        self.age = age
+
+    def greet(self):
+        print(f"Hello, my name is {self.name}.")
+
+# Create instance
+p1 = Person("Alice", 30)
+p1.greet()  # Hello, my name is Alice.
+```
+
+- `class` → defines a new object type.
+- `**init**()` → constructor; runs when you create an object.
+- `self` → refers to the instance itself (like this in JS).
+
+Summary
+Classes encapsulate data (attributes) and behavior (methods) — enabling reusable, modular code.
+
+## Data Model Hooks
+
+Definition
+Python allows you to customize how objects behave with built-in functions (like `print()`, `len()`, `iter()`, etc.) by implementing special methods (dunder methods).
+
+Example Class
+
+```py
+class Book:
+    def __init__(self, title, pages):
+        self.title = title
+        self.pages = pages
+
+    def __str__(self):
+        return f"Book: {self.title}"
+
+    def __repr__(self):
+        return f"Book(title={self.title!r}, pages={self.pages})"
+
+    def __len__(self):
+        return self.pages
+
+    def __iter__(self):
+        for page in range(1, self.pages + 1):
+            yield f"Reading page {page}"
+
+book = Book("Python Mastery", 3)
+print(str(book))      # Book: Python Mastery
+print(repr(book))     # Book(title='Python Mastery', pages=3)
+print(len(book))      # 3
+for p in book:
+    print(p)
+```
+
+Summary
+| Method | Purpose | Example |
+| ---------- | ------------------------ | --------------- |
+| `__str__` | User-friendly display | `print(obj)` |
+| `__repr__` | Developer representation | `repr(obj)` |
+| `__len__` | Length of object | `len(obj)` |
+| `__iter__` | Iterable behavior | `for x in obj:` |
 
 # Control Flow
 
-## Conditionals: if/elif/else
+Control flow in Python determines how your program executes statements — which paths run, how loops iterate, and how errors are handled.
 
-## Loops: for, while, break, continue
+Like JavaScript, it uses conditionals, loops, function returns, and exceptions — but with indentation instead of braces `{}`.
 
-## Loop Tools: enumerate(), zip(), range()
+## if/elif/else
 
-## Exception Handling: try/except/finally/else, raise
+```py
+marks = 85
+
+if marks >= 90:
+    print("Grade: A")
+  elif marks >= 80:
+      print("Grade: B")
+  elif marks >= 70:
+      print("Grade: C")
+  elif marks >= 60:
+      print("Grade: D")
+  else:
+      print("Grade: F")
+```
+
+Explanation
+
+- `if`, `elif`, and `else` control conditional execution.
+- Only the first true condition runs; others are skipped.
+- Code blocks are defined by indentation, not `{}`.
+
+Truthy and Falsy Values
+
+Python also evaluates conditions using truthiness.
+
+Truthy values
+✅ Non-empty strings (`"hello"`)
+✅ Non-zero numbers (`4`, `-5`)
+✅ Non-empty lists, tuples, sets, dicts
+✅ Boolean `True`
+
+Falsy values
+❌ `False`
+❌ `0`, `0.0`
+❌ `""` (empty string)
+❌ `[]`, `{}`, `set()` (empty collections)
+❌ `None`
+
+Example: Loan Eligibility
+
+```py
+credit_score = 720
+annual_income = 60000
+loan_amount = 200000
+
+if credit_score >= 750 and annual_income >= 80000:
+    eligibility = "Eligible for premium loan rates."
+  elif credit_score >= 700 and annual_income >= 50000:
+      eligibility = "Eligible for standard loan rates."
+  elif credit_score >= 650 and annual_income >= 40000:
+      eligibility = "Eligible for subprime loan rates."
+  elif credit_score < 650:
+      eligibility = "Not eligible due to low credit score."
+  else:
+      eligibility = "Not eligible due to insufficient income."
+
+print(eligibility)
+```
+
+🟢 Output:
+
+```py
+Eligible for standard loan rates.
+```
+
+Example: Word Count Function
+
+```py
+def get_word_count(sentence):
+    if sentence.strip() == "":
+        return 0
+    words = sentence.strip().split()
+    return len(words)
+
+word_count = get_word_count("I love Python")
+print(f"Word Count: {word_count}")  # Word Count: 3
+```
+
+## match / case (Python 3.10+)
+
+Python’s `match` is equivalent to JavaScript’s `switch`.
+
+```py
+day_of_week = 3
+
+match day_of_week:
+    case 1:
+        print("It's Monday! Time to start the week strong.")
+    case 2:
+        print("It's Tuesday! Keep the momentum going.")
+    case 3:
+        print("It's Wednesday! We're halfway there.")
+    case 4:
+        print("It's Thursday! Almost the weekend.")
+    case 5:
+        print("It's Friday! The weekend is near.")
+    case 6:
+        print("It's Saturday! Enjoy your weekend.")
+    case 7:
+        print("It's Sunday! Rest and recharge.")
+    case _:
+        print("Invalid day! Please enter a number between 1 and 7.")
+```
+
+🟢 Output:
+
+```
+It's Wednesday! We're halfway there.
+```
+
+## Loops
+
+Python supports three main loop types:
+
+`for`, `while`, and `nested` loops.
+
+Unlike JavaScript, there’s no `do...while`, but it can be simulated
+
+### Primary Loop Structures (for... / while / do... while)
+
+- `for` loop (definite iteration)
+
+  Used when you know the number of iterations or need to process items in a sequence.
+
+  ```py
+  for i in range(6):
+      print("Iteration:", i)
+
+  # Explanation:
+  # i value is 0
+  # i <= 5 means i is less than or equal to 5 so there is 5 arrays (1,2,3,4,5)
+  # i++ there means is increased by 1 each time, so the loop will run 5 times
+  # "" is there for regular text
+  # i there is for display result
+
+  # 🟢 Output:
+
+  Iteration: 0
+  Iteration: 1
+  Iteration: 2
+  Iteration: 3
+  Iteration: 4
+  Iteration: 5
+  ```
+
+  for loop over a list
+
+  ```py
+  colors = ["red", "green", "blue", "yellow"]
+
+  for i in range(len(colors)):
+      print("i =", i)
+      print("colors[i] =", colors[i])
+
+  # Explanation:
+  # color is an array (there is 4 item)
+  # color.length is the number of items in the array
+  # i is the index of the array
+  # i++ there means is increased by 1 each time, so the loop will run 4 times
+
+  #🟢 Output:
+
+  I = 0
+  color[i] = red
+  I = 1
+  color[i] = green
+  I = 2
+  color[i] = blue
+  I = 3
+  color[i] = yellow
+  ```
+
+- `while` loop (indefinite iteration)
+
+  Used when the loop should continue until a condition is false.
+
+  ```py
+  # The Python equivalent of JavaScript's while loop for validation
+  while True:
+    user_input = input("Please enter a number between 1 and 10: ")
+
+    # Try to convert the input to a number and check the range
+    try:
+        user_number = int(user_input)
+        if 1 <= user_number <= 10:
+            print("You entered a valid number!")
+            break  # Exit the loop if input is valid
+        else:
+            print("Invalid input. Please enter a number between 1 and 10.")
+    except ValueError:
+        print("Invalid input. Please enter a valid integer.")
+
+  # Output:
+  Please enter a number between 1 and 10
+  (user have to input text)
+  You entered a valid number!
+  ```
+
+  ```py
+  count = 0
+  while count <= 5:
+      print("count =", count)
+      count += 1
+
+  # Explanation:
+  # count value is 0
+  # count <= 5 means count is less than or equal to 5 so there is 5 arrays (1,2,3,4,5)
+  # count+= there means is increased by 1 each time, so the loop will run 5 times
+  # so if there is no count++ it will continue to loop until the condition is false
+
+  # 🟢 Output:
+
+  count = 0
+  count = 1
+  count = 2
+  count = 3
+  count = 4
+  count = 5
+  ```
+
+- `do...while` Simulation
+
+  Python doesn’t have a built-in `do...while`,
+  but you can simulate it using `while True` with `break`.
+
+  ```py
+  num = 0
+  while True:
+      print("num =", num)
+      num += 1
+      if num > 5:
+          break
+
+  # Explanation:
+  # number value is 0
+  # number <= 5 means number is less than or equal to 5 so there is 5 arrays (1,2,3,4,5)
+  # number++ there means is increased by 1 each time, so the loop will run 5 times
+  # so if there is no number++ it will continue to loop until the condition is false
+
+  # Output:
+  number = 0
+  number = 1
+  number = 2
+  number = 3
+  number = 4
+  number = 5
+  ```
+
+  ```py
+  while True:
+      num_str = input("Enter a number greater than 10: ")
+
+      # Try to convert the input string to an integer
+      try:
+          num = int(num_str)
+
+          # Check if the number meets the condition.
+          # If it does, exit the loop.
+          if num > 10:
+              print("Thank you.")
+              break
+          # If it does not, the loop will repeat.
+      except ValueError:
+          # Handle cases where the user enters non-numeric text
+          print("Invalid input. Please enter a valid number.")
+
+  # Output :
+  Enter a number greater than 10
+  (user have to input text)
+  Thank you.
+  ```
+
+### Specialized Loops `for... in...`
+
+Don't have `for... of...` or `forEach()` in JS but equivalent of `for...in` in JS.
+
+```py
+person = {"name": "Alice", "age": 25, "city": "Paris"}
+
+for key, value in person.items():
+    print(f"{key}: {value}")
+```
+
+🟢 Output:
+
+```py
+name: Alice
+age: 25
+city: Paris
+```
+
+### Loop Controls (break, continue, else)
+
+- Break
+
+  ```py
+  for i in range(10):
+    if i == 5:
+      break # Exit loop early
+    print(i)
+  ```
+
+- Continue
+
+  ```py
+  for i in range(10):
+    if i == 5:
+      continue # Skip iteration
+    print(i)
+  ```
+
+- Loop else (Python-only feature)
+
+  The else clause runs if the loop completes normally (not via break).
+
+  ```py
+  for i in range(3):
+    print(i)
+  else:
+    print("Loop finished cleanly")
+  ```
+
+- Nested Loops
+
+```py
+for i in range(3):
+  for j in range(3):
+    if i == 1 and j == 1:
+      break
+    print(f"i: {i}, j: {j}")
+```
+
+🟢 Output:
+
+```
+i: 0, j: 0
+i: 0, j: 1
+i: 0, j: 2
+i: 1, j: 0
+```
+
+### Loop Tools (Python): `enumerate()`, `zip()`, `range()`
+
+In Python, loops are powerful and expressive, thanks to a few built-in helpers that make iteration cleaner, safer, and more readable.
+
+These three — `enumerate()`, `zip()`, and `range()` — are the cornerstones of professional Python loop writing.
+
+- `range()`
+
+  `range()` generates a sequence of numbers (like `for (let i = 0; i < n; i++)` in JS).
+  It doesn’t create a full list in memory; it’s a lazy sequence that yields numbers on demand.
+
+  ```py
+  # range(stop)
+  for i in range(5):
+      print(i)
+  # 0 1 2 3 4
+
+  # range(start, stop)
+  for i in range(2, 6):
+      print(i)
+  # 2 3 4 5
+
+  # range(start, stop, step)
+  for i in range(0, 10, 2):
+      print(i)
+  # 0 2 4 6 8
+  ```
+
+  Equivalent in JavaScript:
+
+  ```js
+  for (let i = 0; i < 5; i++) console.log(i);
+  ```
+
+  Key notes:
+
+  - range() excludes the stop value (range(0, 5) → 0–4).
+  - step can be negative for reverse iteration.
+  - It’s memory-efficient (doesn’t store all numbers).
+
+- `enumerate()`
+
+  `enumerate()` gives you both index and value when looping — cleaner than managing a manual counter.
+
+  ```py
+  fruits = ["apple", "banana", "cherry"]
+
+  for index, fruit in enumerate(fruits):
+  print(index, fruit)
+  ```
+
+  🟢 Output:
+
+  ```
+  0 apple
+  1 banana
+  2 cherry
+  ```
+
+  Equivalent in JavaScript:
+
+  ```js
+  const fruits = ["apple", "banana", "cherry"];
+  fruits.forEach((fruit, index) => console.log(index, fruit));
+  ```
+
+  Why use it:
+
+  - Keeps your loop Pythonic — no manual range(len(...)).
+  - Works with any iterable (lists, tuples, sets, etc.).
+  - Optional start argument:
+    ```py
+    for i, fruit in enumerate(fruits, start=1):
+    print(i, fruit)
+    # 1 apple, 2 banana, 3 cherry
+    ```
+
+- `zip()`
+
+  `zip()` combines multiple iterables element-by-element.
+  It’s like looping over two (or more) arrays simultaneously.
+
+  ```py
+  names = ["Alice", "Bob", "Charlie"]
+  scores = [90, 85, 95]
+
+  for name, score in zip(names, scores):
+  print(name, "scored", score)
+  ```
+
+  🟢 Output:
+
+  ```
+  Alice scored 90
+  Bob scored 85
+  Charlie scored 95
+  ```
+
+  Equivalent in JavaScript:
+
+  ```js
+  const names = ["Alice", "Bob", "Charlie"];
+  const scores = [90, 85, 95];
+  names.forEach((name, i) => console.log(name, "scored", scores[i]));
+  ```
+
+  Key Notes:
+
+  - Stops at the shortest iterable.
+    ```py
+    zip([1, 2], [10, 20, 30]) # → (1,10), (2,20)
+    ```
+  - To go the opposite way (unzip):
+    ```py
+    pairs = [("a", 1), ("b", 2)]
+    letters, numbers = zip(\*pairs)
+    print(letters) # ('a', 'b')
+    print(numbers) # (1, 2)
+    ```
+  - Combine with enumerate() or range() for flexible pairing.
+
+  🧩 Combined Example
+
+  ```py
+  students = ["Alice", "Bob", "Charlie"]
+  scores = [85, 90, 95]
+
+  for i, (name, score) in enumerate(zip(students, scores), start=1):
+  print(f"{i}. {name} scored {score}")
+  ```
+
+  🟢 Output:
+
+  ```
+  1. Alice scored 85
+  2. Bob scored 90
+  3. Charlie scored 95
+  ```
+
+✅ Summary Table
+| Function | Purpose | JS Equivalent |
+| ------------- | ----------------------------- | -------------------------------------- |
+| `range()` | Generate numeric sequence | `for (let i = 0; i < n; i++)` |
+| `enumerate()` | Get index + value | `array.forEach((v, i) => …)` |
+| `zip()` | Combine iterables elementwise | `array1.map((v, i) => [v, array2[i]])` |
+
+### There are a lot of purpose to use loop:
+
+1. Accumulation
+
+   Definition: Combining values across iterations to build a result (e.g., sums, concatenations).
+
+   Scope Relevance: Critical (outer variable required to preserve accumulated state)
+
+   ```py
+   total = 0                     # Outer scope variable
+   numbers = [1, 2, 3]
+
+   for num in numbers:
+       total += num              # Accumulate across iterations
+
+   print(total)                  # 6
+   ```
+
+   🧠 Explanation:
+   The variable `total` must exist outside the loop to retain its value each iteration.
+   If declared inside, it would reset on every loop cycle.
+
+   ✅ Pythonic alternative:
+
+   ```py
+   total = sum(numbers)
+   ```
+
+2. Per-Item Processing
+
+   Definition: Independent operations for each element (no cross-iteration dependency).
+
+   Scope Relevance: Minimal (inner variables OK)
+
+   ```py
+   words = ["hello", "world"]
+
+   for word in words:
+       upper = word.upper()      # Inner scope variable
+       print(upper)
+   ```
+
+   🟢 Output:
+
+   ```
+   HELLO
+   WORLD
+   ```
+
+   🧠 Explanation:
+   upper is temporary — it’s recreated per iteration, so no need to persist it across loops.
+
+   ✅ Pythonic alternative using list comprehension:
+
+   ```py
+   print([word.upper() for word in words])
+   ```
+
+3. Searching
+
+   Definition: Finding a specific value or condition in a sequence.
+
+   Scope Relevance: Optional — depends on whether you need early exit or a flag.
+
+   ```py
+   # Stateful search
+   found_item = None             # Outer scope
+   items = ["a", "b", "c"]
+
+   for item in items:
+       if item == "b":
+           found_item = item
+           break                 # Exit early
+
+   print(found_item)             # "b"
+   ```
+
+   ✅ Stateless (functional) alternative:
+
+   ```py
+   has_even = any(num % 2 == 0 for num in [1, 3, 4])
+   print(has_even)               # True
+   ```
+
+   🧠 Explanation:
+
+   - Outer variable preserves results for early-exit searches.
+   - Stateless generator expressions like `any()` or `next()` are cleaner when no persistence needed.
+
+4. Side Effects
+
+   Definition: Performing external actions during iteration (e.g., logging, printing, file I/O).
+
+   Scope Relevance: Usually irrelevant — side effects don’t depend on accumulation.
+
+   ```py
+
+   for i in range(2):
+       print(f"Iteration {i}")  # Logging (side effect)
+   ```
+
+   ```py
+   buttons = ["OK", "Cancel"]
+   for text in buttons:
+       print(f"Creating button: {text}")  # Simulated side effect
+   ```
+
+   🧠 Explanation:
+   When the purpose is external effect — not data transformation — scope management is secondary.
+
+5. Data Generation
+
+   Definition: Building up new data structures or sequences step by step.
+
+   Scope Relevance: Outer variable must hold the growing data.
+
+   ```py
+   fibonacci = [0, 1]            # Outer scope
+   for i in range(2, 10):
+       fibonacci.append(fibonacci[i - 1] + fibonacci[i - 2])
+
+   print(fibonacci)
+   ```
+
+   🟢 Output:
+
+   ```py
+   [0, 1, 1, 2, 3, 5, 8, 13, 21, 34]
+   ```
+
+6. State Machines
+
+   Definition: Maintaining and updating system state over time.
+
+   Scope Relevance: Outer variables store the evolving state.
+
+   ```py
+   position = 0
+   velocity = 1
+
+   while position < 100:
+       position += velocity
+       velocity *= 1.1
+       print(f"Position: {position:.2f}")  # Side effect
+   ```
+
+   🧠 Explanation:
+   position and velocity persist between iterations, simulating movement over time.
+
+7. Recursion Simulation
+
+   Definition: Using iteration instead of recursive function calls.
+
+   Scope Relevance: Outer variable needed to store intermediate results.
+
+   ```py
+   def factorial(n):
+       result = 1
+       while n > 1:
+           result *= n
+           n -= 1
+       return result
+
+   print(factorial(5))  # 120
+   ```
+
+   🧠 Explanation:
+   Iteration avoids recursion overhead by maintaining state manually in result.
+
+8. Control Flow
+
+   Definition: Managing program progression or retry loops rather than data processing.
+
+   Scope Relevance: Minimal, but often uses outer variables as counters.
+
+   ```py
+   attempts = 0
+
+   while attempts < 5:
+       attempts += 1
+       print(f"Attempt #{attempts}")
+       if attempts == 3:
+           print("Success!")
+           break
+   ```
+
+   🧠 Explanation:
+   Used for retry logic, waiting loops, or validation until success.
+
+When to Use Which Framework
+
+| Purpose              | Example           | Scope Need | Common Pattern    |
+| -------------------- | ----------------- | ---------- | ----------------- |
+| Accumulation         | Sum, join         | Outer      | `total += x`      |
+| Per-item processing  | Transform         | Inner      | `for x in items:` |
+| Searching            | Find match        | Optional   | `break` / `any()` |
+| Side effects         | Log, print        | Irrelevant | `print()` / I/O   |
+| Data generation      | Build list        | Outer      | `.append()`       |
+| State machines       | Simulate change   | Outer      | `while` loops     |
+| Recursion simulation | Replace recursion | Outer      | `while` loops     |
+| Control flow         | Retry, wait       | Minimal    | Counters          |
+
+🧠 Key Insights
+
+- Stateful loops (accumulation, state machines) require outer scope to remember progress.
+- Stateless loops (transformations, side effects) work fine with inner scope only.
+- Scope placement defines whether you’re retaining, isolating, or discarding state between iterations.
+- This framework helps you choose the correct loop design for readability, performance, and correctness.
+
+## return
+
+return exits the current function and sends a value back to the caller.
+
+If no value is provided, it returns `None`.
+
+```py
+def area(r):
+  if r < 0:
+    return 0 # early exit
+  return 3.14159 _ r _ r
+```
+
+```py
+def greet():
+  print("Hello")
+  return
+
+result = greet()
+print(result) # None
+```
+
+## raise (Python’s throw)
+
+`raise` is Python’s equivalent of JavaScript’s `throw`.
+
+It stops execution and signals an error —
+which can be caught with `try/except`.
+
+```py
+def parse_port(s):
+  n = int(s)
+  if n < 0:
+    raise ValueError("Invalid port number")
+  return n
+```
+
+## try / except / finally
+
+Equivalent to `try / catch / finally` in JS.
+
+```py
+try:
+  risky_operation()
+except Exception as e:
+  print("Error occurred:", e)
+finally:
+  print("Cleanup always runs.")
+```
+
+- Example with Custom Error
+
+  ```py
+  class CustomError(Exception):
+    pass
+
+  try:
+    raise CustomError("Something went wrong")
+  except CustomError as e:
+    print("Caught:", e)
+  finally:
+    print("Done.")
+  ```
+
+  🟢 Output:
+
+  ```py
+  Caught: Something went wrong
+  Done.
+  ```
+
+- Example with File Handling
+
+  ```py
+  try:
+    f = open("example.txt")
+    data = f.read()
+  except FileNotFoundError:
+    print("File not found!")
+  else:
+    print("File loaded successfully!")
+  finally:
+    f.close()
+  ```
+
+✅ Summary Table
+| Concept | JavaScript | Python |
+| ---------------- | ---------------------------- | ------------------------------- |
+| Conditional | `if / else if / else` | `if / elif / else` |
+| Switch | `switch` | `match / case` |
+| Loop | `for`, `while`, `do...while` | `for`, `while` |
+| Break / Continue | `break`, `continue` | Same |
+| Exception | `throw`, `try/catch/finally` | `raise`, `try/except/finally` |
+| Function Return | `return` | `return` |
+| Error Object | `Error`, `TypeError` | `Exception`, `ValueError`, etc. |
 
 # Functions & Scope
 

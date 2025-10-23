@@ -4,7 +4,7 @@
   - [Number Systems](#number-systems)
   - [Variable Naming Conventions](#variable-naming-conventions)
   - [Variable Declarations](#variable-declarations)
-  - [String Manipulation](#string-manipulation)
+  - [String Literals \& Formatting](#string-literals--formatting)
   - [Printing for debugging](#printing-for-debugging)
   - [Modules \& Imports/Exports](#modules--importsexports)
 - [Data Types](#data-types)
@@ -24,6 +24,8 @@
     - [Identity Operators `is`, `is not`](#identity-operators-is-is-not)
 - [Collections \& Objects (Dictionary)](#collections--objects-dictionary)
   - [Braces Literal Syntax](#braces-literal-syntax)
+  - [**Comparative Syntax Table — `{}`, `[]`, `()`**](#comparative-syntax-table----)
+  - [String Manipulation](#string-manipulation)
   - [Dictionary (Object) Manipulation Structure Levels](#dictionary-object-manipulation-structure-levels)
     - [Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}](#natural-hierarchical-structure-levels-in-different-variable-declarations-classification)
   - [List Constructors (Array Equivalent in Python)](#list-constructors-array-equivalent-in-python)
@@ -37,7 +39,7 @@
   - [if/elif/else](#ifelifelse)
   - [match / case (Python 3.10+)](#match--case-python-310)
   - [Loops](#loops)
-    - [Primary Loop Structures (for... / while / do... while)](#primary-loop-structures-for--while--do-while)
+    - [Primary Loop Structures (for / while / do... while... equivalent)](#primary-loop-structures-for--while--do-while-equivalent)
     - [Specialized Loops `for... in...`](#specialized-loops-for-in)
     - [Loop Controls (break, continue, else)](#loop-controls-break-continue-else)
     - [Loop Tools (Python): `enumerate()`, `zip()`, `range()`](#loop-tools-python-enumerate-zip-range)
@@ -277,213 +279,115 @@ Other key declaration and definition constructs include:
 
 Python emphasizes readability and explicitness, so variables exist as references to objects, not fixed memory bindings.
 
-## String Manipulation
+## String Literals & Formatting
 
-A string is a sequence of characters surrounded by either single or double quotation marks. In some programming languages, characters surrounded by single quotes are treated differently than characters surrounded by double quotes, but in Python, they're treated equally. So, you can use either when working with strings. Here are some examples of strings:
+In Python, strings are sequences of characters enclosed in single quotes (`'...'`), double quotes (`"..."`), or triple quotes (`'''...'''` or `"""..."""`).
+They support escape characters (`\n`, `\t`, etc.) and allow multi-line text similar to JavaScript template literals.
 
-```py
-my_str_1 = 'Hello'
-my_str_2 = "World"
-```
+- Newline Character (`\n`)
 
-If you need a multi-line string, you can use triple double quotes or single quotes:
-
-```py
-my_str_3 = """Multiline
-string"""
-my_str_4 = '''Another
-multiline
-string'''
-```
-
-If your string contains either single or double quotation marks, then you have two options:
-
-- Use the opposite kind of quotes. That is, if your string contains single quotes, use double quotes to wrap the string, and vice versa:
+  The newline escape `\n` works like the HTML `<br>` tag — it inserts a line break.
 
   ```py
-  msg = "It's a sunny day"
-  quote = 'She said, "Hello World!"'
+  poem = "Roses are red,\nViolets are blue,\nPython is powerful,\nAnd so are you."
+  print(poem)
+
+  # Output:
+  Roses are red,
+  Violets are blue,
+  Python is powerful,
+  And so are you.
   ```
 
-- Escape the single or double quotation mark in the string with a backslash (\). With this method, you can use either single or double quotation marks to wrap the string itself:
+- Multiline Strings (`"""..."""` or `'''...'''`)
+
+  Triple-quoted strings automatically preserve newlines and spacing, just like JavaScript template literals using backticks.
 
   ```py
-  msg = 'It\'s a sunny day'
-  quote = "She said, \"Hello!\""
+  poem = """Roses are red,
+  Violets are blue,
+  Python is fun,
+  And so are you."""
+  print(poem)
+
+  # Output:
+  Roses are red,
+  Violets are blue,
+  Python is fun,
+  And so are you.
   ```
 
-You can also combine multiple strings together with the plus (+) operator. This process is called string concatenation. Here's how to concatenate two strings with the plus operator:
+  ✅ You don’t need \n — Python keeps your line breaks as written.
+
+- Escaping Quotes
+
+  Use the backslash (\) to include quotes inside a string of the same type.
+
+  ```py
+  statement = "She said, \"Hello!\""
+  print(statement)
+
+  # Output:
+  She said, "Hello!"
+  ```
+
+  You can also escape single quotes or backslashes:
+
+  ```py
+  quote = 'It\'s a beautiful day!'
+  path = "C:\\Users\\Admin\\Documents"
+  print(quote)
+  print(path)
+
+  # Output:
+  It's a beautiful day!
+  C:\Users\Admin\Documents
+  ```
+
+- String Interpolation (f-Strings)
+
+  Python’s f-strings (formatted string literals) are similar to JavaScript’s template literals.
+  They let you embed variables directly inside a string using {}.
+
+  ```py
+  name = "Alice"
+  greeting = f"Hello, {name}!"
+  print(greeting)
+
+  # Output:
+  Hello, Alice!
+  ```
+
+  You can also combine multiple variables:
+
+  ```py
+  name = "Alice"
+  age = 25
+  message = f"My name is {name} and I am {age} years old."
+  print(message)
+
+  # Output:
+  My name is Alice and I am 25 years old.
+  ```
+
+- String Concatenation
+
+  Just like JavaScript’s `+` operator, Python supports string concatenation.
+
+  ```py
+  name = "Alice"
+  age = 25
+  message = "My name is " + name + " and I am " + str(age) + " years old."
+  print(message)
+  ```
+
+  🧠 Note:
+  You must convert non-string values (like integers) using str() before concatenation.
+
+✅ f-strings are preferred because they’re faster and cleaner:
 
 ```py
-my_str_1 = 'Hello'
-my_str_2 = "World"
-
-str_plus_str = my_str_1 + ' ' + my_str_2
-print(str_plus_str) # Hello World
-```
-
-But note that this only works with strings. If you try to concatenate a string with a number, you'll get a TypeError:
-
-```py
-name = 'John Doe'
-age = 26
-
-name_and_age = name + age
-print(name_and_age) # TypeError: can only concatenate str (not "int") to str
-```
-
-This happens because Python does not automatically convert other data types like integers into strings when you concatenate them. Python requires all elements to be strings before it can concatenate them. To fix that, you can convert the number into a string with the built-in str() function:
-
-```py
-name = 'John Doe'
-age = 26
-
-name_and_age = name + str(age)
-print(name_and_age) # John Doe26
-```
-
-You can also use the augmented assignment operator for concatenation. This is represented by a plus and equals sign (+=), and performs both concatenation and assignment in one step. Here's it in action:
-
-```py
-name = 'John Doe'
-age = 26
-
-name_and_age = name  # Start with the name
-name_and_age += str(age)  # Append the age as string
-
-print(name_and_age)  # John Doe26
-```
-
-Create empty lists of fixed length:
-
-```py
-empty_list = [None] * 5
-print(empty_list)                 # [None, None, None, None, None]
-```
-
-Pre-fill with values:
-
-```py
-filled_list = [0] * 3
-print(filled_list)                # [0, 0, 0]
-```
-
-Apart from regular strings, Python also has a category of string called f-strings, which is short for formatted string literals. It allows you to handle interpolation and also do some concatenation with a compact and readable syntax.
-
-F-strings start with f (either lowercase or uppercase) before the quotes, and allow you to embed variables or expressions inside replacement fields indicated by curly braces ({}). Here's an example:
-
-```py
-name = 'John Doe'
-age = 26
-name_and_age = f'My name is {name} and I am {age} years old'
-print(name_and_age) # My name is John Doe and I am 26 years old
-
-num1 = 5
-num2 = 10
-print(f'The sum of {num1} and {num2} is {num1 + num2}') # The sum of 5 and 10 is 15
-```
-
-Now that you've learned about string concatenation and f-strings, let's look at how you can get the length of a string and work with the individual characters in a string, a process called indexing. To get the length of a string, you can use the built-in len() function. Here's an example:
-
-```py
-my_str = 'Hello world'
-print(len(my_str))  # 11
-```
-
-```py
-arr = [1, None, None, 4]
-print(len(arr))                   # 4
-```
-
-Now onto indexing. Each character in a string has a position called an index. The index is zero-based, meaning that the index of the first character of a string is 0, the index of the second character is 1, and so on. To access a character by its index, you use square brackets ([]) with the index of the character you want to access inside. Here are some examples:
-
-```py
-my_str = "Hello world"
-
-print(my_str[0])  # H
-print(my_str[6])  # w
-```
-
-Negative indexing is also allowed, so you can get the last character of any string with -1, the second-to-last character with -2, and so on:
-
-```py
-my_str = 'Hello world'
-print(my_str[-1])  # d
-print(my_str[-2]) # l
-```
-
-Now that you're familiar with indexing, let's take things a bit further with string slicing. String slicing lets you extract a portion of a string or work with only a specific part of it. Here's the basic syntax:
-
-```py
-string[start:stop]
-```
-
-If you want to extract characters from a certain index to another, you just separate the start and stop indices with a colon:
-
-```py
-my_str = 'Hello world'
-print(my_str[1:4]) # ell
-```
-
-Note that the stop index is non-inclusive, so [1:4] just extracted the characters from index 1, and up to, but not including, the character at index 4.
-
-You can also omit the start and stop indices, and Python will default to 0 or the end of the string, respectively. For example, here's what happens if you omit the start index:
-
-```py
-my_str = 'Hello world'
-print(my_str[:7])  # Hello w
-```
-
-This extracts everything from index 0 up to (but not including), the character at index 7. And here's what happens if you omit the stop index:
-
-```py
-my_str = 'Hello world'
-print(my_str[8:])  # rld
-```
-
-This extracts everything from the character at index 8 until the end of the string.
-
-You can also omit both the start and stop indices, which will extract the whole string:
-
-```py
-my_str = 'Hello world'
-print(my_str[:])  # Hello world
-```
-
-Apart from the start and stop indices, there's also an optional step parameter, which is used to specify the increment between each index in the slice.
-
-Here's the syntax for that:
-
-```py
-string[start:stop:step]
-```
-
-In the example below, the slicing starts at index 0, stops before 11, and extracts every second character:
-
-```py
-my_str = 'Hello world'
-print(my_str[0:11:2])  # Hlowrd
-```
-
-A helpful trick you can do with the step parameter is to reverse a string by setting step to -1, and leaving start and stop blank:
-
-```py
-my_str = 'Hello world'
-print(my_str[::-1]) # dlrow olleH
-```
-
-It can also be helpful to check if a character or set of characters exist in a string before slicing it. To do that, Python provides the in operator, which returns a boolean that specifies whether the character or characters exist in the string or not.
-
-Here are some examples:
-
-```py
-my_str = 'Hello world'
-
-print('Hello' in my_str)  # True
-print('hey' in my_str)    # False
-print('hi' in my_str)    # False
-print('e' in my_str)  # True
-print('f' in my_str)  # False
+print(f"My name is {name} and I am {age} years old.")
 ```
 
 ## Printing for debugging
@@ -2036,6 +1940,271 @@ print(greeting[1])  # Output: e
 print(greeting[len(greeting) - 1])  # Output: o
 ```
 
+## **Comparative Syntax Table — `{}`, `[]`, `()`**
+
+| Symbol        | Python                                                      | JavaScript                                                      | C / Java / C++                                                    | Meaning Summary                                               |
+| :------------ | :---------------------------------------------------------- | :-------------------------------------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------ |
+| `{}`          | **Dictionary** (key–value pairs) or **Set** (unique values) | **Object literal** (key–value pairs)                            | **Code block** (not data; defines scope in functions, loops, ifs) | Represents **mapping or grouping** of related items           |
+| Example       | `{"name": "Alice", "age": 25}`<br>`{1, 2, 3}`               | `{ name: "Alice", age: 25 }`                                    | `{ printf("Hi"); }`                                               | Python/JS: data container<br>C/Java: block of executable code |
+| Mutable?      | ✅ **Mutable** (dict, set can be changed)                   | ✅ **Mutable** (object properties can change)                   | N/A (not data)                                                    | Mapping containers usually mutable                            |
+| Ordered?      | ✅ **Yes** (since Python 3.7)                               | 🚫 **No guaranteed order before ES2015**, now insertion-ordered | N/A                                                               | Usually _insertion-ordered_ in modern langs                   |
+| Keys / Values | Dict: key–value<br>Set: unique values only                  | Object: key–value                                               | Code only                                                         | Represents data associations                                  |
+
+| Symbol       | Python                                | JavaScript                            | C / Java / C++                           | Meaning Summary                           |
+| :----------- | :------------------------------------ | :------------------------------------ | :--------------------------------------- | :---------------------------------------- |
+| `[]`         | **List** (ordered, mutable sequence)  | **Array** (ordered, mutable sequence) | **Array indexing or declaration**        | Represents **sequential collections**     |
+| Example      | `[1, 2, 3]`                           | `[1, 2, 3]`                           | `int nums[3] = {1, 2, 3};`               | Indexed sequence of values                |
+| Mutable?     | ✅ **Mutable**                        | ✅ **Mutable**                        | ✅ **Mutable** (fixed-size, static type) | Usually mutable but differs by language   |
+| Ordered?     | ✅ **Yes**                            | ✅ **Yes**                            | ✅ **Yes**                               | Ordered, index-based                      |
+| Mixed Types? | ✅ Allowed (e.g., `[1, "two", True]`) | ✅ Allowed (e.g., `[1, "two", true]`) | 🚫 Usually not (fixed type per array)    | JS/Python flexible; C/Java strongly typed |
+| Use Case     | Storing sequences of elements         | Storing sequences                     | Declaring fixed arrays                   | Sequential collection of data             |
+
+| Symbol        | Python                                                                       | JavaScript                                   | C / Java / C++                               | Meaning Summary                                        |
+| :------------ | :--------------------------------------------------------------------------- | :------------------------------------------- | :------------------------------------------- | :----------------------------------------------------- |
+| `()`          | **Tuple** (ordered, immutable sequence)<br>**Function call**<br>**Grouping** | **Function call** or **Expression grouping** | **Function call** or **Grouping expression** | Represents **order, grouping, or function invocation** |
+| Example       | `(1, 2, 3)`<br>`print("Hi")`                                                 | `(a + b)` or `sum(1, 2)`                     | `printf("Hi");`                              | Used for grouping or calling functions                 |
+| Mutable?      | 🚫 **Immutable** (tuples can’t be changed)                                   | N/A (not a container)                        | N/A                                          | Immutable or not a container                           |
+| Ordered?      | ✅ **Yes**                                                                   | N/A                                          | N/A                                          | Preserves order if data container                      |
+| Special Notes | `(value,)` is 1-tuple; `()` empty tuple                                      | No tuple type; use arrays or objects         | Only grouping or function parentheses        | Tuple is unique to Python                              |
+| Use Case      | Immutable data grouping                                                      | Function calls                               | Function calls                               | Control precedence or encapsulate values               |
+
+🧠 Summary Insights
+
+| Concept                  | Python                                                  | JavaScript                       | C/Java-family                    |     |
+| :----------------------- | :------------------------------------------------------ | :------------------------------- | :------------------------------- | --- |
+| **{} curly braces**      | Create _dict_ or _set_ (data)                           | Create _object_ (data)           | Create _block_ (code)            |     |
+| **[] square brackets**   | Create _list_ (data)                                    | Create _array_ (data)            | Access or define array (data)    |     |
+| **() parentheses**       | Create _tuple_ (data), call function, group expressions | Call function, group expressions | Call function, group expressions |     |
+| **Data vs Code meaning** | Mostly **data creation**                                | Mostly **data creation**         | Mostly **code control**          |     |
+| **Mutability**           | dict ✅ list ✅ tuple 🚫                                | object ✅ array ✅               | arrays fixed type / size         |
+
+🧩 Visual Analogy
+
+| Concept         | Python                       | JavaScript                     | C / Java                          |
+| :-------------- | :--------------------------- | :----------------------------- | :-------------------------------- |
+| Mapping         | 📦 `{key: value}` (dict/set) | 🗂️ `{key: value}` (object)     | ⚙️ `{}` defines code, not mapping |
+| Sequence        | 📚 `[item1, item2]` (list)   | 📜 `[item1, item2]` (array)    | 🧮 `int arr[] = {1,2}`            |
+| Grouping / Call | 🎯 `(a, b)` (tuple or call)  | 🔔 `(a, b)` (call or grouping) | 🔔 `(a, b)` (call or grouping)    |
+
+## String Manipulation
+
+You can combine multiple strings together with the plus (+) operator. This process is called string concatenation. Here's how to concatenate two strings with the plus operator:
+
+```py
+my_str_1 = 'Hello'
+my_str_2 = "World"
+
+str_plus_str = my_str_1 + ' ' + my_str_2
+print(str_plus_str) # Hello World
+```
+
+But note that this only works with strings. If you try to concatenate a string with a number, you'll get a TypeError:
+
+```py
+name = 'John Doe'
+age = 26
+
+name_and_age = name + age
+print(name_and_age) # TypeError: can only concatenate str (not "int") to str
+```
+
+This happens because Python does not automatically convert other data types like integers into strings when you concatenate them. Python requires all elements to be strings before it can concatenate them. To fix that, you can convert the number into a string with the built-in str() function:
+
+```py
+name = 'John Doe'
+age = 26
+
+name_and_age = name + str(age)
+print(name_and_age) # John Doe26
+```
+
+You can also use the augmented assignment operator for concatenation. This is represented by a plus and equals sign (+=), and performs both concatenation and assignment in one step. Here's it in action:
+
+```py
+name = 'John Doe'
+age = 26
+
+name_and_age = name  # Start with the name
+name_and_age += str(age)  # Append the age as string
+
+print(name_and_age)  # John Doe26
+```
+
+Create empty lists of fixed length:
+
+```py
+empty_list = [None] * 5
+print(empty_list)                 # [None, None, None, None, None]
+```
+
+Pre-fill with values:
+
+```py
+filled_list = [0] * 3
+print(filled_list)                # [0, 0, 0]
+```
+
+Apart from regular strings, Python also has a category of string called f-strings, which is short for formatted string literals. It allows you to handle interpolation and also do some concatenation with a compact and readable syntax.
+
+F-strings start with f (either lowercase or uppercase) before the quotes, and allow you to embed variables or expressions inside replacement fields indicated by curly braces ({}). Here's an example:
+
+```py
+name = 'John Doe'
+age = 26
+name_and_age = f'My name is {name} and I am {age} years old'
+print(name_and_age) # My name is John Doe and I am 26 years old
+
+num1 = 5
+num2 = 10
+print(f'The sum of {num1} and {num2} is {num1 + num2}') # The sum of 5 and 10 is 15
+```
+
+Now that you've learned about string concatenation and f-strings, let's look at how you can get the length of a string and work with the individual characters in a string, a process called indexing. To get the length of a string, you can use the built-in len() function. Here's an example:
+
+```py
+my_str = 'Hello world'
+print(len(my_str))  # 11
+```
+
+```py
+arr = [1, None, None, 4]
+print(len(arr))                   # 4
+```
+
+- **Indexing**
+
+  Now onto indexing. Each character in a string has a position called an index. The index is zero-based, meaning that the index of the first character of a string is 0, the index of the second character is 1, and so on. To access a character by its index, you use square brackets ([]) with the index of the character you want to access inside. Here are some examples:
+
+  ```py
+  my_str = "Hello world"
+
+  print(my_str[0])  # H
+  print(my_str[6])  # w
+  ```
+
+  Negative indexing is also allowed, so you can get the last character of any string with -1, the second-to-last character with -2, and so on:
+
+  ```py
+  my_str = 'Hello world'
+  print(my_str[-1])  # d
+  print(my_str[-2]) # l
+  ```
+
+  In this example, we have one nested list containing three popular programming languages. To access the nested list, you will need to access it using index 2 since lists are zero based indexed:
+
+  ```py
+  developer = ['Alice', 25, ['Python', 'Rust', 'C++']]
+  developer[2] # ['Python', 'Rust', 'C++']
+  ```
+
+  Then to access the second language from that nested list, you will need to access it using index 1 like this:
+
+  ```py
+  developer = ['Alice', 25, ['Python', 'Rust', 'C++']]
+  developer[2][1] # 'Rust'
+  ```
+
+- **Another common technique used with lists is unpacking values.**
+
+  Unpacking values from a list is a technique used to assign values from a list to new variables. Here is an example of unpacking a developer list into new variables called name, age and job.
+
+  ```py
+  developer = ['Alice', 34, 'Rust Developer']
+  name, age, job = developer
+
+  print(name) # 'Alice'
+  print(age) # 34
+  print(job) # 'Rust Developer'
+  ```
+
+  Here, name has the value 'Alice', age has the value 34, and job has the value 'Rust Developer'.
+
+  If you need to collect any remaining elements from a list, you can use the asterisk (\*) operator like this:
+
+  ```py
+  developer = ['Alice', 34, 'Rust Developer']
+  name, *rest = developer
+
+  print(name) # 'Alice'
+  print(rest) # [34, 'Rust Developer']
+  ```
+
+  In this example, name will still have the value 'Alice', and rest is a list of two items: the number 34 and the string 'Rust Developer'.
+
+Now that you're familiar with indexing, let's take things a bit further with string slicing. String slicing lets you extract a portion of a string or work with only a specific part of it. Here's the basic syntax:
+
+```py
+string[start:stop]
+```
+
+If you want to extract characters from a certain index to another, you just separate the start and stop indices with a colon:
+
+```py
+my_str = 'Hello world'
+print(my_str[1:4]) # ell
+```
+
+Note that the stop index is non-inclusive, so [1:4] just extracted the characters from index 1, and up to, but not including, the character at index 4.
+
+You can also omit the start and stop indices, and Python will default to 0 or the end of the string, respectively. For example, here's what happens if you omit the start index:
+
+```py
+my_str = 'Hello world'
+print(my_str[:7])  # Hello w
+```
+
+This extracts everything from index 0 up to (but not including), the character at index 7. And here's what happens if you omit the stop index:
+
+```py
+my_str = 'Hello world'
+print(my_str[8:])  # rld
+```
+
+This extracts everything from the character at index 8 until the end of the string.
+
+You can also omit both the start and stop indices, which will extract the whole string:
+
+```py
+my_str = 'Hello world'
+print(my_str[:])  # Hello world
+```
+
+Apart from the start and stop indices, there's also an optional step parameter, which is used to specify the increment between each index in the slice.
+
+Here's the syntax for that:
+
+```py
+string[start:stop:step]
+```
+
+In the example below, the slicing starts at index 0, stops before 11, and extracts every second character:
+
+```py
+my_str = 'Hello world'
+print(my_str[0:11:2])  # Hlowrd
+```
+
+A helpful trick you can do with the step parameter is to reverse a string by setting step to -1, and leaving start and stop blank:
+
+```py
+my_str = 'Hello world'
+print(my_str[::-1]) # dlrow olleH
+```
+
+It can also be helpful to check if a character or set of characters exist in a string before slicing it. To do that, Python provides the in operator, which returns a boolean that specifies whether the character or characters exist in the string or not.
+
+Here are some examples:
+
+```py
+my_str = 'Hello world'
+
+print('Hello' in my_str)  # True
+print('hey' in my_str)    # False
+print('hi' in my_str)    # False
+print('e' in my_str)  # True
+print('f' in my_str)  # False
+```
+
 ## Dictionary (Object) Manipulation Structure Levels
 
 Accessing Nested Dictionary Data
@@ -2132,7 +2301,7 @@ def update_records(records, record_id, prop, value):
 
 
 print(update_records(record_collection, 5439, "artist", "ABBA"))
-#                        ^records          ^id      ^prop      ^value
+#                           ^records     ^id      ^prop    ^value
 ```
 
 Example of Well-Identified Dictionary Structure
@@ -2346,8 +2515,13 @@ arr = [1, 2, 3] # ✅ Preferred
   ```py
   fruits = ["apple", "banana", "orange", "apple"]
 
+  # .index()
   print(fruits.index("apple"))       # 0 → first occurrence
+
+  # .count()
   print(fruits.count("apple"))       # 2 → count of value
+
+  # in
   print("mango" in fruits)           # False → membership check
   ```
 
@@ -2361,22 +2535,41 @@ arr = [1, 2, 3] # ✅ Preferred
 - Transforming Lists
 
   ```py
+  # map
   numbers = [1, 4, 9]
   roots = list(map(lambda x: x ** 0.5, numbers))
   print(roots)  # [1.0, 2.0, 3.0]
 
+  # filter
   words = ["spray", "limit", "elite", "exuberant"]
   result = list(filter(lambda w: len(w) > 5, words))
   print(result)  # ['exuberant']
 
+  # reduce
   from functools import reduce
   sum_all = reduce(lambda acc, n: acc + n, [1, 2, 3, 4], 0)
   print(sum_all)  # 10
 
+  # .sort()
   fruits = ["banana", "cherry", "apple"]
   fruits.sort()
   print(fruits)  # ['apple', 'banana', 'cherry']
 
+  # sorted()
+  numbers = [19, 2, 35, 1, 67, 41]
+  sorted_numbers = sorted(numbers)
+  print(numbers) # [19, 2, 35, 1, 67, 41]
+  print(sorted_numbers) # [1, 2, 19, 35, 41, 67]
+
+  programming_languages = ('Rust', 'Java', 'Python', 'C++', 'Rust', 'Python')
+  sorted(programming_languages, key=len)
+  # ['C++', 'Rust', 'Java', 'Rust', 'Python', 'Python']
+
+  programming_languages = ('Rust', 'Java', 'Python', 'C++', 'Rust', 'Python')
+  print(sorted(programming_languages, reverse=True))
+  # ['Rust', 'Rust', 'Python', 'Python', 'Java', 'C++']
+
+  # .reverse()
   numbers = [1, 2, 3, 4, 5]
   numbers.reverse()
   print(numbers)  # [5, 4, 3, 2, 1]
@@ -2398,41 +2591,25 @@ arr = [1, 2, 3] # ✅ Preferred
   citrus = fruits[1:3]
   print(citrus) # ['banana', 'orange']
 
-  # join (string join)
+  # .join() (string join)
 
   elements = ["Fire", "Water", "Air"]
   print(",".join(elements)) # Fire,Water,Air
 
-  # split (string → list)
+  # .split() (string → list)
 
   s = "The quick brown fox"
   words = s.split(" ")
   print(words) # ['The', 'quick', 'brown', 'fox']
-  ```
 
-  - Adding / Removing Elements
+  # .extend()
 
-  ```py
-  arr = []
-  arr.append([1, 2, 3]) # add nested list
-  print(arr) # [[1, 2, 3]]
+  numbers = [1, 2, 3, 4, 5]
+  even_numbers = [6, 8, 10]
+  numbers.extend(even_numbers)
+  print(numbers) # [1, 2, 3, 4, 5, 6, 8, 10]
 
-  inv = []
-  inv.append({"name": "FLOUR", "quantity": 5})
-  print(inv) # [{'name': 'FLOUR', 'quantity': 5}]
-
-  plants = ["broccoli", "cauliflower", "kale"]
-  removed = plants.pop() # remove last
-  print(plants) # ['broccoli', 'cauliflower']
-  print(removed) # 'kale'
-
-  animals = ["pigs", "goats"]
-  animals.append("cows")
-  print(animals) # ['pigs', 'goats', 'cows']
-
-  arr = [1, 2, 3]
-  first = arr.pop(0) # remove first (no shift() in Python)
-  print(arr, first) # [2, 3], 1
+  # .insert()
 
   array = [4, 5, 6]
   array.insert(0, 1) # add to start
@@ -2441,6 +2618,45 @@ arr = [1, 2, 3] # ✅ Preferred
   months = ["Jan", "March", "April", "June"]
   months.insert(1, "Feb") # Insert at index
   print(months) # ['Jan', 'Feb', 'March', 'April', 'June']
+  ```
+
+  - Adding / Removing Elements
+
+  ```py
+  # .append()
+
+  arr = []
+  arr.append([1, 2, 3]) # add nested list
+  print(arr) # [[1, 2, 3]]
+
+  inv = []
+  inv.append({"name": "FLOUR", "quantity": 5})
+  print(inv) # [{'name': 'FLOUR', 'quantity': 5}]
+
+  animals = ["pigs", "goats"]
+  animals.append("cows")
+  print(animals) # ['pigs', 'goats', 'cows']
+
+  # .remove()
+
+  plants = ["broccoli", "cauliflower", "kale"]
+  removed = plants.pop() # remove last
+  print(plants) # ['broccoli', 'cauliflower']
+  print(removed) # 'kale'
+
+  # .pop()
+
+  arr = [1, 2, 3]
+  first = arr.pop(0) # remove first (no shift() in Python)
+  print(arr, first) # [2, 3], 1
+
+  # .clear()
+
+  numbers = [1, 2, 3, 4, 5]
+  numbers.clear()
+  print(numbers) # []
+
+  # replace
 
   months[4:5] = ["May"] # Replace
   print(months) # ['Jan', 'Feb', 'March', 'April', 'May']
@@ -2622,6 +2838,33 @@ t2 = ("a", "b", "c")
 t3 = (1, "apple", True)
 ```
 
+```py
+developer = 'Jessica'
+tuple(developer) # ('J', 'e', 's', 's', 'i', 'c', 'a')
+```
+
+To check if an item is in a tuple, you can use the in keyword like this:
+
+```py
+programming_languages = ('Python', 'Java', 'C++', 'Rust')
+
+'Rust' in programming_languages # True
+'JavaScript' in programming_languages # False
+```
+
+If you need to remove an item from a tuple, that isn't possible because tuples are immutable. So this example, will produce an error:
+
+```py
+developer = ('Jane Doe', 23, 'Python Developer')
+del developer[1]
+
+"""
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+TypeError: "tuple" object doesn't support item deletion
+"""
+```
+
 - Indexing
 
   Access elements by position (starting from 0):
@@ -2653,6 +2896,16 @@ t3 = (1, "apple", True)
   print(name)  # Alice
   print(age)   # 25
   print(job)   # Engineer
+  ```
+
+  If you need to collect any remaining elements from a tuple, you can use the asterisk (\*) operator like this:
+
+  ```py
+  developer = ('Alice', 34, 'Rust Developer')
+  name, *rest = developer
+
+  print(name, rest) # 'Alice'
+  print(rest) # [34, 'Rust Developer']
   ```
 
 Summary
@@ -2955,15 +3208,62 @@ It's Wednesday! We're halfway there.
 
 ## Loops
 
+**"i" as the loop variable recognized by every programmer, stands for "index" or "iterator")**
+
+**Synonym for "Iterable"**
+
+You can think of it as:
+
+- **"Loop-able"** (can be used in loops)
+- **"Sequence-able"** (has an order of elements)
+- **"Traversable"** (you can go through its items one by one)
+
+  **Real-World Analogy**
+
+Imagine:
+
+- **Iterable** = A **bookshelf** (you can scan each book one by one).
+- **Non-iterable** = A **single book** (you can’t "loop through" a standalone book).
+
+**Strings are like bookshelves of characters. Numbers/booleans are single books.**
+
 Python supports three main loop types:
 
 `for`, `while`, and `nested` loops.
 
 Unlike JavaScript, there’s no `do...while`, but it can be simulated
 
-### Primary Loop Structures (for... / while / do... while)
+### Primary Loop Structures (for / while / do... while... equivalent)
 
 - `for` loop (definite iteration)
+
+  ```py
+  for char in 'code':
+      print(char)
+
+  # Output
+  c
+  o
+  d
+  e
+  ```
+
+  ```py
+  categories = ['Fruit', 'Vegetable']
+  foods = ['Apple', 'Carrot', 'Banana']
+
+  for category in categories:
+      for food in foods:
+          print(category, food)
+
+  # Output
+  Fruit Apple
+  Fruit Carrot
+  Fruit Banana
+  Vegetable Apple
+  Vegetable Carrot
+  Vegetable Banana
+  ```
 
   Used when you know the number of iterations or need to process items in a sequence.
 
@@ -3124,11 +3424,8 @@ person = {"name": "Alice", "age": 25, "city": "Paris"}
 
 for key, value in person.items():
     print(f"{key}: {value}")
-```
 
-🟢 Output:
-
-```py
+# Output:
 name: Alice
 age: 25
 city: Paris
@@ -3167,21 +3464,37 @@ city: Paris
 
 - Nested Loops
 
+  ```py
+  for i in range(3):
+    for j in range(3):
+      if i == 1 and j == 1:
+        break
+      print(f"i: {i}, j: {j}")
+
+  # Output:
+  i: 0, j: 0
+  i: 0, j: 1
+  i: 0, j: 2
+  i: 1, j: 0
+  ```
+
 ```py
-for i in range(3):
-  for j in range(3):
-    if i == 1 and j == 1:
-      break
-    print(f"i: {i}, j: {j}")
-```
+words = ['sky', 'apple', 'rhythm', 'fly', 'orange']
 
-🟢 Output:
+for word in words:
+    for letter in word:
+        if letter.lower() in 'aeiou':
+            print(f"'{word}' contains the vowel '{letter}'")
+            break
+    else:
+        print(f"'{word}' has no vowels")
 
-```
-i: 0, j: 0
-i: 0, j: 1
-i: 0, j: 2
-i: 1, j: 0
+# Output
+'sky' has no vowels
+'apple' contains the vowel 'a'
+'rhythm' has no vowels
+'fly' has no vowels
+'orange' contains the vowel 'o'
 ```
 
 ### Loop Tools (Python): `enumerate()`, `zip()`, `range()`

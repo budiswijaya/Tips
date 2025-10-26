@@ -24,7 +24,7 @@
     - [Identity Operators `is`, `is not`](#identity-operators-is-is-not)
 - [Collections \& Objects (Dictionary)](#collections--objects-dictionary)
   - [Braces Literal Syntax](#braces-literal-syntax)
-  - [**Comparative Syntax Table — `{}`, `[]`, `()`**](#comparative-syntax-table----)
+  - [Comparative Syntax Table — `{}`, `[]`, `()`](#comparative-syntax-table----)
   - [String Manipulation](#string-manipulation)
   - [Dictionary (Object) Manipulation Structure Levels](#dictionary-object-manipulation-structure-levels)
     - [Natural Hierarchical Structure Levels in Different Variable Declarations {Classification}](#natural-hierarchical-structure-levels-in-different-variable-declarations-classification)
@@ -44,10 +44,13 @@
     - [Loop Controls (break, continue, else)](#loop-controls-break-continue-else)
     - [Loop Tools (Python): `enumerate()`, `zip()`, `range()`](#loop-tools-python-enumerate-zip-range)
     - [There are a lot of purpose to use loop:](#there-are-a-lot-of-purpose-to-use-loop)
+    - [Function variety of using with list](#function-variety-of-using-with-list)
   - [return](#return)
   - [raise (Python’s throw)](#raise-pythons-throw)
   - [try / except / finally](#try--except--finally)
 - [Functions \& Scope](#functions--scope)
+  - [Function declaration:](#function-declaration)
+  - [Lambda (Anonymous) Functions](#lambda-anonymous-functions)
   - [Closures](#closures)
   - [Decorators: `@decorator` syntax](#decorators-decorator-syntax)
   - [Scopes: LEGB rule](#scopes-legb-rule)
@@ -121,11 +124,20 @@ Print Function
 print(*objects, sep=' ', end='\n', file=sys.stdout, flush=False)
 ```
 
-- objects: The data you want to print. The \* sign means that you can print multiple things to the terminal by passing in multiple objects (in other words, strings, variables, numbers, and so on) separated by commas.
-- sep=' ': The separator between the objects. This defaults to a single space character (' ').
-- end='\n': What to print at the end of the object. This defaults to a new line character ('\n').
-- file=sys.stdout: Determines where to send the output. The default is the terminal, but it can be a file.
-- flush=False: Determines whether to show the output data right away. The default is False, which means Python may wait before displaying the output.
+| Parameter  | Default      | Description                                             |
+| ---------- | ------------ | ------------------------------------------------------- |
+| `*objects` | —            | One or more things you want to print                    |
+| `sep`      | `' '`        | Separator string between multiple items                 |
+| `end`      | `'\n'`       | String appended after the last item (usually newline)   |
+| `file`     | `sys.stdout` | Where to send the text (default = console)              |
+| `flush`    | `False`      | Whether to force the output buffer to flush immediately |
+
+| Parameter | Purpose                     | Example                     | Output            |
+| --------- | --------------------------- | --------------------------- | ----------------- |
+| `sep`     | Separator between arguments | `print(1, 2, 3, sep="-")`   | `1-2-3`           |
+| `end`     | What to add at the end      | `print("Hi", end="!")`      | `Hi!`             |
+| `file`    | Send output to file         | `print("log", file=f)`      | (written to file) |
+| `flush`   | Force output immediately    | `print("Wait", flush=True)` | (instant output)  |
 
 ```py
 print('Footballers:', 'Ronaldo', 'Messi', 'Hazard', 'Kante', 'Okocha', sep=', ')
@@ -182,12 +194,14 @@ ASCII standard covers 128 characters including:
 ~ Control characters (such as newline and tab).`
 
 ```py
-// Converting between characters and ASCII values
-let symbol = "!";
-console.log(symbol.charCodeAt(0)); // Output: 33
+# Convert a character to its ASCII value
+symbol = "!"
+print(ord(symbol))  # Output: 33
 
-let char = String.fromCharCode(65);
-console.log(char); // Output: A
+# Convert an ASCII value to its corresponding character
+ascii_value = 65
+char = chr(ascii_value)
+print(char)  # Output: A
 ```
 
 ## Number Systems
@@ -1226,6 +1240,31 @@ However, Python’s conversions are explicit and type-safe — there’s no auto
 
 In Python, mathematical operations are handled by the built-in math module, which provides functions and constants for performing advanced mathematical calculations. You need to import it before using.
 
+- `sum()` This function is used to get the sum from an iterable like a list or tuple. Here is an example of using the sum() function:
+-
+
+```py
+numbers = [5, 10, 15, 20]
+total = sum(numbers)
+print(total) # Result: 50
+```
+
+You can also pass in an optional start argument which sets the initial value for the summation. Here is an updated example using the start argument as a positional argument:
+
+```py
+numbers = [5, 10, 15, 20]
+total = sum(numbers, 10) # positional argument
+print(total) # 60
+```
+
+You can also choose to use the start argument as a keyword argument like this instead:
+
+```py
+numbers = [5, 10, 15, 20]
+total = sum(numbers, start=10) # keyword argument
+print(total) # 60
+```
+
 Common Methods
 
 ```py
@@ -1940,7 +1979,7 @@ print(greeting[1])  # Output: e
 print(greeting[len(greeting) - 1])  # Output: o
 ```
 
-## **Comparative Syntax Table — `{}`, `[]`, `()`**
+## Comparative Syntax Table — `{}`, `[]`, `()`
 
 | Symbol        | Python                                                      | JavaScript                                                      | C / Java / C++                                                    | Meaning Summary                                               |
 | :------------ | :---------------------------------------------------------- | :-------------------------------------------------------------- | :---------------------------------------------------------------- | :------------------------------------------------------------ |
@@ -2494,6 +2533,23 @@ print(arr2) # [None, None, None] → pre-allocated with default value
 
 arr3 = list(("a", 2, True))
 print(arr3) # ['a', 2, True]
+```
+
+In Python,
+
+- [] is the literal (just like in JS)
+- list() is the constructor function, like Array() in JS.
+
+```py
+nums = [1, 2, 3]      # literal — preferred way
+nums2 = list([1, 2, 3])  # uses the constructor
+```
+
+Similar to Javascript
+
+```js
+const arr1 = [1, 2, 3]; // literal
+const arr2 = new Array(1, 2, 3); // constructor
 ```
 
 When to use list() constructor:
@@ -3523,6 +3579,13 @@ These three — `enumerate()`, `zip()`, and `range()` — are the cornerstones o
   for i in range(0, 10, 2):
       print(i)
   # 0 2 4 6 8
+
+  for num in range(40, 0, -10):
+    print(num)
+  # 40 30 20 10
+
+  numbers = list(range(2, 11, 2))
+  print(numbers) # [2, 4, 6, 8, 10]
   ```
 
   Equivalent in JavaScript:
@@ -3542,15 +3605,57 @@ These three — `enumerate()`, `zip()`, and `range()` — are the cornerstones o
   `enumerate()` gives you both index and value when looping — cleaner than managing a manual counter.
 
   ```py
+  languages = ['Spanish', 'English', 'Russian', 'Chinese']
+
+  index = 0
+
+  for language in languages:
+      print(f'Index {index} and language {language}')
+      index += 1
+  # Index 0 and language Spanish
+  # Index 1 and language English
+  # Index 2 and language Russian
+  # Index 3 and language Chinese
+
+  # Or you could just use this way
+
+  languages = ['Spanish', 'English', 'Russian', 'Chinese']
+
+  for index, language in enumerate(languages):
+      print(f'Index {index} and language {language}')
+
+  # Index 0 and language Spanish
+  # Index 1 and language English
+  # Index 2 and language Russian
+  # Index 3 and language Chinese
+
+  # Same but begin at Index 1
+
+  languages = ['Spanish', 'English', 'Russian', 'Chinese']
+
+  for index, language in enumerate(languages, 1):
+      print(f'Index {index} and language {language}')
+
+  # Index 1 and language Spanish
+  # Index 2 and language English
+  # Index 3 and language Russian
+  # Index 4 and language Chinese
+
+  # Same concept but in dictionary
+
+  languages = ['Spanish', 'English', 'Russian', 'Chinese']
+
+  list(enumerate(languages))
+  # [(0, 'Spanish'), (1, 'English'), (2, 'Russian'), (3, 'Chinese')]
+  ```
+
+  ```py
   fruits = ["apple", "banana", "cherry"]
 
   for index, fruit in enumerate(fruits):
   print(index, fruit)
-  ```
 
-  🟢 Output:
-
-  ```
+  # Output:
   0 apple
   1 banana
   2 cherry
@@ -3580,16 +3685,40 @@ These three — `enumerate()`, `zip()`, and `range()` — are the cornerstones o
   It’s like looping over two (or more) arrays simultaneously.
 
   ```py
+  developers = ['Naomi', 'Dario', 'Jessica', 'Tom']
+  ids = [1, 2, 3, 4]
+
+  for name, id in zip(developers, ids):
+      print(f'Name: {name}')
+      print(f'ID: {id}')
+
+  # Output:
+  Name: Naomi
+  ID: 1
+  Name: Dario
+  ID: 2
+  Name: Jessica
+  ID: 3
+  Name: Tom
+  ID: 4
+
+  # Same concept but in dictionary
+
+  developers = ['Naomi', 'Dario', 'Jessica', 'Tom']
+  ids = [1, 2, 3, 4]
+
+  list(zip(developers, ids))
+  # [('Naomi', 1), ('Dario', 2), ('Jessica', 3), ('Tom', 4)]
+  ```
+
+  ```py
   names = ["Alice", "Bob", "Charlie"]
   scores = [90, 85, 95]
 
   for name, score in zip(names, scores):
   print(name, "scored", score)
-  ```
 
-  🟢 Output:
-
-  ```
+  # Output:
   Alice scored 90
   Bob scored 85
   Charlie scored 95
@@ -3852,6 +3981,101 @@ When to Use Which Framework
 - Scope placement defines whether you’re retaining, isolating, or discarding state between iterations.
 - This framework helps you choose the correct loop design for readability, performance, and correctness.
 
+### Function variety of using with list
+
+```py
+even_numbers = []
+
+for num in range(21):
+    if num % 2 == 0:
+        even_numbers.append(num)
+
+print(even_numbers)
+```
+
+This example creates a new empty list called even_numbers and loops through a sequence of numbers between 0 and 20. Inside the loop, there's a condition that checks if the current number has a remainder of 0 when divided by 2. This is used to determine if the number is even. If the condition is True, then the current num is appended at the end of the even_numbers list. Finally, we print the even_numbers list to the console.
+
+While this code works, there is a more concise way to write this that uses list comprehension instead. List comprehension allows you to create a new list in a single line by combining a loop and condition directly within square brackets. This makes the code shorter and often easier to read.
+
+Here is the refactored example from earlier using square brackets:
+
+```py
+even_numbers = [num for num in range(21) if num % 2 == 0]
+print(even_numbers)
+```
+
+In this refactored example, the even_numbers list is created using a single line of code. The list comprehension loops through numbers from 0 to 20, and includes only those that are divisible by 2. This approach is more compact and eliminates the need for a separate loop and conditional block.
+
+Let's take a look at another example so we can better understand how list comprehension works:
+
+```py
+numbers = [1, 2, 3, 4, 5]
+result = [(num, 'Even') if num % 2 == 0 else (num, 'Odd') for num in numbers]
+print(result)
+```
+
+In this example, we have a list of numbers and want to create a new list of tuples indicating which numbers are even or odd. In the first part of the list comprehension, we use an if statement to check if the number is evenly divisible by 2. If so, then the result is a tuple of that number followed by the word Even. Otherwise, the result is a tuple with the number followed by the word Odd.
+
+Here is what the result looks like printed in the console:
+
+```
+[(1, 'Odd'), (2, 'Even'), (3, 'Odd'), (4, 'Even'), (5, 'Odd')]
+```
+
+Another way to create a list starting from an existing iterable is the filter() function. Here is an example of creating a new list of just words longer than four characters:
+
+```py
+words = ['tree', 'sky', 'mountain', 'river', 'cloud', 'sun']
+
+def is_long_word(word):
+    return len(word) > 4
+
+long_words = list(filter(is_long_word, words))
+print(long_words) # ['mountain', 'river', 'cloud']
+```
+
+The filter() function is used to select elements from an iterable that meet a specific condition. The filter() function accepts a function and an iterable for its arguments. In this example, we are passing in an is_long_word function into the filter() function to check if the current word count is greater than 4. All words that have a character count greater than 4 are added into a new list and assigned to the long_words variable.
+
+Aside from the filter() function, there are a few more functions that are helpful when working with lists. Another function to be aware of is the map() function, which takes an iterable and applies a function to each of its elements. Here is an example of using the map() function to convert a list of temperatures from Celsius to Fahrenheit:
+
+```py
+celsius = [0, 10, 20, 30, 40]
+
+def to_fahrenheit(temp):
+    return (temp * 9/5) + 32
+
+fahrenheit = list(map(to_fahrenheit, celsius))
+print(fahrenheit) # [32.0, 50.0, 68.0, 86.0, 104.0]
+```
+
+Just like the filter() function, map() accepts a function and an iterable for its arguments. The to_fahrenheit function takes a temperature and converts it from Celsius to Fahrenheit.
+
+The last function we will look at is the sum() function. This function is used to get the sum from an iterable like a list or tuple. Here is an example of using the sum() function:
+
+```py
+numbers = [5, 10, 15, 20]
+total = sum(numbers)
+print(total) # Result: 50
+```
+
+You can also pass in an optional start argument which sets the initial value for the summation. Here is an updated example using the start argument as a positional argument:
+
+```py
+numbers = [5, 10, 15, 20]
+total = sum(numbers, 10) # positional argument
+print(total) # 60
+```
+
+You can also choose to use the start argument as a keyword argument like this instead:
+
+```py
+numbers = [5, 10, 15, 20]
+total = sum(numbers, start=10) # keyword argument
+print(total) # 60
+```
+
+Both versions will produce the same result, but the keyword argument is a little more explicit.
+
 ## return
 
 return exits the current function and sends a value back to the caller.
@@ -3954,7 +4178,7 @@ Functions in Python are reusable blocks of code that perform specific tasks or c
 
 You define a function with the def keyword, optionally pass in parameters, and call it by name. Think of it as a “mini program” inside your main program.
 
-- Function declaration:
+## Function declaration:
 
 ```py
 def greet(name):
@@ -4019,9 +4243,9 @@ def mystery(a, b=3):
 print(mystery(4))  # 12
 ```
 
-- Lambda (Anonymous) Functions
+## Lambda (Anonymous) Functions
 
-Arrow functions in JavaScript are conceptually similar to lambda functions in Python. They’re used for short, simple, one-line operations.
+`=>` Arrow functions in JavaScript are conceptually similar to lambda functions in Python. They’re used for short, simple, one-line operations.
 
 ```py
 # Regular function
